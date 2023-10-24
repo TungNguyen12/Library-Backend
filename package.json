@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "type": "module",
   "description": "",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
     "lint": "eslint src/**/*.ts",
     "ts-watch": "tsc -w",
     "start": "nodemon dist/server.js",
-    "dev": "npm run ts-watch & npm run start",
+    "dev": "concurrently \"tsc -w\" \"nodemon -q dist/server.js\"",
     "build": "tsc"
   },
   "keywords": [],
@@ -20,6 +20,7 @@
   "devDependencies": {
     "@types/express": "^4.17.20",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "concurrently": "^8.2.2",
     "eslint": "^8.52.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-standard-with-typescript": "^39.1.1",
