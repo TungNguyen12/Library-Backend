@@ -16,4 +16,3 @@ export const getItemByIndexController = (req: Request, res: Response): void => {
     res.json({ item })
   }
 }
-export { getAllItems, getItemByIndex }

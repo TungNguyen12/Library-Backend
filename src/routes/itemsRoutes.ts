@@ -1,10 +1,13 @@
 import express from 'express'
 
-import { getAllItems, getItemByIndex } from '../controllers/itemsController'
+import {
+  getAllItemsController,
+  getItemByIndexController,
+} from '../controllers/itemsController'
 
 const router = express.Router()
 
-router.get('/', getAllItems)
-router.get('/:itemIndex', getItemByIndex)
+router.get('/', getAllItemsController)
+router.get('/:itemIndex', getItemByIndexController)
 
 export default router
