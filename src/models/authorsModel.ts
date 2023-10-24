@@ -60,3 +60,15 @@ export const createNewAuthor = (
   authors.push(newAuthor as Author)
   return newAuthor as Author
 }
+
+export const deleteAuthor = (authorId: number): boolean => {
+  const findIndex = authors.findIndex(
+    (author: Author) => authorId === author.id
+  )
+  if (findIndex === -1) {
+    return false
+  }
+
+  authors.splice(findIndex, 1)
+  return true
+}
