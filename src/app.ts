@@ -8,6 +8,7 @@ import authorsRoutes from './routes/authorsRoutes.js'
 const app = express()
 
 // Middleware
+app.use(express.json())
 app.use(loggingMiddleware)
 app.use(errorLoggingMiddleware)
 
