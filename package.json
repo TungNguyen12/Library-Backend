@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint src/**/*.ts",
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon src/server.ts",
     "build": "tsc"
   },
   "keywords": [],
@@ -22,6 +22,7 @@
     "eslint-config-standard-with-typescript": "^39.1.1",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-n": "^16.2.0",
+    "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-promise": "^6.1.1",
     "nodemon": "^3.0.1",
     "prettier": "^3.0.3",

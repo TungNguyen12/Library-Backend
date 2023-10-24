@@ -1,10 +1,6 @@
-import {
-  type NextFunction,
-  type Request,
-  type Response,
-} from 'express';
+import { type NextFunction, type Request, type Response } from 'express'
 
-export function loggingMiddleware (
+export function loggingMiddleware(
   req: Request,
   _: Response,
   next: NextFunction
