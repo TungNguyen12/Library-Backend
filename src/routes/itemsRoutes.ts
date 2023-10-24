@@ -3,7 +3,7 @@ import express from 'express'
 import {
   getAllItemsController,
   getItemByIndexController,
-} from '../controllers/itemsController'
+} from '../controllers/itemsController.js'
 
 const router = express.Router()
 

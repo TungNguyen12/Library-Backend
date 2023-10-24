@@ -1,11 +1,14 @@
 {
   "name": "fs16-express",
   "version": "1.0.0",
+  "type": "module",
   "description": "",
   "main": "index.js",
   "scripts": {
     "lint": "eslint src/**/*.ts",
-    "dev": "nodemon src/server.ts",
+    "ts-watch": "tsc -w",
+    "start": "nodemon dist/server.js",
+    "dev": "npm run ts-watch & npm run start",
     "build": "tsc"
   },
   "keywords": [],

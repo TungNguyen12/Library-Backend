@@ -1,8 +1,8 @@
 import express from 'express'
 
-import { errorLoggingMiddleware } from './middlewares/error'
-import { loggingMiddleware } from './middlewares/logging'
-import itemRoutes from './routes/itemsRoutes'
+import { errorLoggingMiddleware } from './middlewares/error.js'
+import { loggingMiddleware } from './middlewares/logging.js'
+import itemRoutes from './routes/itemsRoutes.js'
 
 const app = express()
 
