@@ -1,19 +1,13 @@
 import express from 'express'
 
-import {
-  createNewAuthorController,
-  deleteAuthorController,
-  getAllAuthorsController,
-  getAuthorByIdController,
-  updateAuthorInfoController,
-} from '../controllers/authorsController.js'
+import AuthorsController from '../controllers/authorsController.js'
 
 const router = express.Router()
 
-router.get('/', getAllAuthorsController)
-router.post('/', createNewAuthorController)
-router.get('/:authorId', getAuthorByIdController)
-router.delete('/:authorId', deleteAuthorController)
-router.put('/:authorId', updateAuthorInfoController)
+router.get('/', AuthorsController.getAllAuthors)
+router.post('/', AuthorsController.createNewAuthor)
+router.get('/:authorId', AuthorsController.getAuthorById)
+router.delete('/:authorId', AuthorsController.deleteAuthor)
+router.put('/:authorId', AuthorsController.updateAuthorInfo)
 
 export default router

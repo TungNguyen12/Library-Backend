@@ -3,16 +3,12 @@ import { ApiError } from '../utils/ApiError.js'
 
 import AuthorsService from '../services/authorsService.js'
 
-export const getAllAuthorsController = (_: Request, res: Response): void => {
+function getAllAuthors(_: Request, res: Response): void {
   const authors = AuthorsService.getAll()
   res.json(authors)
 }
 
-export const getAuthorByIdController = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+function getAuthorById(req: Request, res: Response, next: NextFunction): void {
   const authorId = Number(req.params.authorId)
   const author = AuthorsService.getOne(authorId)
 
@@ -24,11 +20,11 @@ export const getAuthorByIdController = (
   res.json(author)
 }
 
-export const createNewAuthorController = (
+function createNewAuthor(
   req: Request,
   res: Response,
   next: NextFunction
-): void => {
+): void {
   const body = req.body
   const result = AuthorsService.createOne(body)
 
@@ -40,11 +36,7 @@ export const createNewAuthorController = (
   res.status(201).json(result)
 }
 
-export const deleteAuthorController = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+function deleteAuthor(req: Request, res: Response, next: NextFunction): void {
   const authorId = Number(req.params.authorId)
 
   if (!AuthorsService.deleteOne(authorId)) {
@@ -55,11 +47,11 @@ export const deleteAuthorController = (
   res.json({ isDeleted: true })
 }
 
-export const updateAuthorInfoController = (
+function updateAuthorInfo(
   req: Request,
   res: Response,
   next: NextFunction
-): void => {
+): void {
   const authorId = Number(req.params.authorId)
   const body = req.body
   const result = AuthorsService.updateOne(authorId, body)
@@ -73,4 +65,12 @@ export const updateAuthorInfoController = (
   }
 
   res.json(result)
+}
+
+export default {
+  getAllAuthors,
+  getAuthorById,
+  createNewAuthor,
+  deleteAuthor,
+  updateAuthorInfo,
 }
