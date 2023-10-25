@@ -8,7 +8,7 @@
     "lint": "eslint src/**/*.ts",
     "ts-watch": "tsc -w",
     "start": "nodemon dist/server.js",
-    "dev": "concurrently \"tsc -w\" \"nodemon -q dist/server.js\"",
+    "dev": "nodemon src/server.ts",
     "build": "tsc"
   },
   "keywords": [],
