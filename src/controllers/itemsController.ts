@@ -5,7 +5,7 @@ import { ApiError } from '../utils/ApiError.js'
 
 export const getAllItemsController = (_: Request, res: Response): void => {
   const items = itemModel.getAllItems()
-  res.json({ items })
+  res.json(items)
 }
 
 export const getItemByIndexController = (
@@ -21,5 +21,5 @@ export const getItemByIndexController = (
     return
   }
 
-  res.json({ item })
+  res.json(item)
 }
