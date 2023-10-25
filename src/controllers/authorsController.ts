@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import { ApiError } from '../utils/ApiError.js'
 
+import { ApiError } from '../utils/ApiError.js'
 import AuthorsService from '../services/authorsService.js'
 
 function getAllAuthors(_: Request, res: Response): void {
@@ -28,11 +28,6 @@ function createNewAuthor(
   const body = req.body
   const result = AuthorsService.createOne(body)
 
-  if (result === undefined) {
-    next(ApiError.methodNotAllowed('Invalid input.'))
-    return
-  }
-
   res.status(201).json(result)
 }
 
@@ -58,9 +53,6 @@ function updateAuthorInfo(
 
   if (result === false) {
     next(ApiError.notFound('Author not found.'))
-    return
-  } else if (result === undefined) {
-    next(ApiError.methodNotAllowed('Invalid input.'))
     return
   }
 

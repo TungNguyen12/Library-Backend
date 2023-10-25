@@ -13,8 +13,8 @@ app.use(express.json())
 app.use(loggingMiddleware)
 
 // Routes
-app.use('/api/items', itemRoutes)
-app.use('/api/authors', authorsRoutes)
+app.use('/api/v1/items', itemRoutes)
+app.use('/api/v1/authors', authorsRoutes)
 
 // Error Handler
 app.use(apiErrorHandler)
