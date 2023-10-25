@@ -5,6 +5,7 @@ import {
   deleteAuthor,
   getAllAuthors,
   getAuthorById,
+  updateAuthorInfo,
 } from './../models/authorsModel.js'
 
 export const getAllAuthorsController = (_: Request, res: Response): void => {
@@ -41,5 +42,22 @@ export const deleteAuthorController = (req: Request, res: Response): void => {
     res.status(404).json({ error: 'Author not found' })
   } else {
     res.json({ isDeleted: true })
+  }
+}
+
+export const updateAuthorInfoController = (
+  req: Request,
+  res: Response
+): void => {
+  const authorId = Number(req.params.authorId)
+  const body = req.body
+  const result = updateAuthorInfo(authorId, body)
+
+  if (result === false) {
+    res.status(404).json({ error: 'Author not found' })
+  } else if (result === undefined) {
+    res.status(405).json({ error: 'Invalid input' })
+  } else {
+    res.json(result)
   }
 }
