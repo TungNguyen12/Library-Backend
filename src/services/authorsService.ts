@@ -9,7 +9,7 @@ function getAll(): Author[] {
   return authors
 }
 
-function getOne(authorId: number): Author | undefined {
+function getOne(authorId: string): Author | undefined {
   const author = authorsRepo.getOne(authorId)
   return author
 }
@@ -25,13 +25,13 @@ function createOne(payload: Partial<Author>): Author | undefined {
   return newAuthor
 }
 
-function deleteOne(authorId: number): boolean {
+function deleteOne(authorId: string): boolean {
   const result = authorsRepo.deleteOne(authorId)
   return result
 }
 
 function updateOne(
-  authorId: number,
+  authorId: string,
   payload: Partial<Author>
 ): Author | undefined | boolean {
   for (const key of Object.entries(payload)) {

@@ -9,7 +9,7 @@ function getAllAuthors(_: Request, res: Response): void {
 }
 
 function getAuthorById(req: Request, res: Response, next: NextFunction): void {
-  const authorId = Number(req.params.authorId)
+  const authorId = req.params.authorId
   const author = AuthorsService.getOne(authorId)
 
   if (author === undefined) {
@@ -32,7 +32,7 @@ function createNewAuthor(
 }
 
 function deleteAuthor(req: Request, res: Response, next: NextFunction): void {
-  const authorId = Number(req.params.authorId)
+  const authorId = req.params.authorId
 
   if (!AuthorsService.deleteOne(authorId)) {
     next(ApiError.notFound('Author not found.'))
@@ -47,7 +47,7 @@ function updateAuthorInfo(
   res: Response,
   next: NextFunction
 ): void {
-  const authorId = Number(req.params.authorId)
+  const authorId = req.params.authorId
   const body = req.body
   const result = AuthorsService.updateOne(authorId, body)
 

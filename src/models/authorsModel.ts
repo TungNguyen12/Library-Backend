@@ -1,28 +1,35 @@
-import { type Author } from 'types/Author.js'
+import { v4 as uuidv4 } from 'uuid'
+
+import { type Author } from '../types/Author.js'
 
 export class AuthorRepo {
   authors: Author[] = [
-    { id: 1, firstName: 'Leo', lastName: 'Tolstoy', books: ['Anna Karenina'] },
     {
-      id: 2,
+      id: uuidv4(),
+      firstName: 'Leo',
+      lastName: 'Tolstoy',
+      books: ['Anna Karenina'],
+    },
+    {
+      id: uuidv4(),
       firstName: 'William',
       lastName: 'Shakespeare',
       books: ['Romeo and Juliet', 'Hamlet'],
     },
     {
-      id: 3,
+      id: uuidv4(),
       firstName: 'Jane',
       lastName: 'Austen',
       books: ['Pride And Prejudice'],
     },
     {
-      id: 4,
+      id: uuidv4(),
       firstName: 'George',
       lastName: 'Orwell',
       books: ['Animal Farm'],
     },
     {
-      id: 5,
+      id: uuidv4(),
       firstName: 'Jules',
       lastName: 'Verne',
       books: ['Journey To The Centre Of The Earth'],
@@ -33,23 +40,18 @@ export class AuthorRepo {
     return this.authors
   }
 
-  getOne(authorId: number): Author | undefined {
+  getOne(authorId: string): Author | undefined {
     return this.authors.find((item: Author) => item.id === authorId)
   }
 
   createOne(payload: Partial<Author>): Author {
-    const newId =
-      this.authors.reduce(
-        (acc: number, curr: Author) => (acc = Math.max(acc, curr.id)),
-        0
-      ) + 1
-    const newAuthor = { id: newId, ...payload }
+    const newAuthor = { id: uuidv4(), ...payload }
 
     this.authors.push(newAuthor as Author)
     return newAuthor as Author
   }
 
-  deleteOne(authorId: number): boolean {
+  deleteOne(authorId: string): boolean {
     const findIndex = this.authors.findIndex(
       (author: Author) => authorId === author.id
     )
@@ -61,7 +63,7 @@ export class AuthorRepo {
     return true
   }
 
-  updateOne(authorId: number, payload: Partial<Author>): Author | boolean {
+  updateOne(authorId: string, payload: Partial<Author>): Author | boolean {
     const findIndex = this.authors.findIndex(
       (author: Author) => authorId === author.id
     )
