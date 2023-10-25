@@ -40,3 +40,23 @@ export const getAllAuthors = (): Author[] => {
 export const getAuthorById = (authorId: number): Author | undefined => {
   return authors.find((item: Author) => item.id === authorId)
 }
+
+export const createNewAuthor = (
+  payload: Partial<Author>
+): Author | undefined => {
+  for (const key of Object.entries(payload)) {
+    if (key[1].toString().length === 0) {
+      return undefined
+    }
+  }
+
+  const newId =
+    authors.reduce(
+      (acc: number, curr: Author) => (acc = Math.max(acc, curr.id)),
+      0
+    ) + 1
+  const newAuthor = { id: newId, ...payload }
+
+  authors.push(newAuthor as Author)
+  return newAuthor as Author
+}
