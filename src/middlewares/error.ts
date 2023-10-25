@@ -1,11 +1,17 @@
 import { type NextFunction, type Request, type Response } from 'express'
 
-export function errorLoggingMiddleware(
-  error: any,
+import { ApiError } from '../utils/ApiError.js'
+
+export function apiErrorHandler(
+  error: typeof ApiError | Error,
   req: Request,
   res: Response,
-  next: NextFunction
-): Response {
-  console.log('👀 ERRROOOR!!', error)
-  return res.status(500).json({ error: 'Something went wrong' })
+  _: NextFunction
+): void {
+  if (error instanceof ApiError) {
+    res.status(error.code).json({ msg: error.message })
+    return
+  }
+
+  res.status(500).json({ msg: 'Something went wrong' })
 }
