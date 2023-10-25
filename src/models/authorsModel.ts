@@ -37,13 +37,7 @@ export class AuthorRepo {
     return this.authors.find((item: Author) => item.id === authorId)
   }
 
-  createOne(payload: Partial<Author>): Author | undefined {
-    for (const key of Object.entries(payload)) {
-      if (key[1].toString().length === 0) {
-        return undefined
-      }
-    }
-
+  createOne(payload: Partial<Author>): Author {
     const newId =
       this.authors.reduce(
         (acc: number, curr: Author) => (acc = Math.max(acc, curr.id)),
@@ -67,21 +61,12 @@ export class AuthorRepo {
     return true
   }
 
-  updateOne(
-    authorId: number,
-    payload: Partial<Author>
-  ): Author | undefined | boolean {
+  updateOne(authorId: number, payload: Partial<Author>): Author | boolean {
     const findIndex = this.authors.findIndex(
       (author: Author) => authorId === author.id
     )
     if (findIndex === -1) {
       return false
-    }
-
-    for (const key of Object.entries(payload)) {
-      if (key[1].toString().length === 0) {
-        return undefined
-      }
     }
 
     this.authors[findIndex] = Object.assign(this.authors[findIndex], payload)
