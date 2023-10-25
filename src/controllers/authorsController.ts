@@ -1,6 +1,10 @@
 import { type Request, type Response } from 'express'
 
-import { getAllAuthors, getAuthorById } from './../models/authorsModel.js'
+import {
+  createNewAuthor,
+  getAllAuthors,
+  getAuthorById,
+} from './../models/authorsModel.js'
 
 export const getAllAuthorsController = (_: Request, res: Response): void => {
   const authors = getAllAuthors()
@@ -14,4 +18,16 @@ export const getAuthorByIdController = (req: Request, res: Response): void => {
     res.status(404).json({ error: 'Author not found' })
   }
   res.json(author)
+}
+
+export const createNewAuthorController = (
+  req: Request,
+  res: Response
+): void => {
+  const body = req.body
+  const result = createNewAuthor(body)
+  if (result === undefined) {
+    res.status(405).json({ error: 'Invalid input' })
+  }
+  res.json(result)
 }

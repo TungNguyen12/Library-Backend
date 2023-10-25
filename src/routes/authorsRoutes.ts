@@ -1,6 +1,7 @@
 import express from 'express'
 
 import {
+  createNewAuthorController,
   getAllAuthorsController,
   getAuthorByIdController,
 } from '../controllers/authorsController.js'
@@ -8,6 +9,7 @@ import {
 const router = express.Router()
 
 router.get('/', getAllAuthorsController)
+router.post('/', createNewAuthorController)
 router.get('/:authorId', getAuthorByIdController)
 
 export default router
