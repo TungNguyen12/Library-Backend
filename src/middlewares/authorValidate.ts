@@ -19,7 +19,7 @@ export function validateCreateAuthor(
     })
     next()
   } catch (error) {
-    next(ApiError.methodNotAllowed('Invalid input.'))
+    next(ApiError.badRequest('Bad request.'))
   }
 }
 
@@ -36,6 +36,6 @@ export function validateUpdateAuthor(
     })
     next()
   } catch (error) {
-    next(ApiError.methodNotAllowed('Invalid input.'))
+    next(ApiError.badRequest('Bad request.'))
   }
 }
