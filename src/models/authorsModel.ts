@@ -72,3 +72,24 @@ export const deleteAuthor = (authorId: number): boolean => {
   authors.splice(findIndex, 1)
   return true
 }
+
+export const updateAuthorInfo = (
+  authorId: number,
+  payload: Partial<Author>
+): Author | undefined | boolean => {
+  const findIndex = authors.findIndex(
+    (author: Author) => authorId === author.id
+  )
+  if (findIndex === -1) {
+    return false
+  }
+
+  for (const key of Object.entries(payload)) {
+    if (key[1].toString().length === 0) {
+      return undefined
+    }
+  }
+
+  authors[findIndex] = Object.assign(authors[findIndex], payload)
+  return authors[findIndex]
+}
