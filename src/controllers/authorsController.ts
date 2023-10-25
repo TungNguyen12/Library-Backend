@@ -1,63 +1,76 @@
-import { type Request, type Response } from 'express'
+import { type NextFunction, type Request, type Response } from 'express'
+import { ApiError } from '../utils/ApiError.js'
 
-import {
-  createNewAuthor,
-  deleteAuthor,
-  getAllAuthors,
-  getAuthorById,
-  updateAuthorInfo,
-} from './../models/authorsModel.js'
+import AuthorsService from '../services/authorsService.js'
 
 export const getAllAuthorsController = (_: Request, res: Response): void => {
-  const authors = getAllAuthors()
+  const authors = AuthorsService.getAll()
   res.json(authors)
 }
 
-export const getAuthorByIdController = (req: Request, res: Response): void => {
+export const getAuthorByIdController = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   const authorId = Number(req.params.authorId)
-  const author = getAuthorById(authorId)
+  const author = AuthorsService.getOne(authorId)
+
   if (author === undefined) {
-    res.status(404).json({ error: 'Author not found' })
-  } else {
-    res.json(author)
+    next(ApiError.notFound('Author not found.'))
+    return
   }
+
+  res.json(author)
 }
 
 export const createNewAuthorController = (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): void => {
   const body = req.body
-  const result = createNewAuthor(body)
+  const result = AuthorsService.createOne(body)
+
   if (result === undefined) {
-    res.status(405).json({ error: 'Invalid input' })
-  } else {
-    res.json(result)
+    next(ApiError.methodNotAllowed('Invalid input.'))
+    return
   }
+
+  res.status(201).json(result)
 }
 
-export const deleteAuthorController = (req: Request, res: Response): void => {
+export const deleteAuthorController = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   const authorId = Number(req.params.authorId)
-  if (!deleteAuthor(authorId)) {
-    res.status(404).json({ error: 'Author not found' })
-  } else {
-    res.json({ isDeleted: true })
+
+  if (!AuthorsService.deleteOne(authorId)) {
+    next(ApiError.notFound('Author not found.'))
+    return
   }
+
+  res.json({ isDeleted: true })
 }
 
 export const updateAuthorInfoController = (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): void => {
   const authorId = Number(req.params.authorId)
   const body = req.body
-  const result = updateAuthorInfo(authorId, body)
+  const result = AuthorsService.updateOne(authorId, body)
 
   if (result === false) {
-    res.status(404).json({ error: 'Author not found' })
+    next(ApiError.notFound('Author not found.'))
+    return
   } else if (result === undefined) {
-    res.status(405).json({ error: 'Invalid input' })
-  } else {
-    res.json(result)
+    next(ApiError.methodNotAllowed('Invalid input.'))
+    return
   }
+
+  res.json(result)
 }
