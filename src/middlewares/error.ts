@@ -9,9 +9,11 @@ export function apiErrorHandler(
   _: NextFunction
 ): void {
   if (error instanceof ApiError) {
-    res.status(error.code).json({ msg: error.message })
+    res
+      .status(error.code)
+      .json({ message: error.message, errors: error.errors })
     return
   }
 
-  res.status(500).json({ msg: 'Something went wrong' })
+  res.status(500).json({ message: 'Something went wrong' })
 }

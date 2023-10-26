@@ -1,3 +1,11 @@
+# Dependency Directories
 node_modules/
+
+# Build Artifacts
 dist/
+
+# Package Lock Files
 package-lock.json
+pnpm-lock.yaml
+yarn.lock
+bun.lockb

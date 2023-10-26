@@ -1,14 +1,18 @@
 export class ApiError {
   constructor(
     public code: number,
-    public message: string
+    public message: string,
+    public errors?: object
   ) {
     this.code = code
     this.message = message
+    if (errors != null) {
+      this.errors = errors
+    }
   }
 
-  static badRequest(message: string): ApiError {
-    return new ApiError(400, message)
+  static badRequest(message: string, errors?: any): ApiError {
+    return new ApiError(400, message, errors)
   }
 
   static unauthorized(message: string): ApiError {

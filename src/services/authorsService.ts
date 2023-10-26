@@ -1,6 +1,5 @@
-import { type Author } from 'types/Author.js'
-
 import { AuthorRepo } from '../models/authorsModel.js'
+import { type Author } from '../types/Author.js'
 
 const authorsRepo = new AuthorRepo()
 
