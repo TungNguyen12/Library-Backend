@@ -1,18 +1,22 @@
 import { z } from 'zod'
 
+const errorMessage = (field: string): object => {
+  return { require_error: `${field} is required` }
+}
+
 export const bookCreateSchema = z.object({
   body: z
     .object({
-      ISBN: z.number(),
-      title: z.string().min(2),
-      edition: z.string().min(2),
-      category: z.string().min(2),
-      description: z.string().min(2),
-      publisher: z.string().min(2),
+      ISBN: z.number(errorMessage('ISBN')),
+      title: z.string(errorMessage('Title')).min(2),
+      edition: z.string(errorMessage('Edition')).min(2),
+      category: z.string(errorMessage('Category')).min(2),
+      description: z.string(errorMessage('Description')).min(2),
+      publisher: z.string(errorMessage('Publisher')).min(2),
       author: z
         .string()
         .array()
-        .nonempty({ message: 'author cannot be empty. ' }),
+        .nonempty({ message: 'author cannot be empty.' }),
     })
     .strict(),
 })
