@@ -36,4 +36,26 @@ export class UserRepo {
 
     return newUser
   }
+
+  deleteUser(userId: string): boolean {
+    const foundIndex = this.users.findIndex((user) => user.id === userId)
+
+    if (foundIndex === -1) {
+      return false
+    }
+
+    this.users.splice(foundIndex, 1)
+    return true
+  }
+
+  updateUser(userId: string, payload: Partial<User>): User | boolean {
+    const foundIndex = this.users.findIndex((user) => user.id === userId)
+
+    if (foundIndex === -1) {
+      return false
+    }
+
+    this.users[foundIndex] = Object.assign(this.users[foundIndex], payload)
+    return this.users[foundIndex]
+  }
 }

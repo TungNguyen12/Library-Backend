@@ -30,10 +30,13 @@ export function createNewUser(req: Request, res: Response): void {
   res.status(201).json({ user })
 }
 
-export function deleteUser(req: Request, res: Response): void {
-  const deletedUserId = Number(req.params.userId)
-  const user = 'fsdfs'
-  UsersServices.deleteUser(deletedUserId)
+export function deleteUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void {
+  const deletedUserId = req.params.userId
+  const user = UsersServices.deleteUser(deletedUserId)
 
   if (user === undefined) {
     next(ApiError.notFound('User not found'))
@@ -42,9 +45,27 @@ export function deleteUser(req: Request, res: Response): void {
   res.json({ user })
 }
 
+export function updateUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void {
+  const userId = req.params.userId
+  const body = req.body
+  const result = UsersServices.updateUser(userId, body)
+
+  if (result === false) {
+    next(ApiError.notFound('User not found'))
+    return
+  }
+
+  res.json(result)
+}
+
 export default {
   findOneUser,
   findAllUsers,
   createNewUser,
-  deleteOneUser,
+  deleteUser,
+  updateUser,
 }

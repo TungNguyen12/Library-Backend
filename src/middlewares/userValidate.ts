@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express'
-import { ApiError } from 'utils/ApiError.js'
-// import { type User } from '../types/user.js'
+import { ApiError } from '../utils/ApiError.js'
+
 import { z } from 'zod'
 
 const userSchema = z.object({
@@ -22,12 +22,11 @@ const userSchema = z.object({
   }),
 })
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export async function validateUser(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<void> {
   try {
     await userSchema.parseAsync({
       body: req.body,
