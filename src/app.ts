@@ -5,6 +5,7 @@ import { loggingMiddleware } from './middlewares/logging.js'
 import { routeNotFound } from './middlewares/routeNotFound.js'
 import itemRoutes from './routes/itemsRoutes.js'
 import authorsRoutes from './routes/authorsRoutes.js'
+import booksRoutes from './routes/bookRoutes.js'
 
 const app = express()
 
@@ -15,6 +16,7 @@ app.use(loggingMiddleware)
 // Routes
 app.use('/api/v1/items', itemRoutes)
 app.use('/api/v1/authors', authorsRoutes)
+app.use('/api/v1/books', booksRoutes)
 
 // Error Handler
 app.use(apiErrorHandler)
