@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-
 // Simulating the Database
+import { v4 as uuid } from 'uuid'
 import type { User } from '../types/user.js'
 export class UserRepo {
   users = [
     {
-      id: 1,
+      id: 'f54f322f-d4e2-4a12-93c6-8a1774bba9d0',
       firstName: 'Tuomas',
       lastName: 'Korhonen',
       email: 'tuomas@mail.com',
@@ -13,7 +12,7 @@ export class UserRepo {
       role: 'user',
     },
     {
-      id: 2,
+      id: '543f140d-5c83-4af8-865e-f825871b3642',
       firstName: 'Jere',
       lastName: 'Kokko',
       email: 'jere@mail.com',
@@ -22,18 +21,18 @@ export class UserRepo {
     },
   ]
 
-  findAll() {
+  findAll(): User[] {
     return this.users
   }
 
-  findOne(userId: number) {
+  findOne(userId: string): User | undefined {
     const user = this.users.find((user) => user.id === userId)
 
     return user
   }
 
-  createOne(newUser: User) {
-    this.users = [...this.users, newUser]
+  createOne(newUser: User): User {
+    this.users = [...this.users, { ...newUser, id: uuid() }]
 
     return newUser
   }
