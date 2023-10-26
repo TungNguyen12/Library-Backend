@@ -1,6 +1,8 @@
 import type { NextFunction, Request, Response } from 'express'
-import { ApiError } from '../utils/ApiError.js'
+import { ZodError } from 'zod'
+
 import { userCreateSchema, userUpdateSchema } from '../schemas/usersSchema.js'
+import { ApiError } from '../utils/ApiError.js'
 
 export async function validateCreateUser(
   req: Request,
@@ -15,8 +17,8 @@ export async function validateCreateUser(
     })
     next()
   } catch (error) {
-    if (typeof error === 'string') {
-      next(ApiError.badRequest(error))
+    if (error instanceof ZodError) {
+      next(ApiError.badRequest('Bad Request', error.errors))
     }
     next(ApiError.internal('Something wrong happened'))
   }
@@ -35,8 +37,8 @@ export async function validateUpdateUser(
     })
     next()
   } catch (error) {
-    if (typeof error === 'string') {
-      next(ApiError.badRequest(error))
+    if (error instanceof ZodError) {
+      next(ApiError.badRequest('Bad Request', error.errors))
     }
     next(ApiError.internal('Something wrong happened'))
   }
