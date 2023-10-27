@@ -1,5 +1,5 @@
-import { type User } from '../types/user.js'
-import { UserRepo } from '../models/User.js'
+import { type UserUpdate, type User } from '../types/user.js'
+import { UserRepo } from '../models/userModel.js'
 
 const usersRepo = new UserRepo()
 
@@ -25,7 +25,7 @@ function deleteUser(userId: string): boolean {
   return result
 }
 
-function updateUser(userId: string, payload: Partial<User>): User | boolean {
+function updateUser(userId: string, payload: UserUpdate): User | boolean {
   const updatedUser = usersRepo.updateUser(userId, payload)
   return updatedUser
 }
