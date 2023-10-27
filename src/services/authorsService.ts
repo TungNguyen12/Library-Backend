@@ -14,12 +14,6 @@ function getOne(authorId: string): Author | undefined {
 }
 
 function createOne(payload: Partial<Author>): Author | undefined {
-  for (const key of Object.entries(payload)) {
-    if (key[1].toString().length === 0) {
-      return undefined
-    }
-  }
-
   const newAuthor = authorsRepo.createOne(payload)
   return newAuthor
 }
@@ -32,13 +26,7 @@ function deleteOne(authorId: string): boolean {
 function updateOne(
   authorId: string,
   payload: Partial<Author>
-): Author | undefined | boolean {
-  for (const key of Object.entries(payload)) {
-    if (key[1].toString().length === 0) {
-      return undefined
-    }
-  }
-
+): Author | boolean {
   const updatedAuthor = authorsRepo.updateOne(authorId, payload)
   return updatedAuthor
 }

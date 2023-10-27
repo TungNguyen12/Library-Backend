@@ -1,4 +1,5 @@
 import { type NextFunction, type Request, type Response } from 'express'
+import { type ZodError, z } from 'zod'
 
 import {
   authorCreateSchema,
@@ -11,15 +12,25 @@ export function validateCreateAuthor(
   res: Response,
   next: NextFunction
 ): void {
+  const bodySchema = z.object({
+    body: authorCreateSchema,
+  })
+
   try {
-    authorCreateSchema.parse({
+    bodySchema.parse({
       body: req.body,
       query: req.query,
       params: req.params,
     })
     next()
   } catch (error) {
-    next(ApiError.badRequest('Bad request.'))
+    const e = error as ZodError
+    const errorMessages: string[] = []
+    JSON.parse(e.message).forEach((element: any) => {
+      errorMessages.push(element.message)
+    })
+
+    next(ApiError.badRequest('Bad request.', errorMessages.join(' ')))
   }
 }
 
@@ -28,14 +39,24 @@ export function validateUpdateAuthor(
   res: Response,
   next: NextFunction
 ): void {
+  const bodySchema = z.object({
+    body: authorUpdateSchema,
+  })
+
   try {
-    authorUpdateSchema.parse({
+    bodySchema.parse({
       body: req.body,
       query: req.query,
       params: req.params,
     })
     next()
   } catch (error) {
-    next(ApiError.badRequest('Bad request.'))
+    const e = error as ZodError
+    const errorMessages: string[] = []
+    JSON.parse(e.message).forEach((element: any) => {
+      errorMessages.push(element.message)
+    })
+
+    next(ApiError.badRequest('Bad request.', errorMessages.join(' ')))
   }
 }
