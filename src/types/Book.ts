@@ -1,12 +1,12 @@
 export interface Book {
-  ISBN: number
+  ISBN: string
   title: string
   edition: string
   category: string
   description: string
   publisher: string
   author: string[]
-  isAvaslable: string
+  isAvailable: boolean
   borrowedDate: Date | null
   returnedDate: Date | null
 }

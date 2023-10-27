@@ -7,7 +7,11 @@ const errorMessage = (field: string): object => {
 export const bookCreateSchema = z.object({
   body: z
     .object({
-      ISBN: z.number(errorMessage('ISBN')),
+      ISBN: z
+        .string(errorMessage('ISBN'))
+        .min(10)
+        .max(13)
+        .regex(/?=(?:\D*\d){10}(?:(?:\D*\d){3})?$/, 'Invalid ISBN'),
       title: z.string(errorMessage('Title')).min(2),
       edition: z.string(errorMessage('Edition')).min(2),
       category: z.string(errorMessage('Category')).min(2),
@@ -24,7 +28,12 @@ export const bookCreateSchema = z.object({
 export const bookUpdateSchema = z.object({
   body: z
     .object({
-      ISBN: z.number().optional(),
+      ISBN: z
+        .string()
+        .min(10)
+        .max(13)
+        .regex(/?=(?:\D*\d){10}(?:(?:\D*\d){3})?$/, 'Invalid ISBN')
+        .optional(),
       title: z.string().min(1).optional(),
       edition: z.string().min(1).optional(),
       category: z.string().min(1).optional(),
