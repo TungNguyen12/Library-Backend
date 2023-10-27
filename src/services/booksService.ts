@@ -18,12 +18,15 @@ const createOne = (payload: Partial<Book>): boolean => {
   return result
 }
 
-const updateOne = (ISBN: string, payload: Partial<Book>): boolean => {
+const updateOne = (ISBN: string, payload: Partial<Book>): boolean | Book => {
   const result = booksRepo.updateOne(ISBN, payload)
   return result
 }
 
-const updateAvailableStatus = (ISBN: string, newStatus: boolean): boolean => {
+const updateAvailableStatus = (
+  ISBN: string,
+  newStatus: boolean
+): boolean | Book => {
   const result = booksRepo.updateAvailableStatus(ISBN, newStatus)
   return result
 }

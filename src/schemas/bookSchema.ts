@@ -1,45 +1,56 @@
 import { z } from 'zod'
 
-const errorMessage = (field: string): object => {
+const requiredErrorMessage = (field: string): object => {
   return { require_error: `${field} is required` }
 }
 
+const emptyErrorMessage = (field: string): string => {
+  return `${field} can not be empty`
+}
+
+export const booksSchema = z
+  .object({
+    ISBN: z
+      .string(requiredErrorMessage('ISBN'))
+      .min(10)
+      .max(13)
+      .regex(/(?:\D*\d){10}(?:(?:\D*\d){3})?/, 'Invalid ISBN'),
+    title: z
+      .string(requiredErrorMessage('Title'))
+      .min(1, emptyErrorMessage('Title')),
+    edition: z
+      .string(requiredErrorMessage('Edition'))
+      .min(1, emptyErrorMessage('Edition')),
+    category: z
+      .string(requiredErrorMessage('Category'))
+      .min(1, emptyErrorMessage('Category')),
+    description: z
+      .string(requiredErrorMessage('Description'))
+      .min(1, emptyErrorMessage('Description')),
+    publisher: z
+      .string(requiredErrorMessage('Publisher'))
+      .min(1, emptyErrorMessage('Publisher')),
+    author: z.string().array().nonempty({ message: 'author cannot be empty.' }),
+    isAvailable: z.boolean().default(false),
+    borrowedDate: z.date().nullable().default(null),
+    returnedDate: z.date().nullable().default(null),
+  })
+  .strict()
+
 export const bookCreateSchema = z.object({
-  body: z
-    .object({
-      ISBN: z
-        .string(errorMessage('ISBN'))
-        .min(10)
-        .max(13)
-        .regex(/(?:\D*\d){10}(?:(?:\D*\d){3})?/, 'Invalid ISBN'),
-      title: z.string(errorMessage('Title')).min(2),
-      edition: z.string(errorMessage('Edition')).min(2),
-      category: z.string(errorMessage('Category')).min(2),
-      description: z.string(errorMessage('Description')).min(2),
-      publisher: z.string(errorMessage('Publisher')).min(2),
-      author: z
-        .string()
-        .array()
-        .nonempty({ message: 'author cannot be empty.' }),
-    })
-    .strict(),
+  body: booksSchema.omit({
+    isAvailable: true,
+    borrowedDate: true,
+    returnedDate: true,
+  }),
 })
 
 export const bookUpdateSchema = z.object({
-  body: z
-    .object({
-      ISBN: z
-        .string()
-        .min(10)
-        .max(13)
-        .regex(/(?:\D*\d){10}(?:(?:\D*\d){3})?/, 'Invalid ISBN')
-        .optional(),
-      title: z.string().min(1).optional(),
-      edition: z.string().min(1).optional(),
-      category: z.string().min(1).optional(),
-      description: z.string().min(1).optional(),
-      publisher: z.string().min(1).optional(),
-      author: z.string().array().optional(),
+  body: booksSchema
+    .omit({
+      isAvailable: true,
+      borrowedDate: true,
+      returnedDate: true,
     })
-    .strict(),
+    .partial(),
 })

@@ -68,7 +68,7 @@ export class BookRepo {
     return true
   }
 
-  updateOne(ISBN: string, payload: Partial<Book>): boolean {
+  updateOne(ISBN: string, payload: Partial<Book>): boolean | Book {
     const findISBNIndex = this.books.findIndex(
       (book: Book) => book.ISBN === ISBN
     )
@@ -81,10 +81,10 @@ export class BookRepo {
       this.books[findISBNIndex],
       payload
     )
-    return true
+    return this.books[findISBNIndex]
   }
 
-  updateAvailableStatus(ISBN: string, newStatus: boolean): boolean {
+  updateAvailableStatus(ISBN: string, newStatus: boolean): boolean | Book {
     const findISBNIndex = this.books.findIndex(
       (book: Book) => book.ISBN === ISBN && book.isAvailable !== newStatus
     )
@@ -101,7 +101,7 @@ export class BookRepo {
       this.books[findISBNIndex].returnedDate = null
       this.books[findISBNIndex].borrowedDate = new Date()
     }
-    return true
+    return this.books[findISBNIndex]
   }
 
   deleteOne(ISBN: string): boolean {

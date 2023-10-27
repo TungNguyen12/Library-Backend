@@ -1,8 +1,4 @@
-import express, {
-  type NextFunction,
-  type Request,
-  type Response,
-} from 'express'
+import express from 'express'
 
 import BookController from '../controllers/bookController.js'
 import {
@@ -18,25 +14,13 @@ router.get('/', BookController.getAllBooks)
 router.get('/:ISBN', BookController.getBookByISBN)
 
 // Create new Book (require admin auth)
-router.post(
-  '/',
-  (req: Request, res: Response, next: NextFunction) => {
-    validateCreateBook(req, res, next)
-  },
-  BookController.createNewBook
-)
+router.post('/', validateCreateBook, BookController.createNewBook)
 
 // Delete Book with given ISBN (require admin auth)
 router.delete('/:ISBN', BookController.deleteBookByISBN)
 
 // Update Book with given ISBN (require admin auth)
-router.put(
-  '/:ISBN',
-  (req: Request, res: Response, next: NextFunction) => {
-    validateUpdateBook(req, res, next)
-  },
-  BookController.updateBookInfo
-)
+router.put('/:ISBN', validateUpdateBook, BookController.updateBookInfo)
 
 // borrow Book with given ISBN (require user/admin auth)
 router.post('/borrow/:ISBN', BookController.borrowBookByISBN)

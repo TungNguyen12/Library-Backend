@@ -1,12 +1,6 @@
-export interface Book {
-  ISBN: string
-  title: string
-  edition: string
-  category: string
-  description: string
-  publisher: string
-  author: string[]
-  isAvailable: boolean
-  borrowedDate: Date | null
-  returnedDate: Date | null
-}
+import type z from 'zod'
+import { type booksSchema } from '../schemas/bookSchema'
+
+type BookDTO = z.infer<typeof booksSchema>
+
+export type Book = BookDTO
