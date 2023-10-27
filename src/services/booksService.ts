@@ -1,5 +1,5 @@
-import { BookRepo } from 'models/bookModel'
-import { type Book } from 'types/Book'
+import { BookRepo } from '../models/bookModel.js'
+import { type Book } from '../types/Book.js'
 
 const booksRepo = new BookRepo()
 

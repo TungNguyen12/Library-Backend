@@ -4,11 +4,11 @@ import express, {
   type Response,
 } from 'express'
 
-import BookController from 'controllers/bookController'
+import BookController from '../controllers/bookController.js'
 import {
   validateCreateBook,
   validateUpdateBook,
-} from 'middlewares/bookValidate'
+} from '../middlewares/bookValidate.js'
 const router = express.Router()
 
 // Get all Book

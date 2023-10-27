@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import { bookCreateSchema, bookUpdateSchema } from 'schemas/bookSchema'
-import { ApiError } from 'utils/ApiError'
+import { bookCreateSchema, bookUpdateSchema } from '../schemas/bookSchema.js'
+import { ApiError } from '../utils/ApiError.js'
 
 export const validateCreateBook = (
   req: Request,
@@ -15,7 +15,7 @@ export const validateCreateBook = (
     })
     next()
   } catch (error) {
-    next(ApiError.badRequest('Bad request.'))
+    next(ApiError.badRequest('Bad request. fail'))
   }
 }
 

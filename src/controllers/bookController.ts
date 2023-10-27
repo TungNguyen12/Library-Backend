@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import BooksServices from 'services/booksService'
-import { ApiError } from 'utils/ApiError'
+import BooksServices from '../services/booksService.js'
+import { ApiError } from '../utils/ApiError.js'
 
 const getAllBooks = (_: Request, res: Response): void => {
   const books = BooksServices.getAll()
@@ -43,7 +43,7 @@ const updateBookInfo = (
   const body = req.body
   const result = BooksServices.updateOne(ISBN, body)
 
-  if (result === false) {
+  if (!result) {
     next(ApiError.notFound('Book not found'))
     return
   }
@@ -59,7 +59,7 @@ const borrowBookByISBN = (
   const ISBN = req.params.ISBN
   const result = BooksServices.updateAvailableStatus(ISBN, false)
 
-  if (result === false) {
+  if (!result) {
     next(ApiError.notFound('Book not found or availble to borrow'))
     return
   }
@@ -75,7 +75,7 @@ const returnBookByISBN = (
   const ISBN = req.params.ISBN
   const result = BooksServices.updateAvailableStatus(ISBN, true)
 
-  if (result === false) {
+  if (!result) {
     next(ApiError.notFound('Book not found or availble to borrow'))
     return
   }
@@ -90,7 +90,7 @@ const deleteBookByISBN = (
 ): void => {
   const ISBN = req.params.ISBN
 
-  if (BooksServices.deleteOne(ISBN) === false) {
+  if (!BooksServices.deleteOne(ISBN)) {
     next(ApiError.notFound('Book not found'))
     return
   }
