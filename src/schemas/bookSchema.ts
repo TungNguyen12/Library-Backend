@@ -14,7 +14,7 @@ export const booksSchema = z
       .string(requiredErrorMessage('ISBN'))
       .min(10)
       .max(13)
-      .regex(/(?:\D*\d){10}(?:(?:\D*\d){3})?/, 'Invalid ISBN'),
+      .regex(/^(?:\D*\d){10}(?:(?:\D*\d){3})?$/, 'Invalid ISBN'),
     title: z
       .string(requiredErrorMessage('Title'))
       .min(1, emptyErrorMessage('Title')),

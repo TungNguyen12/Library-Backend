@@ -1,7 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import { bookCreateSchema, bookUpdateSchema } from '../schemas/bookSchema.js'
 import { ApiError } from '../utils/ApiError.js'
-import { ZodError } from 'zod'
+import { type ZodError } from 'zod'
 
 export const validateCreateBook = (
   req: Request,
@@ -14,10 +14,13 @@ export const validateCreateBook = (
     })
     next()
   } catch (error) {
-    if (error instanceof ZodError) {
-      next(ApiError.badRequest('Bad Request', error.errors))
-    }
-    next(ApiError.internal('Something wrong happened'))
+    const e = error as ZodError
+    const errorMessages: string[] = []
+    JSON.parse(e.message).forEach((element: any) => {
+      errorMessages.push(element.message)
+    })
+
+    next(ApiError.badRequest('Bad request.', errorMessages.join(' ')))
   }
 }
 
@@ -32,9 +35,12 @@ export const validateUpdateBook = (
     })
     next()
   } catch (error) {
-    if (error instanceof ZodError) {
-      next(ApiError.badRequest('Bad Request', error.errors))
-    }
-    next(ApiError.internal('Something wrong happened'))
+    const e = error as ZodError
+    const errorMessages: string[] = []
+    JSON.parse(e.message).forEach((element: any) => {
+      errorMessages.push(element.message)
+    })
+
+    next(ApiError.badRequest('Bad request.', errorMessages.join(' ')))
   }
 }
