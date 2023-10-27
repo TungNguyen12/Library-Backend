@@ -18,9 +18,7 @@ app.use(loggingMiddleware)
 app.use(entitiesMonitorMiddleware)
 
 // Routes
-app.use(express.json())
 app.use('/api/v1/users', usersRoutes)
-app.use('/api/v1/items', itemRoutes)
 app.use('/api/v1/authors', authorsRoutes)
 app.use('/api/v1/books', booksRoutes)
 
