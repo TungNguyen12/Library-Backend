@@ -25,7 +25,12 @@ export function validateCreateAuthor(
     next()
   } catch (error) {
     const e = error as ZodError
-    next(ApiError.badRequest('Bad request.', JSON.parse(e.message)[0].message))
+    const errorMessages: string[] = []
+    JSON.parse(e.message).forEach((element: any) => {
+      errorMessages.push(element.message)
+    })
+
+    next(ApiError.badRequest('Bad request.', errorMessages.join(' ')))
   }
 }
 
@@ -47,6 +52,11 @@ export function validateUpdateAuthor(
     next()
   } catch (error) {
     const e = error as ZodError
-    next(ApiError.badRequest('Bad request.', JSON.parse(e.message)[0].message))
+    const errorMessages: string[] = []
+    JSON.parse(e.message).forEach((element: any) => {
+      errorMessages.push(element.message)
+    })
+
+    next(ApiError.badRequest('Bad request.', errorMessages.join(' ')))
   }
 }
