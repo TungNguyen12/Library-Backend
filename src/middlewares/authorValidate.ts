@@ -1,5 +1,5 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import { z } from 'zod'
+import { ZodError, z } from 'zod'
 
 import {
   authorCreateSchema,
@@ -24,8 +24,8 @@ export function validateCreateAuthor(
     })
     next()
   } catch (error) {
-    const e = error as Error
-    next(ApiError.badRequest(JSON.parse(e.message)[0].message))
+    const e = error as ZodError
+    next(ApiError.badRequest('Bad request.', JSON.parse(e.message)[0].message))
   }
 }
 
@@ -46,7 +46,7 @@ export function validateUpdateAuthor(
     })
     next()
   } catch (error) {
-    const e = error as Error
-    next(ApiError.badRequest(JSON.parse(e.message)[0].message))
+    const e = error as ZodError
+    next(ApiError.badRequest('Bad request.', JSON.parse(e.message)[0].message))
   }
 }
