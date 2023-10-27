@@ -48,7 +48,7 @@ export class BookRepo {
     return this.books.find((book: Book) => book.ISBN === ISBN)
   }
 
-  createOne(payload: Partial<Book>): boolean {
+  createOne(payload: Partial<Book>): boolean | Book {
     const findISBNIndex = this.books.findIndex(
       (book: Book) => book.ISBN === payload.ISBN
     )
@@ -65,7 +65,7 @@ export class BookRepo {
     }
 
     this.books.push(newBook as Book)
-    return true
+    return newBook as Book
   }
 
   updateOne(ISBN: string, payload: Partial<Book>): boolean | Book {

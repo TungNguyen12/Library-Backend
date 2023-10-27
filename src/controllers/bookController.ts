@@ -31,7 +31,12 @@ const createNewBook = (
   const body = req.body
   const result = BooksServices.createOne(body)
 
-  res.status(201).json(result)
+  if (result === false) {
+    next(ApiError.badRequest('Book failed to create'))
+    return
+  }
+
+  res.json(result)
 }
 
 const updateBookInfo = (
@@ -43,7 +48,7 @@ const updateBookInfo = (
   const body = req.body
   const result = BooksServices.updateOne(ISBN, body)
 
-  if (!result) {
+  if (result === false) {
     next(ApiError.notFound('Book not found'))
     return
   }
@@ -59,7 +64,7 @@ const borrowBookByISBN = (
   const ISBN = req.params.ISBN
   const result = BooksServices.updateAvailableStatus(ISBN, false)
 
-  if (!result) {
+  if (result === false) {
     next(ApiError.notFound('Book not found or availble to borrow'))
     return
   }
@@ -75,7 +80,7 @@ const returnBookByISBN = (
   const ISBN = req.params.ISBN
   const result = BooksServices.updateAvailableStatus(ISBN, true)
 
-  if (!result) {
+  if (result === false) {
     next(ApiError.notFound('Book not found or availble to borrow'))
     return
   }

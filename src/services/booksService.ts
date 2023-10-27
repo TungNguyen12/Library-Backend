@@ -13,7 +13,7 @@ const getOne = (ISBN: string): Book | undefined => {
   return book
 }
 
-const createOne = (payload: Partial<Book>): boolean => {
+const createOne = (payload: Partial<Book>): boolean | Book => {
   const result = booksRepo.createOne(payload)
   return result
 }
