@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express'
-import { ZodError } from 'zod'
+import type { ZodError } from 'zod'
 
 import { userCreateSchema, userUpdateSchema } from '../schemas/usersSchema.js'
 import { ApiError } from '../utils/ApiError.js'
@@ -17,10 +17,13 @@ export async function validateCreateUser(
     })
     next()
   } catch (error) {
-    if (error instanceof ZodError) {
-      next(ApiError.badRequest('Bad Request', error.errors))
-    }
-    next(ApiError.internal('Something wrong happened'))
+    const e = error as ZodError
+    const errorMessages: string[] = []
+    JSON.parse(e.message).forEach((element: any) => {
+      errorMessages.push(element.message)
+    })
+
+    next(ApiError.badRequest('Bad request.', errorMessages.join(' ')))
   }
 }
 
@@ -37,9 +40,12 @@ export async function validateUpdateUser(
     })
     next()
   } catch (error) {
-    if (error instanceof ZodError) {
-      next(ApiError.badRequest('Bad Request', error.errors))
-    }
-    next(ApiError.internal('Something wrong happened'))
+    const e = error as ZodError
+    const errorMessages: string[] = []
+    JSON.parse(e.message).forEach((element: any) => {
+      errorMessages.push(element.message)
+    })
+
+    next(ApiError.badRequest('Bad request.', errorMessages.join(' ')))
   }
 }
