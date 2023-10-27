@@ -2,20 +2,27 @@ import { z } from 'zod'
 
 export const userSchema = z
   .object({
-    firstName: z.string({
-      required_error: 'First name is required',
-    }),
-    lastName: z.string({
-      required_error: 'Last name is required',
-    }),
+    firstName: z
+      .string({
+        required_error: 'First name is required',
+      })
+      .min(1, 'First name cannot be empty.'),
+    lastName: z
+      .string({
+        required_error: 'Last name is required',
+      })
+      .min(1, 'Last name cannot be empty.'),
     email: z
       .string({
         required_error: 'Email is required',
       })
+      .min(1, 'Email cannot be empty.')
       .email('Not a valid email'),
-    phoneNumber: z.string({
-      required_error: 'Phone number is required',
-    }),
+    phoneNumber: z
+      .string({
+        required_error: 'Phone number is required',
+      })
+      .min(1, 'Phone number cannot be empty.'),
   })
   .strict()
 

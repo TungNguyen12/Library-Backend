@@ -1,4 +1,4 @@
-import { type UserUpdate, type User } from '../types/user.js'
+import { type UserUpdate, type User } from '../types/User.js'
 import { UserRepo } from '../models/userModel.js'
 
 const usersRepo = new UserRepo()
