@@ -1,6 +1,7 @@
-export interface Author {
-  id: string
-  firstName: string
-  lastName: string
-  books: string[]
-}
+import { type z } from 'zod'
+
+import { type authorCreateSchema } from '../schemas/authorsSchema.js'
+
+type AuthorDTO = z.infer<typeof authorCreateSchema>
+
+export type Author = AuthorDTO & { id: string }
