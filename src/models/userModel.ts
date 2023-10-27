@@ -1,6 +1,6 @@
 // Simulating the Database
 import { v4 as uuid } from 'uuid'
-import type { User } from '../types/user.js'
+import type { User } from '../types/User.js'
 export class UserRepo {
   users = [
     {
@@ -32,7 +32,7 @@ export class UserRepo {
   }
 
   createOne(newUser: User): User {
-    this.users = [...this.users, { ...newUser, id: uuid() }]
+    this.users = [...this.users, { ...newUser, id: uuid(), role: 'user' }]
 
     return newUser
   }
