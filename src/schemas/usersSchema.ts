@@ -18,6 +18,11 @@ export const userSchema = z
       })
       .min(1, 'Email cannot be empty.')
       .email('Not a valid email'),
+    address: z
+      .string({
+        required_error: 'Address is required',
+      })
+      .min(1, 'Address cannot be empty.'),
     phoneNumber: z
       .string({
         required_error: 'Phone number is required',
