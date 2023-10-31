@@ -2,6 +2,7 @@ import { type NextFunction, type Request, type Response } from 'express'
 import { bookCreateSchema, bookUpdateSchema } from '../schemas/bookSchema.js'
 import { ApiError } from '../utils/ApiError.js'
 import { type ZodError } from 'zod'
+import customZodErrorParser from '../utils/customZodErrorParser.js'
 
 export const validateCreateBook = (
   req: Request,
@@ -9,18 +10,17 @@ export const validateCreateBook = (
   next: NextFunction
 ): void => {
   try {
-    bookCreateSchema.parse({
-      body: req.body,
-    })
+    bookCreateSchema.parse(req.body)
     next()
   } catch (error) {
     const e = error as ZodError
-    const errorMessages: string[] = []
-    JSON.parse(e.message).forEach((element: any) => {
-      errorMessages.push(element.message)
-    })
-
-    next(ApiError.badRequest('Bad request.', errorMessages.join(' ')))
+    const errorMessages = e.flatten()
+    next(
+      ApiError.badRequest(
+        'Bad request.',
+        customZodErrorParser(errorMessages.fieldErrors)
+      )
+    )
   }
 }
 
@@ -30,17 +30,16 @@ export const validateUpdateBook = (
   next: NextFunction
 ): void => {
   try {
-    bookUpdateSchema.parse({
-      body: req.body,
-    })
+    bookUpdateSchema.parse(req.body)
     next()
   } catch (error) {
     const e = error as ZodError
-    const errorMessages: string[] = []
-    JSON.parse(e.message).forEach((element: any) => {
-      errorMessages.push(element.message)
-    })
-
-    next(ApiError.badRequest('Bad request.', errorMessages.join(' ')))
+    const errorMessages = e.flatten()
+    next(
+      ApiError.badRequest(
+        'Bad request.',
+        customZodErrorParser(errorMessages.fieldErrors)
+      )
+    )
   }
 }
