@@ -43,7 +43,7 @@ export const booksSchema = z
           break
         }
         case 10: {
-          weight = 0
+          weight = 10
           sum = 0
           for (i = 0; i < 9; i++) {
             digit = parseInt(val[i])
@@ -54,7 +54,11 @@ export const booksSchema = z
           if (check === 10) {
             check = 'X'
           }
-          result = check === val[val.length - 1].toUpperCase()
+          const last =
+            val[val.length - 1].toUpperCase() === 'X'
+              ? 'X'
+              : parseInt(val[val.length - 1])
+          result = check === last
           break
         }
         default: {
