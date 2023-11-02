@@ -1,4 +1,4 @@
-import { ZodIssueCode, type ZodErrorMap } from 'zod'
+import { type ZodErrorMap, ZodIssueCode } from 'zod'
 
 const customErrorMap: ZodErrorMap = (issue, ctx) => {
   const parsedField = issue.path[0].toString()
@@ -17,7 +17,7 @@ const customErrorMap: ZodErrorMap = (issue, ctx) => {
       }
     case ZodIssueCode.invalid_string:
       return {
-        message: `Invalid ${issue.validation}`,
+        message: `Invalid ${String(issue.validation)}`,
       }
     case ZodIssueCode.too_small: {
       if (issue.minimum > 1)
