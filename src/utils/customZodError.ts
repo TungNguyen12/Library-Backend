@@ -1,11 +1,20 @@
 import { ZodIssueCode, type ZodErrorMap } from 'zod'
 
 const customErrorMap: ZodErrorMap = (issue, ctx) => {
-  const parsedField = issue.path[0].toString()
+  let parsedField: string
+
+  if (issue.code !== ZodIssueCode.unrecognized_keys) {
+    parsedField = issue.path[0].toString()
+  } else {
+    parsedField =
+      '"' + issue.keys[0] + issue.keys.slice(1).join('" and "') + '"'
+  }
+
   const formattedField = parsedField
     .charAt(0)
     .toUpperCase()
     .concat(parsedField.slice(1))
+
   switch (issue.code) {
     case ZodIssueCode.invalid_type:
       return {
@@ -31,6 +40,17 @@ const customErrorMap: ZodErrorMap = (issue, ctx) => {
     case ZodIssueCode.too_big: {
       return {
         message: `${formattedField} length exceed ${issue.maximum}`,
+      }
+    }
+    case ZodIssueCode.unrecognized_keys: {
+      if (issue.keys.length > 1) {
+        return {
+          message: `${formattedField} are not regonized as valid keys`,
+        }
+      } else {
+        return {
+          message: `${formattedField} is not regonized as a valid key`,
+        }
       }
     }
     case ZodIssueCode.custom: {

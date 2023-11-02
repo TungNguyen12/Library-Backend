@@ -16,10 +16,7 @@ const validatorTryCatch = (
     const e = error as ZodError
     const errorMessages = e.flatten()
     next(
-      ApiError.badRequest(
-        'Bad request.',
-        customZodErrorParser(errorMessages.fieldErrors)
-      )
+      ApiError.badRequest('Bad request.', customZodErrorParser(errorMessages))
     )
   }
 }
