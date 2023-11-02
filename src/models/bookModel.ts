@@ -70,7 +70,8 @@ export class BookRepo {
 
   updateOne(ISBN: string, payload: Partial<Book>): boolean | Book {
     const findISBNIndex = this.books.findIndex(
-      (book: Book) => book.ISBN === ISBN
+      (book: Book) =>
+        book.ISBN.replace(/[^0-9X]/gi, '') === ISBN.replace(/[^0-9X]/gi, '')
     )
 
     if (findISBNIndex === -1) {

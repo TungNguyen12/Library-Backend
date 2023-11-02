@@ -49,7 +49,7 @@ const updateBookInfo = (
   const result = BooksServices.updateOne(ISBN, body)
 
   if (result === false) {
-    next(ApiError.notFound('Dublicated ISBN'))
+    next(ApiError.notFound('Duplicate ISBN'))
     return
   }
 
