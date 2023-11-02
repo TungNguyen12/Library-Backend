@@ -1,4 +1,5 @@
 import { type Book } from '../types/Book.js'
+import { type AtleastOne } from '../types/AdditionalType.js'
 
 export class BookRepo {
   books: Book[] = [
@@ -48,9 +49,11 @@ export class BookRepo {
     return this.books.find((book: Book) => book.ISBN === ISBN)
   }
 
-  createOne(payload: Partial<Book>): boolean | Book {
+  createOne(payload: AtleastOne<Book, 'ISBN'>): boolean | Book {
     const findISBNIndex = this.books.findIndex(
-      (book: Book) => book.ISBN === payload.ISBN
+      (book: Book) =>
+        book.ISBN.replace(/[^0-9X]/gi, '') ===
+        payload.ISBN.replace(/[^0-9X]/gi, '')
     )
 
     if (findISBNIndex !== -1) {
@@ -70,7 +73,8 @@ export class BookRepo {
 
   updateOne(ISBN: string, payload: Partial<Book>): boolean | Book {
     const findISBNIndex = this.books.findIndex(
-      (book: Book) => book.ISBN === ISBN
+      (book: Book) =>
+        book.ISBN.replace(/[^0-9X]/gi, '') === ISBN.replace(/[^0-9X]/gi, '')
     )
 
     if (findISBNIndex === -1) {
