@@ -4,6 +4,9 @@ node_modules/
 # Build Artifacts
 dist/
 
+# Environment Variables (Sensitive Information)
+.env
+
 # Package Lock Files
 package-lock.json
 pnpm-lock.yaml
