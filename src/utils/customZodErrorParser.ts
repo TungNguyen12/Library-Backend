@@ -13,10 +13,12 @@ const customZodErrorParser = (error: Record<string, any>): ParsingType[] => {
     })
   })
 
-  errorMap.push({
-    field: 'Form Error',
-    error: error.formErrors.join(''),
-  })
+  if (error.formErrors.length > 1) {
+    errorMap.push({
+      field: 'Form Error',
+      error: error.formErrors.join(''),
+    })
+  }
 
   return errorMap
 }
