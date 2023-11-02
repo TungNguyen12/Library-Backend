@@ -32,7 +32,7 @@ const createNewBook = (
   const result = BooksServices.createOne(body)
 
   if (result === false) {
-    next(ApiError.badRequest('Book failed to create'))
+    next(ApiError.badRequest('Book failed to create due to dupclicate ISBN'))
     return
   }
 
@@ -49,7 +49,7 @@ const updateBookInfo = (
   const result = BooksServices.updateOne(ISBN, body)
 
   if (result === false) {
-    next(ApiError.notFound('Duplicate ISBN'))
+    next(ApiError.notFound('Book with given ISBN failed to update'))
     return
   }
 

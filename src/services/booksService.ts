@@ -1,5 +1,6 @@
 import { BookRepo } from '../models/bookModel.js'
 import { type Book } from '../types/Book.js'
+import { type AtleastOne } from '../types/AdditionalType.js'
 
 const booksRepo = new BookRepo()
 
@@ -13,7 +14,7 @@ const getOne = (ISBN: string): Book | undefined => {
   return book
 }
 
-const createOne = (payload: Partial<Book>): boolean | Book => {
+const createOne = (payload: AtleastOne<Book, 'ISBN'>): boolean | Book => {
   const result = booksRepo.createOne(payload)
   return result
 }
