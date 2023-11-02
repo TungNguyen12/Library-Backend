@@ -6,8 +6,16 @@ const customErrorMap: ZodErrorMap = (issue, ctx) => {
   if (issue.code !== ZodIssueCode.unrecognized_keys) {
     parsedField = issue.path[0].toString()
   } else {
-    parsedField =
-      '"' + issue.keys[0] + issue.keys.slice(1).join('" and "') + '"'
+    if (issue.keys.length > 1) {
+      parsedField =
+        '"' +
+        issue.keys[0] +
+        '" and "' +
+        issue.keys.slice(1).join('" and "') +
+        '"'
+    } else {
+      parsedField = '"' + issue.keys[0] + '"'
+    }
   }
 
   const formattedField = parsedField
@@ -45,11 +53,11 @@ const customErrorMap: ZodErrorMap = (issue, ctx) => {
     case ZodIssueCode.unrecognized_keys: {
       if (issue.keys.length > 1) {
         return {
-          message: `${formattedField} are not regonized as valid keys`,
+          message: `${formattedField} are not regconized as valid keys`,
         }
       } else {
         return {
-          message: `${formattedField} is not regonized as a valid key`,
+          message: `${formattedField} is not regconized as a valid key`,
         }
       }
     }
