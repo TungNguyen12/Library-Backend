@@ -33,10 +33,13 @@ const customErrorMap: ZodErrorMap = (issue, ctx) => {
         message: `${formattedField} length exceed ${issue.maximum}`,
       }
     }
-    case ZodIssueCode.custom:
+    case ZodIssueCode.custom: {
+      const params =
+        issue.params !== undefined ? issue.params : { customMessage: '' }
       return {
-        message: `Placeholder`,
+        message: `${params.customMessage}`,
       }
+    }
   }
 
   return { message: ctx.defaultError }
