@@ -62,8 +62,7 @@ const customErrorMap: ZodErrorMap = (issue, ctx) => {
       }
     }
     case ZodIssueCode.custom: {
-      const params =
-        issue.params !== undefined ? issue.params : { customMessage: '' }
+      const params = issue.params ?? { customMessage: '' }
       return {
         message: `${params.customMessage}`,
       }
