@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 
@@ -15,6 +14,11 @@ app.listen(PORT, () => {
   console.log(`Server is running on localhost:${PORT}`)
 })
 
-mongoose.connect(dbUrl).then(() => {
-  console.log('Connected!')
-})
+mongoose
+  .connect(dbUrl)
+  .then(() => {
+    console.log('Connected!')
+  })
+  .catch((error) => {
+    console.log('ERROR: ', error)
+  })
