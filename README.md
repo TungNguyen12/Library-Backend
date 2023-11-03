@@ -1,41 +1,35 @@
-# ExpressJS
+# Backend Assignment - API
 
-## Basic CRUD Operations
+This is the README for an Express backend assignment that requires you to implement the REST APIs for a library management system or E-commerce based on the Entity-Relationship Diagram (ERD) assignment. The ERD assignment should outline the data model, including the relationships and attributes of entities within the system. You are tasked with designing and documenting the REST APIs according to the ERD specifications.
 
-**Books OR Products:**
+## Introduction
 
-1. Create a new (book or product)
-2. Get a list of all (book or product)s
-3. Get a book by ISBN or product by ID
-4. Update (book or product) information
-5. Delete a (book or product)
+This Express backend assignment involves building a RESTful API for a library management system or E-commerce. You are provided with an Entity-Relationship Diagram (ERD) assignment that outlines the data model, including the relationships and attributes of entities such as books, users, authors, and admin roles.
 
-**Authors OR Catgegories:**
+## Entity CRUD Operations
 
-1. Create a new (author or category)
-2. Get a list of all (author or category)s
-3. Get an (author or category) by ID
-4. Update (author or category) information
-5. Delete an (author or category)
+`Before` implementing JWT authentication, `you are required to create the basic CRUD` (Create, Read, Update, Delete) operations for the entities based on the specifications provided in the ERD assignment. This section focuses on designing and implementing the core functionality to manage and interact with the specified entities.
 
-**Users:**
+## Authentication
 
-1. Create a new user
-2. Get a list of all users
-3. Get a user by ID
-4. Update user information
-5. Delete a user
+For security, this API should implement user authentication using JSON Web Tokens (JWT). Each user should have a unique username and password OR broker authentication. Certain admin endpoints may require special privileges for access.
 
-## Error Handling and Logging
+## Minimum requirements
 
-Implement these routes and associated error handling and logging mechanisms in your Express.js application.
+Please check the REST API slides where you can find the minimum requirements of the project.
 
-**Types of error handlers:**
+## Response Format
 
-1. Errors for 4xx and 5xx code statuses
-2. Global Error
+All API responses should be provided in JSON format. A typical response should include a `status`, `data`, and an optional `message` field. The `status` field should indicate the success or failure of the request.
 
-**Logging middlware:**
+## Error Handling
 
-1. log every incoming request
-2. monitor status of your application. when entities are created ie, user is created
+The API should include comprehensive error handling with clear and informative error messages. Errors should be accompanied by appropriate HTTP status codes.
+
+## Testing
+
+Developers should conduct unit tests and integration tests to ensure the reliability and correctness of the API. Instructions for running the tests should be provided in the project's documentation.
+
+## Deployment
+
+The API should be deployed before the **`DEADLINE`** which is end of Week 47 24th of Nov
