@@ -13,11 +13,9 @@ export const authorCreateSchema = z
       })
       .min(1, 'Last name cannot be empty.'),
     books: z
-      .string({
-        required_error: 'Book array is required.',
-      })
-      .array()
-      .nonempty({ message: 'Book array cannot be empty.' }),
+      .array(z.string().min(1, 'Book title cannot be empty.'))
+      .min(1, { message: 'Book array cannot be empty.' })
+      .default([]),
   })
   .strict()
 
@@ -27,6 +25,7 @@ export const authorUpdateSchema = z
     lastName: z.string().min(1, 'Last name cannot be empty.').optional(),
     books: z
       .string()
+      .min(1, 'Book title cannot be empty.')
       .array()
       .nonempty({ message: 'Book array cannot be empty.' })
       .optional(),

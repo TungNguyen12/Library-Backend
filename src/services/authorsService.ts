@@ -1,34 +1,60 @@
-import { AuthorRepo } from '../models/authorsModel.js'
+import mongoose from 'mongoose'
+
+import AuthorRepo from '../models/authorsModel.js'
 import { type Author } from '../types/Author.js'
 
-const authorsRepo = new AuthorRepo()
-
-function getAll(): Author[] {
-  const authors = authorsRepo.getAll()
-  return authors
+async function getAll(): Promise<Author[]> {
+  const authors = await AuthorRepo.find().exec()
+  return authors as Author[]
 }
 
-function getOne(authorId: string): Author | undefined {
-  const author = authorsRepo.getOne(authorId)
-  return author
+async function getOne(authorId: string): Promise<Author | null | Error> {
+  try {
+    const id = new mongoose.Types.ObjectId(authorId)
+    const author = await AuthorRepo.findById(id)
+    return author as Author | null
+  } catch (e) {
+    const err = e as Error
+    return err
+  }
 }
 
-function createOne(payload: Partial<Author>): Author | undefined {
-  const newAuthor = authorsRepo.createOne(payload)
-  return newAuthor
+async function createOne(payload: Author): Promise<Author | undefined> {
+  const newAuthor = new AuthorRepo(payload)
+  const res = await newAuthor.save()
+  return res as Author | undefined
 }
 
-function deleteOne(authorId: string): boolean {
-  const result = authorsRepo.deleteOne(authorId)
-  return result
+async function deleteOne(authorId: string): Promise<boolean | Error> {
+  try {
+    const id = new mongoose.Types.ObjectId(authorId)
+    const author = await AuthorRepo.findById(id)
+    if (!(author instanceof Error || author === null)) {
+      await author.deleteOne()
+      return true
+    }
+    return false
+  } catch (e) {
+    const err = e as Error
+    return err
+  }
 }
 
-function updateOne(
+async function updateOne(
   authorId: string,
   payload: Partial<Author>
-): Author | boolean {
-  const updatedAuthor = authorsRepo.updateOne(authorId, payload)
-  return updatedAuthor
+): Promise<Author | null | Error> {
+  try {
+    const id = new mongoose.Types.ObjectId(authorId)
+    const filter = { _id: id }
+    const updatedAuthor = await AuthorRepo.findOneAndUpdate(filter, payload, {
+      new: true,
+    })
+    return updatedAuthor as Author | null
+  } catch (e) {
+    const err = e as Error
+    return err
+  }
 }
 
 export default { getAll, getOne, createOne, deleteOne, updateOne }

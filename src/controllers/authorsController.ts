@@ -3,38 +3,53 @@ import { type NextFunction, type Request, type Response } from 'express'
 import { ApiError } from '../utils/ApiError.js'
 import AuthorsService from '../services/authorsService.js'
 
-function getAllAuthors(_: Request, res: Response): void {
-  const authors = AuthorsService.getAll()
+async function getAllAuthors(_: Request, res: Response): Promise<void> {
+  const authors = await AuthorsService.getAll()
   res.json(authors)
 }
 
-function getAuthorById(req: Request, res: Response, next: NextFunction): void {
+async function getAuthorById(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   const authorId = req.params.authorId
-  const author = AuthorsService.getOne(authorId)
+  const author = await AuthorsService.getOne(authorId)
 
-  if (author === undefined) {
+  if (author === null) {
     next(ApiError.notFound('Author not found.'))
+    return
+  } else if (author instanceof Error) {
+    next(ApiError.badRequest('Bad request.', author.message))
     return
   }
 
   res.json(author)
 }
 
-function createNewAuthor(
+async function createNewAuthor(
   req: Request,
   res: Response,
   next: NextFunction
-): void {
+): Promise<void> {
   const body = req.body
-  const result = AuthorsService.createOne(body)
+  const result = await AuthorsService.createOne(body)
 
   res.status(201).json(result)
 }
 
-function deleteAuthor(req: Request, res: Response, next: NextFunction): void {
+async function deleteAuthor(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   const authorId = req.params.authorId
+  const result = await AuthorsService.deleteOne(authorId)
 
-  if (!AuthorsService.deleteOne(authorId)) {
+  if (result instanceof Error) {
+    next(ApiError.badRequest('Bad request.', result.message))
+    return
+  } else if (!result) {
     next(ApiError.notFound('Author not found.'))
     return
   }
@@ -42,17 +57,20 @@ function deleteAuthor(req: Request, res: Response, next: NextFunction): void {
   res.json({ isDeleted: true })
 }
 
-function updateAuthorInfo(
+async function updateAuthorInfo(
   req: Request,
   res: Response,
   next: NextFunction
-): void {
+): Promise<void> {
   const authorId = req.params.authorId
   const body = req.body
-  const result = AuthorsService.updateOne(authorId, body)
+  const result = await AuthorsService.updateOne(authorId, body)
 
-  if (result === false) {
+  if (result === null) {
     next(ApiError.notFound('Author not found.'))
+    return
+  } else if (result instanceof Error) {
+    next(ApiError.badRequest('Bad request.', result.message))
     return
   }
 
