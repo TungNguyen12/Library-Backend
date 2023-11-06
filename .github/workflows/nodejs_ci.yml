@@ -8,6 +8,7 @@ on:
     branches:
       - main
 
+jobs:
   cache-and-install:
     runs-on: ubuntu-latest
 
