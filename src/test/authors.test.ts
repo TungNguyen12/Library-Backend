@@ -23,11 +23,11 @@ describe('GET authors', () => {
 
   it('should work', async () => {
     const mongoDbContainer = await new GenericContainer('mongo')
-      .withExposedPorts(8888)
+      .withExposedPorts(27017)
       .start()
 
     mongoose
-      .connect(`mongodb://localhost:${mongoDbContainer.getMappedPort(8888)}`)
+      .connect(`mongodb://localhost:${mongoDbContainer.getMappedPort(27017)}`)
       .catch((err) => {
         throw err
       })
