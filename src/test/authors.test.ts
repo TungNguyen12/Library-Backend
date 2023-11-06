@@ -1,4 +1,7 @@
+import { GenericContainer } from 'testcontainers'
 // import request from 'supertest'
+
+import mongoose from 'mongoose'
 
 // import app from '../app.js'
 // import AuthorRepo from '../models/authorsModel.js'
@@ -16,6 +19,20 @@ describe('GET authors', () => {
     //   expect(response.body.length).toBe(authors.length)
 
     expect(true).toBe(true)
+  })
+
+  it('should work', async () => {
+    const mongoDbContainer = await new GenericContainer('mongo')
+      .withExposedPorts(8888)
+      .start()
+
+    mongoose
+      .connect(`mongodb://localhost:${mongoDbContainer.getMappedPort(8888)}`)
+      .catch((err) => {
+        throw err
+      })
+    await mongoose.disconnect()
+    await mongoDbContainer.stop()
   })
 })
 
