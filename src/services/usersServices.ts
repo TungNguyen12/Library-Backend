@@ -1,32 +1,40 @@
 import { type UserUpdate, type User } from '../types/User.js'
-import { UserRepo } from '../models/userModel.js'
+import UserRepo from '../models/userModel.js'
 
-const usersRepo = new UserRepo()
+async function findAll(): Promise<User[]> {
+  const users = await UserRepo.find().exec()
 
-function findAll(): User[] {
-  const users = usersRepo.findAll()
-
-  return users
+  return users as User[]
 }
 
-function findOne(userId: string): User | undefined {
-  const user = usersRepo.findOne(userId)
+async function findOne(userId: string): Promise<User | undefined> {
+  const user = await UserRepo.findOne({ _id: userId }).exec()
 
-  return user
+  return user as User
 }
 
-function createOne(newUser: User): User {
-  const user = usersRepo.createOne(newUser)
-  return user
+async function createOne(newUser: User): Promise<User | Error | undefined> {
+  try {
+    const isAvailable = await UserRepo.exists({ email: newUser.email }).exec()
+
+    if (isAvailable === null) {
+      const user = await UserRepo.create(newUser)
+      return user as User
+    }
+    return undefined
+  } catch (e) {
+    const error = e as Error
+    return error
+  }
 }
 
-function deleteUser(userId: string): boolean {
-  const result = usersRepo.deleteUser(userId)
+async function deleteUser(userId: string): boolean {
+  const result = await UserRepo.deleteUser(userId)
   return result
 }
 
-function updateUser(userId: string, payload: UserUpdate): User | boolean {
-  const updatedUser = usersRepo.updateUser(userId, payload)
+async function updateUser(userId: string, payload: UserUpdate): User | boolean {
+  const updatedUser = await UserRepo.updateUser(userId, payload)
   return updatedUser
 }
 
