@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express'
 
-import UsersServices from '../services/usersServices.js'
+import UsersServices from '../services/usersService.js'
 import { ApiError } from '../utils/ApiError.js'
 
 export async function findAllUsers(_: Request, res: Response): Promise<void> {

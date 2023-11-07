@@ -2,14 +2,14 @@ import { type UserUpdate, type User } from '../types/User.js'
 import UserRepo from '../models/userModel.js'
 
 async function findAll(): Promise<User[]> {
-  const users = await UserRepo.find().exec()
-  return users as User[]
+  const users = await UserRepo.find().populate('role').exec()
+  return users as unknown as User[]
 }
 
 async function findOne(userId: string): Promise<User | Error | null> {
   try {
     const user = await UserRepo.findOne({ _id: userId })
-    return user as User
+    return user as unknown as User
   } catch (e) {
     const error = e as Error
     return error
@@ -21,7 +21,7 @@ async function createUser(newUser: User): Promise<User | Error | null> {
     const isAvailable = await UserRepo.exists({ email: newUser.email })
     if (isAvailable === null) {
       const user = await UserRepo.create(newUser)
-      return user as User
+      return user as unknown as User
     }
     return null
   } catch (e) {
@@ -33,7 +33,7 @@ async function createUser(newUser: User): Promise<User | Error | null> {
 async function deleteUser(userId: string): Promise<User | Error | null> {
   try {
     const result = await UserRepo.findByIdAndDelete(userId).exec()
-    return result as User
+    return result as unknown as User
   } catch (e) {
     const error = e as Error
     return error
@@ -50,7 +50,7 @@ async function updateUser(
       payload
     ).exec()
 
-    return updatedUser as User
+    return updatedUser as unknown as User
   } catch (e) {
     const error = e as Error
     console.log(e)
