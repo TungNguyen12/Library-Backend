@@ -41,7 +41,7 @@ export async function deleteUser(
   const deletedUserId = req.params.userId
   const user = await UsersServices.deleteUser(deletedUserId)
 
-  if (user === undefined) {
+  if (user === null) {
     next(ApiError.notFound('User not found'))
     return
   }
