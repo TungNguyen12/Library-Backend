@@ -6,7 +6,7 @@ import { ApiError } from '../utils/ApiError.js'
 
 export async function validateCreateUser(
   req: Request,
-  res: Response,
+  _: Response,
   next: NextFunction
 ): Promise<void> {
   try {
@@ -29,7 +29,7 @@ export async function validateCreateUser(
 
 export async function validateUpdateUser(
   req: Request,
-  res: Response,
+  _: Response,
   next: NextFunction
 ): Promise<void> {
   try {

@@ -13,7 +13,7 @@ async function findOne(userId: string): Promise<User | undefined> {
   return user as User
 }
 
-async function createOne(newUser: User): Promise<User | Error | undefined> {
+async function createOne(newUser: User): Promise<User | Error | null> {
   try {
     const isAvailable = await UserRepo.exists({ email: newUser.email }).exec()
 
@@ -22,24 +22,17 @@ async function createOne(newUser: User): Promise<User | Error | undefined> {
       return user as User
     }
 
-    return undefined
+    return null
   } catch (e) {
     const error = e as Error
     return error
   }
 }
 
-async function deleteUser(userId: string): Promise<number | Error> {
+async function deleteUser(userId: string): Promise<User | Error | null> {
   try {
-    const result = await UserRepo.deleteOne({ _id: userId }).exec()
-
-    if (result.deletedCount === 0) {
-      console.log(`No user with _id ${userId} found.`)
-    } else {
-      console.log(`User with _id ${userId} deleted successfully.`)
-    }
-
-    return result.deletedCount
+    const result = await UserRepo.findByIdAndDelete(userId).exec()
+    return result as User
   } catch (e) {
     const error = e as Error
     return error
@@ -49,20 +42,17 @@ async function deleteUser(userId: string): Promise<number | Error> {
 async function updateUser(
   userId: string,
   payload: UserUpdate
-): Promise<boolean | Error> {
+): Promise<User | Error | null> {
   try {
-    const updatedUser = await UserRepo.updateOne(
+    const updatedUser = await UserRepo.findOneAndUpdate(
       { _id: userId },
       payload
     ).exec()
 
-    if (updatedUser.modifiedCount === 1) {
-      return true
-    } else {
-      throw new Error()
-    }
+    return updatedUser as User
   } catch (e) {
     const error = e as Error
+    console.log(e)
     return error
   }
 }
