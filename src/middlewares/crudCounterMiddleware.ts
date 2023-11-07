@@ -8,16 +8,17 @@ export const crudCounterMiddleware = (
   res: Response,
   next: NextFunction
 ): void => {
-  const originalSend = res.send
+  const crudOperation = httpMethodToCrudOperation(req.method)
 
-  res.send = function (data?: any): Response {
-    const isSuccess = res.statusCode >= 200 && res.statusCode < 300
-    const crudOperation = httpMethodToCrudOperation(req.method)
-    if (crudOperation !== null) {
-      crudstatsService.increment(crudOperation, isSuccess)
+  res.on('finish', async () => {
+    try {
+      const isSuccess = res.statusCode >= 200 && res.statusCode < 300
+      if (crudOperation !== null) {
+        await crudstatsService.increment(crudOperation, isSuccess)
+      }
+    } catch (error) {
+      console.error('Error in crudCounterMiddleware:', error)
     }
-    return originalSend.call(this, data)
-  }
-
+  })
   next()
 }
