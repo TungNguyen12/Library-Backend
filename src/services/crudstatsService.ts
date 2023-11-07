@@ -34,8 +34,8 @@ async function createNewCrudStats(): Promise<CrudStats | Error> {
 
 async function getAll(): Promise<CrudStats | Error> {
   try {
-    const CrudStats = await Stats.findOne({ name: 'crud-stats' })
-    if (CrudStats == null) {
+    const crudStats = await Stats.findOne({ name: 'crud-stats' })
+    if (crudStats == null) {
       try {
         return await createNewCrudStats()
       } catch (e) {
@@ -43,7 +43,7 @@ async function getAll(): Promise<CrudStats | Error> {
       }
     }
 
-    return CrudStats?.data as CrudStats
+    return crudStats?.data as CrudStats
   } catch (e) {
     return e as Error
   }
@@ -53,15 +53,15 @@ async function getOne(
   type: keyof CrudStats
 ): Promise<CrudStats | undefined | Error> {
   try {
-    const stats = await Stats.findOne({ name: 'crud-stats' })
-    if (stats == null) {
+    const crudStats = await Stats.findOne({ name: 'crud-stats' })
+    if (crudStats == null) {
       try {
         return await createNewCrudStats()
       } catch (e) {
         return e as Error
       }
     }
-    return stats?.data as CrudStats
+    return crudStats?.data as CrudStats
   } catch (e) {
     return e as Error
   }
@@ -87,8 +87,12 @@ async function increment(
 
   const options = { new: true }
   try {
-    const updatedStats = await Stats.findOneAndUpdate(filter, update, options)
-    return updatedStats?.data
+    const updatedCrudStats = await Stats.findOneAndUpdate(
+      filter,
+      update,
+      options
+    )
+    return updatedCrudStats?.data
   } catch (e) {
     return e as Error
   }
