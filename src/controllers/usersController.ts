@@ -17,7 +17,7 @@ export async function findOneUser(
   const userId = req.params.userId
   const user = await UsersServices.findOne(userId)
 
-  if (user === undefined) {
+  if (user === null) {
     next(ApiError.notFound('User not found'))
     return
   }
@@ -30,7 +30,7 @@ export async function createNewUser(
   next: NextFunction
 ): Promise<void> {
   const newUser = req.body
-  const user = await UsersServices.createOne(newUser)
+  const user = await UsersServices.createUser(newUser)
   if (user === null) {
     next(
       ApiError.badRequest('Email is not available, please insert another one')
@@ -49,7 +49,7 @@ export async function deleteUser(
   const user = await UsersServices.deleteUser(deletedUserId)
 
   if (user === null) {
-    next(ApiError.notFound('User not found'))
+    next(ApiError.notFound('User does not exist'))
     return
   }
   res.json({ user })
@@ -68,7 +68,8 @@ export async function updateUser(
     next(ApiError.notFound('User not found'))
     return
   } else if (result instanceof Error) {
-    next(ApiError.badRequest('Bad require'))
+    console.log(result.name, result.message)
+    next(ApiError.badRequest('Bad request'))
   }
 
   res.json(result)

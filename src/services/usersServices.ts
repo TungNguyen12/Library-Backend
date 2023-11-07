@@ -3,20 +3,22 @@ import UserRepo from '../models/userModel.js'
 
 async function findAll(): Promise<User[]> {
   const users = await UserRepo.find().exec()
-
   return users as User[]
 }
 
-async function findOne(userId: string): Promise<User | undefined> {
-  const user = await UserRepo.findOne({ _id: userId }).exec()
-
-  return user as User
+async function findOne(userId: string): Promise<User | Error | null> {
+  try {
+    const user = await UserRepo.findOne({ _id: userId })
+    return user as User
+  } catch (e) {
+    const error = e as Error
+    return error
+  }
 }
 
-async function createOne(newUser: User): Promise<User | Error | null> {
+async function createUser(newUser: User): Promise<User | Error | null> {
   try {
-    const isAvailable = await UserRepo.exists({ email: newUser.email }).exec()
-
+    const isAvailable = await UserRepo.exists({ email: newUser.email })
     if (isAvailable === null) {
       const user = await UserRepo.create(newUser)
       return user as User
@@ -59,7 +61,7 @@ async function updateUser(
 export default {
   findOne,
   findAll,
-  createOne,
+  createUser,
   deleteUser,
   updateUser,
 }
