@@ -26,10 +26,17 @@ export async function findOneUser(
 
 export async function createNewUser(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   const newUser = req.body
   const user = await UsersServices.createOne(newUser)
+  if (user === null) {
+    next(
+      ApiError.badRequest('Email is not available, please insert another one')
+    )
+    return
+  }
   res.status(201).json({ user })
 }
 

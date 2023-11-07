@@ -21,7 +21,6 @@ async function createOne(newUser: User): Promise<User | Error | null> {
       const user = await UserRepo.create(newUser)
       return user as User
     }
-
     return null
   } catch (e) {
     const error = e as Error
