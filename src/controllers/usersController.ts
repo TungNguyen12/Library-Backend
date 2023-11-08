@@ -52,7 +52,7 @@ export async function deleteUser(
     next(ApiError.notFound('User does not exist'))
     return
   }
-  res.json({ user })
+  res.status(204).json({ user })
 }
 
 export async function updateUser(
