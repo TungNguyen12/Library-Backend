@@ -8,7 +8,7 @@ const userSchema = new Schema({
   email: String,
   address: String,
   phoneNumber: String,
-  role: { type: Schema.Types.ObjectId, ref: 'UserRole' },
+  roles: [{ type: Schema.Types.ObjectId, ref: 'UserRole' }],
 })
 
 export default mongoose.model('User', userSchema)

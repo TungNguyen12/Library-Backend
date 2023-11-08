@@ -6,7 +6,7 @@ import type { z } from 'zod'
 type UserDTO = z.infer<typeof userSchema>
 
 export type User = UserDTO & { id: string }
-export type UserUpdate = Omit<Partial<User>, 'id' | 'role'>
+export type UserUpdate = Omit<Partial<User>, 'id' | 'roles'>
 export type UserRole = {
   title: string
 }

@@ -2,13 +2,13 @@ import { type UserUpdate, type User } from '../types/User.js'
 import UserRepo from '../models/userModel.js'
 
 async function findAll(): Promise<User[]> {
-  const users = await UserRepo.find().populate('role').exec()
+  const users = await UserRepo.find().populate('roles').exec()
   return users as unknown as User[]
 }
 
 async function findOne(userId: string): Promise<User | Error | null> {
   try {
-    const user = await UserRepo.findOne({ _id: userId })
+    const user = await UserRepo.findOne({ _id: userId }).populate('roles')
     return user as unknown as User
   } catch (e) {
     const error = e as Error
