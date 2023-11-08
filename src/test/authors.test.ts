@@ -1,22 +1,20 @@
-import { GenericContainer } from 'testcontainers'
 import request from 'supertest'
+import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 
-import AuthorRepo from '../models/authorsModel.js'
 import app from '../app.js'
 import { authorsData } from './authorsData.js'
-
-let mongoDbContainer: any
+import AuthorRepo from '../models/authorsModel.js'
 
 beforeAll(async () => {
-  mongoDbContainer = await new GenericContainer('mongo')
-    .withExposedPorts(27017)
-    .start()
-
+  const mongoServer = await MongoMemoryServer.create()
   mongoose
-    .connect(`mongodb://localhost:${mongoDbContainer.getMappedPort(27017)}`)
+    .connect(mongoServer.getUri(), { dbName: 'testingDB' })
+    .then(() => {
+      console.log('Connected to testingDB')
+    })
     .catch((err) => {
-      throw err
+      throw new Error(err)
     })
 })
 
@@ -33,7 +31,6 @@ afterEach(async () => {
 
 afterAll(async () => {
   await mongoose.disconnect()
-  await mongoDbContainer.stop()
 })
 
 describe('GET /authors', () => {
