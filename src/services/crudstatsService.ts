@@ -82,7 +82,11 @@ async function increment(
       },
     }
   } else {
-    update = { [`data.${type}.total`]: 1 }
+    update = {
+      $inc: {
+        [`data.${type}.total`]: 1,
+      },
+    }
   }
 
   const options = { new: true }
