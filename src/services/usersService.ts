@@ -18,8 +18,8 @@ async function findOne(userId: string): Promise<User | Error | null> {
 
 async function createUser(newUser: User): Promise<User | Error | null> {
   try {
-    const isAvailable = await UserRepo.exists({ email: newUser.email })
-    if (isAvailable === null) {
+    const isNotAvailable = await UserRepo.exists({ email: newUser.email })
+    if (isNotAvailable === null) {
       const user = await UserRepo.create(newUser)
       return user as unknown as User
     }
