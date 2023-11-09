@@ -38,25 +38,20 @@ const customErrorMap: ZodErrorMap = (issue, ctx) => {
           return {
             message: `Invalid ${issue.validation}`,
           }
-        case 'object':
-          if ('includes' in issue.validation) {
-            if ('position' in issue.validation) {
-              return {
-                message: `${formattedField} ${issue.validation.includes} is not in ${issue.validation.position}`,
-              }
-            }
-            return {
-              message: `${formattedField} does not includes ${issue.validation.includes}`,
-            }
-          }
-          if ('startsWith' in issue.validation) {
-            return {
-              message: `${formattedField} does not start with ${issue.validation.startsWith}`,
-            }
-          }
-          return {
-            message: `${formattedField} does not end with ${issue.validation.endsWith}`,
-          }
+        case 'object': {
+          const returnString =
+            'includes' in issue.validation && 'position' in issue.validation
+              ? `${formattedField} ${issue.validation.includes} is not in ${issue.validation.position}`
+              : 'includes' in issue.validation &&
+                !('position' in issue.validation)
+              ? `${formattedField} does not includes ${issue.validation.includes}`
+              : 'startsWith' in issue.validation
+              ? `${formattedField} does not start with ${issue.validation.startsWith}`
+              : 'endsWith' in issue.validation
+              ? `${formattedField} does not end with ${issue.validation.endsWith}`
+              : ctx.defaultError
+          return { message: returnString }
+        }
         default:
           return { message: ctx.defaultError }
       }
