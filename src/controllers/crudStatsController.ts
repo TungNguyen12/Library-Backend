@@ -4,16 +4,16 @@ import CrudStatsService from '../services/crudstatsService.js'
 import { type CrudType } from '../types/CrudStats.js'
 import { ApiError } from '../utils/ApiError.js'
 
-function getAllCrudStats(_: Request, res: Response): void {
-  const stats = CrudStatsService.getAll()
+async function getAllCrudStats(_: Request, res: Response): Promise<void> {
+  const stats = await CrudStatsService.getAll()
   res.json(stats)
 }
 
-function getOneCrudStats(
+async function getOneCrudStats(
   req: Request,
   res: Response,
   next: NextFunction
-): void {
+): Promise<void> {
   const crudType: CrudType = req.params.crudType as CrudType
   const allowedCrudTypes: CrudType[] = ['create', 'read', 'update', 'delete']
 
@@ -26,8 +26,19 @@ function getOneCrudStats(
     return
   }
 
-  const stats = CrudStatsService.getOne(crudType)
-  res.json({ [crudType]: stats })
+  const stats = await CrudStatsService.getOne(crudType)
+
+  if (stats instanceof Error) {
+    next(ApiError.internal(stats.message))
+    return
+  }
+
+  if (stats == null) {
+    next(ApiError.notFound(`No stats found for ${crudType} operation`))
+    return
+  }
+
+  res.json({ [crudType]: stats?.[crudType] })
 }
 
 export default {

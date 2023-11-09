@@ -6,7 +6,7 @@ import { ApiError } from '../utils/ApiError.js'
 export async function findAllUsers(_: Request, res: Response): Promise<void> {
   const users = await UsersServices.findAll()
 
-  res.json({ users })
+  res.json(users)
 }
 
 export async function findOneUser(
@@ -20,8 +20,12 @@ export async function findOneUser(
   if (user === null) {
     next(ApiError.notFound('User not found'))
     return
+  } else if (user instanceof Error) {
+    console.log(user.message)
+    next(ApiError.badRequest('Bad request.', user.message))
+    return
   }
-  res.json({ user })
+  res.json(user)
 }
 
 export async function createNewUser(
@@ -37,7 +41,7 @@ export async function createNewUser(
     )
     return
   }
-  res.status(201).json({ user })
+  res.status(201).json(user)
 }
 
 export async function deleteUser(
@@ -51,8 +55,12 @@ export async function deleteUser(
   if (user === null) {
     next(ApiError.notFound('User does not exist'))
     return
+  } else if (user instanceof Error) {
+    console.log(user.message)
+    next(ApiError.badRequest('Bad request.', user.message))
+    return
   }
-  res.json({ user })
+  res.status(204).json(user)
 }
 
 export async function updateUser(
@@ -62,17 +70,16 @@ export async function updateUser(
 ): Promise<void> {
   const userId = req.params.userId
   const body = req.body
-  const result = await UsersServices.updateUser(userId, body)
-
-  if (result === null) {
+  const user = await UsersServices.updateUser(userId, body)
+  if (user === null) {
     next(ApiError.notFound('User not found'))
     return
-  } else if (result instanceof Error) {
-    console.log(result.name, result.message)
-    next(ApiError.badRequest('Bad request'))
+  } else if (user instanceof Error) {
+    next(ApiError.badRequest('Bad request.', user.message))
+    return
   }
 
-  res.json(result)
+  res.json(user)
 }
 
 export default {
