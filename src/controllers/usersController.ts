@@ -3,63 +3,83 @@ import type { NextFunction, Request, Response } from 'express'
 import UsersServices from '../services/usersServices.js'
 import { ApiError } from '../utils/ApiError.js'
 
-export function findAllUsers(_: Request, res: Response): void {
-  const users = UsersServices.findAll()
+export async function findAllUsers(_: Request, res: Response): Promise<void> {
+  const users = await UsersServices.findAll()
 
-  res.json({ users })
+  res.json(users)
 }
 
-export function findOneUser(
+export async function findOneUser(
   req: Request,
   res: Response,
   next: NextFunction
-): void {
+): Promise<void> {
   const userId = req.params.userId
-  const user = UsersServices.findOne(userId)
+  const user = await UsersServices.findOne(userId)
 
-  if (user === undefined) {
+  if (user === null) {
     next(ApiError.notFound('User not found'))
     return
+  } else if (user instanceof Error) {
+    console.log(user.message)
+    next(ApiError.badRequest('Bad request.', user.message))
+    return
   }
-  res.json({ user })
+  res.json(user)
 }
 
-export function createNewUser(req: Request, res: Response): void {
+export async function createNewUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   const newUser = req.body
-  const user = UsersServices.createOne(newUser)
-  res.status(201).json({ user })
-}
-
-export function deleteUser(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void {
-  const deletedUserId = req.params.userId
-  const user = UsersServices.deleteUser(deletedUserId)
-
-  if (user === undefined) {
-    next(ApiError.notFound('User not found'))
+  const user = await UsersServices.createUser(newUser)
+  if (user === null) {
+    next(
+      ApiError.badRequest('Email is not available, please insert another one')
+    )
     return
   }
-  res.json({ user })
+  res.status(201).json(user)
 }
 
-export function updateUser(
+export async function deleteUser(
   req: Request,
   res: Response,
   next: NextFunction
-): void {
+): Promise<void> {
+  const deletedUserId = req.params.userId
+  const user = await UsersServices.deleteUser(deletedUserId)
+
+  if (user === null) {
+    next(ApiError.notFound('User does not exist'))
+    return
+  } else if (user instanceof Error) {
+    console.log(user.message)
+    next(ApiError.badRequest('Bad request.', user.message))
+    return
+  }
+  res.status(204).json(user)
+}
+
+export async function updateUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   const userId = req.params.userId
   const body = req.body
-  const result = UsersServices.updateUser(userId, body)
-
-  if (result === false) {
+  const user = await UsersServices.updateUser(userId, body)
+  if (user === null) {
     next(ApiError.notFound('User not found'))
+    return
+  } else if (user instanceof Error) {
+    next(ApiError.badRequest('Bad request.', user.message))
     return
   }
 
-  res.json(result)
+  res.json(user)
 }
 
 export default {
