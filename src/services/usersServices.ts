@@ -50,12 +50,10 @@ async function updateUser(
   payload: UserUpdate
 ): Promise<User | Error | null> {
   try {
-    // const id = new mongoose.Types.ObjectId(userId)
-    // I want to use normal ID instead of ObjectId to avoid giving hint (missing characters...) to hacker/unauthorized user
-    const updatedUser = await UserRepo.findOneAndUpdate(
-      { _id: userId },
-      payload
-    ).exec()
+    const id = new mongoose.Types.ObjectId(userId)
+    const updatedUser = await UserRepo.findOneAndUpdate({ _id: id }, payload, {
+      new: true,
+    }).exec()
 
     return updatedUser as User | null
   } catch (e) {
