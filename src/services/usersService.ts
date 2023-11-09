@@ -5,7 +5,7 @@ import UserRepo from '../models/userModel.js'
 
 async function findAll(): Promise<User[]> {
   const users = await UserRepo.find().exec()
-  return users as User[]
+  return users as unknown as User[]
 }
 
 async function findOne(userId: string): Promise<User | Error | null> {
@@ -25,7 +25,7 @@ async function createUser(newUser: User): Promise<User | Error | null> {
     const isAvailable = await UserRepo.exists({ email: newUser.email })
     if (isAvailable === null) {
       const user = await UserRepo.create(newUser)
-      return user as User
+      return user as unknown as User
     }
     return null
   } catch (e) {
