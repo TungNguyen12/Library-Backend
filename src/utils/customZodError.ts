@@ -32,10 +32,30 @@ const customErrorMap: ZodErrorMap = (issue, ctx) => {
       return {
         message: `Invalid date`,
       }
-    case ZodIssueCode.invalid_string:
-      return {
-        message: `Invalid ${String(issue.validation)}`,
+    case ZodIssueCode.invalid_string: {
+      switch (typeof issue.validation) {
+        case 'string':
+          return {
+            message: `Invalid ${issue.validation}`,
+          }
+        case 'object': {
+          const returnString =
+            'includes' in issue.validation && 'position' in issue.validation
+              ? `${formattedField} ${issue.validation.includes} is not in ${issue.validation.position}`
+              : 'includes' in issue.validation &&
+                !('position' in issue.validation)
+              ? `${formattedField} does not includes ${issue.validation.includes}`
+              : 'startsWith' in issue.validation
+              ? `${formattedField} does not start with ${issue.validation.startsWith}`
+              : 'endsWith' in issue.validation
+              ? `${formattedField} does not end with ${issue.validation.endsWith}`
+              : ctx.defaultError
+          return { message: returnString }
+        }
+        default:
+          return { message: ctx.defaultError }
       }
+    }
     case ZodIssueCode.too_small: {
       if (issue.minimum > 1)
         return {
