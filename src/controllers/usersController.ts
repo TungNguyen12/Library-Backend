@@ -20,6 +20,10 @@ export async function findOneUser(
   if (user === null) {
     next(ApiError.notFound('User not found'))
     return
+  } else if (user instanceof Error) {
+    console.log(user.message)
+    next(ApiError.badRequest('Bad request.', user.message))
+    return
   }
   res.json({ user })
 }
@@ -51,6 +55,10 @@ export async function deleteUser(
   if (user === null) {
     next(ApiError.notFound('User does not exist'))
     return
+  } else if (user instanceof Error) {
+    console.log(user.message)
+    next(ApiError.badRequest('Bad request.', user.message))
+    return
   }
   res.status(204).json({ user })
 }
@@ -63,13 +71,12 @@ export async function updateUser(
   const userId = req.params.userId
   const body = req.body
   const result = await UsersServices.updateUser(userId, body)
-
   if (result === null) {
     next(ApiError.notFound('User not found'))
     return
   } else if (result instanceof Error) {
-    console.log(result.name, result.message)
-    next(ApiError.badRequest('Bad request'))
+    next(ApiError.badRequest('Bad request.', result.message))
+    return
   }
 
   res.json(result)

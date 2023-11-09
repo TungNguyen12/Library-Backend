@@ -1,3 +1,5 @@
+import mongoose from 'mongoose'
+
 import { type UserUpdate, type User } from '../types/User.js'
 import UserRepo from '../models/userModel.js'
 
@@ -8,8 +10,10 @@ async function findAll(): Promise<User[]> {
 
 async function findOne(userId: string): Promise<User | Error | null> {
   try {
-    const user = await UserRepo.findOne({ _id: userId })
-    return user as User
+    const id = new mongoose.Types.ObjectId(userId)
+    const user = await UserRepo.findById(id)
+
+    return user as User | null
   } catch (e) {
     const error = e as Error
     return error
@@ -32,8 +36,9 @@ async function createUser(newUser: User): Promise<User | Error | null> {
 
 async function deleteUser(userId: string): Promise<User | Error | null> {
   try {
-    const result = await UserRepo.findByIdAndDelete(userId).exec()
-    return result as User
+    const id = new mongoose.Types.ObjectId(userId)
+    const result = await UserRepo.findByIdAndDelete(id).exec()
+    return result as User | null
   } catch (e) {
     const error = e as Error
     return error
@@ -45,15 +50,16 @@ async function updateUser(
   payload: UserUpdate
 ): Promise<User | Error | null> {
   try {
+    // const id = new mongoose.Types.ObjectId(userId)
+    // I want to use normal ID instead of ObjectId to avoid giving hint (missing characters...) to hacker/unauthorized user
     const updatedUser = await UserRepo.findOneAndUpdate(
       { _id: userId },
       payload
     ).exec()
 
-    return updatedUser as User
+    return updatedUser as User | null
   } catch (e) {
     const error = e as Error
-    console.log(e)
     return error
   }
 }
