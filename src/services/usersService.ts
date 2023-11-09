@@ -1,15 +1,19 @@
+import mongoose from 'mongoose'
+
 import { type UserUpdate, type User } from '../types/User.js'
 import UserRepo from '../models/userModel.js'
 
 async function findAll(): Promise<User[]> {
-  const users = await UserRepo.find().populate('roles').exec()
-  return users as unknown as User[]
+  const users = await UserRepo.find().exec()
+  return users as User[]
 }
 
 async function findOne(userId: string): Promise<User | Error | null> {
   try {
-    const user = await UserRepo.findOne({ _id: userId }).populate('roles')
-    return user as unknown as User
+    const id = new mongoose.Types.ObjectId(userId)
+    const user = await UserRepo.findById(id)
+
+    return user as User | null
   } catch (e) {
     const error = e as Error
     return error
@@ -18,10 +22,10 @@ async function findOne(userId: string): Promise<User | Error | null> {
 
 async function createUser(newUser: User): Promise<User | Error | null> {
   try {
-    const isNotAvailable = await UserRepo.exists({ email: newUser.email })
-    if (isNotAvailable === null) {
+    const isAvailable = await UserRepo.exists({ email: newUser.email })
+    if (isAvailable === null) {
       const user = await UserRepo.create(newUser)
-      return user as unknown as User
+      return user as User
     }
     return null
   } catch (e) {
@@ -32,8 +36,9 @@ async function createUser(newUser: User): Promise<User | Error | null> {
 
 async function deleteUser(userId: string): Promise<User | Error | null> {
   try {
-    const result = await UserRepo.findByIdAndDelete(userId).exec()
-    return result as unknown as User
+    const id = new mongoose.Types.ObjectId(userId)
+    const result = await UserRepo.findByIdAndDelete(id).exec()
+    return result as User | null
   } catch (e) {
     const error = e as Error
     return error
@@ -45,15 +50,14 @@ async function updateUser(
   payload: UserUpdate
 ): Promise<User | Error | null> {
   try {
-    const updatedUser = await UserRepo.findOneAndUpdate(
-      { _id: userId },
-      payload
-    ).exec()
+    const id = new mongoose.Types.ObjectId(userId)
+    const updatedUser = await UserRepo.findOneAndUpdate({ _id: id }, payload, {
+      new: true,
+    }).exec()
 
-    return updatedUser as unknown as User
+    return updatedUser as User | null
   } catch (e) {
     const error = e as Error
-    console.log(e)
     return error
   }
 }
