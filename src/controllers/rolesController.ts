@@ -1,24 +1,19 @@
 import type { NextFunction, Request, Response } from 'express'
-
-import UserRolesServices from '../services/userRolesService.js'
+import RolesService from '../services/rolesService.js'
 import { ApiError } from '../utils/ApiError.js'
 
-export async function findAllUserRoles(
-  _: Request,
-  res: Response
-): Promise<void> {
-  const userRoles = await UserRolesServices.findAll()
-
-  res.json(userRoles)
+export async function findAllRoles(_: Request, res: Response): Promise<void> {
+  const roles = await RolesService.findAll()
+  res.json(roles)
 }
 
-export async function createNewUserRole(
+export async function createNewRole(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   const newRole = req.body
-  const role = await UserRolesServices.createUserRole(newRole)
+  const role = await RolesService.createRole(newRole)
   if (role === null) {
     next(
       ApiError.badRequest(
@@ -31,6 +26,6 @@ export async function createNewUserRole(
 }
 
 export default {
-  findAllUserRoles,
-  createNewUserRole,
+  findAllRoles,
+  createNewRole,
 }

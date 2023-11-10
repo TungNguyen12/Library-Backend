@@ -1,10 +1,10 @@
 import type { NextFunction, Request, Response } from 'express'
 
-import UsersServices from '../services/usersService.js'
+import UsersService from '../services/usersService.js'
 import { ApiError } from '../utils/ApiError.js'
 
 export async function findAllUsers(_: Request, res: Response): Promise<void> {
-  const users = await UsersServices.findAll()
+  const users = await UsersService.findAll()
 
   res.json(users)
 }
@@ -15,7 +15,7 @@ export async function findOneUser(
   next: NextFunction
 ): Promise<void> {
   const userId = req.params.userId
-  const user = await UsersServices.findOne(userId)
+  const user = await UsersService.findOne(userId)
 
   if (user === null) {
     next(ApiError.notFound('User not found'))
@@ -34,7 +34,7 @@ export async function createNewUser(
   next: NextFunction
 ): Promise<void> {
   const newUser = req.body
-  const user = await UsersServices.createUser(newUser)
+  const user = await UsersService.createUser(newUser)
   if (user === null) {
     next(
       ApiError.badRequest('Email is not available, please insert another one')
@@ -50,7 +50,7 @@ export async function deleteUser(
   next: NextFunction
 ): Promise<void> {
   const deletedUserId = req.params.userId
-  const user = await UsersServices.deleteUser(deletedUserId)
+  const user = await UsersService.deleteUser(deletedUserId)
 
   if (user === null) {
     next(ApiError.notFound('User does not exist'))
@@ -70,7 +70,7 @@ export async function updateUser(
 ): Promise<void> {
   const userId = req.params.userId
   const body = req.body
-  const user = await UsersServices.updateUser(userId, body)
+  const user = await UsersService.updateUser(userId, body)
   if (user === null) {
     next(ApiError.notFound('User not found'))
     return

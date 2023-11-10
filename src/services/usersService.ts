@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 import { type UserUpdate, type User } from '../types/User.js'
-import UserRepo from '../models/userModel.js'
+import UserRepo from '../models/usersModel.js'
 
 async function findAll(): Promise<User[]> {
   const users = await UserRepo.find().exec()
