@@ -4,7 +4,6 @@ const schema = Schema
 const ObjectId = schema.ObjectId
 
 const BookSchema = new Schema({
-  id: ObjectId,
   ISBN: String,
   title: String,
   edition: String,
@@ -15,13 +14,11 @@ const BookSchema = new Schema({
 })
 
 const CopiesBooksSchema = new Schema({
-  id: ObjectId,
   book_id: { type: ObjectId, ref: 'Book' },
   is_Available: Boolean,
 })
 
 const BorrowedBookSchema = new Schema({
-  id: ObjectId,
   copy_id: { type: ObjectId, ref: 'CopiesBook' },
   user_id: String, // temp
   borrowed_Date: Date,
