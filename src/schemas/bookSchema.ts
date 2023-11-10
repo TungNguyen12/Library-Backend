@@ -81,23 +81,10 @@ export const booksSchema = z
     category: z.string().min(1),
     description: z.string().min(1),
     publisher: z.string().min(1),
-    author: z.string().array().nonempty(),
-    isAvailable: z.boolean().default(false),
-    borrowedDate: z.date().nullable().default(null),
-    returnedDate: z.date().nullable().default(null),
+    author: z.array(z.string().min(1)).min(1).default([]),
   })
   .strict()
 
-export const bookCreateSchema = booksSchema.omit({
-  isAvailable: true,
-  borrowedDate: true,
-  returnedDate: true,
-})
+export const bookCreateSchema = booksSchema
 
-export const bookUpdateSchema = booksSchema
-  .omit({
-    isAvailable: true,
-    borrowedDate: true,
-    returnedDate: true,
-  })
-  .partial()
+export const bookUpdateSchema = booksSchema.partial()
