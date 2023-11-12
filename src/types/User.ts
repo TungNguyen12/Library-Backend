@@ -6,12 +6,16 @@ import type { z } from 'zod'
 
 import type mongoose from 'mongoose'
 
+// User
 type UserDTO = z.infer<typeof userSchema>
-
 export type User = UserDTO & { id: mongoose.Types.ObjectId }
 export type UserUpdate = Omit<Partial<User>, 'id' | 'roles'>
 
+// User-Role (bridge table)
 export type UserRole = {
-  title: string
+  user_id: mongoose.Types.ObjectId
+  role_id: mongoose.Types.ObjectId
 }
+
+// Role
 export type Role = z.infer<typeof roleSchema> & { id: mongoose.Types.ObjectId }
