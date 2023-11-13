@@ -24,7 +24,7 @@ async function createNewPair(
   next: NextFunction
 ): Promise<void> {
   const body = req.body
-  const result = await BookAuthorService.createOne(body)
+  const result = await BookAuthorService.createNewPair(body)
 
   res.status(201).json(result)
 }

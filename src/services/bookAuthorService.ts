@@ -32,7 +32,7 @@ async function getPairsById(filter: {
   }
 }
 
-async function createOne(
+async function createNewPair(
   payload: BookAuthorPair
 ): Promise<BookAuthorPair | undefined> {
   const newBookAuthorPair = new BookAuthorRepo(payload)
@@ -92,7 +92,7 @@ async function updatePair(
 export default {
   getAll,
   getPairsById,
-  createOne,
+  createNewPair,
   deletePairs,
   updatePair,
 }
