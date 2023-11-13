@@ -112,6 +112,14 @@ const deleteOne = async (bookId: string): Promise<boolean | Error> => {
   try {
     const id = new Types.ObjectId(bookId)
     const book = await BooksRepo.findById(id)
+    const bookCopies = await CopiesBookRepo.find({ book_id: id })
+
+    if (!(bookCopies instanceof Error || bookCopies === null)) {
+      bookCopies.forEach(async (book) => {
+        await book.deleteOne()
+      })
+    }
+
     if (!(book instanceof Error || book === null)) {
       await book.deleteOne()
       return true
