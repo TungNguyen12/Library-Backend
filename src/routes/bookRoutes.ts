@@ -11,6 +11,9 @@ const router = express.Router()
 // Get all Book
 router.get('/', BookController.getAllBooks)
 
+// Get all book copies
+router.get('/copy', BookController.getAllBookCopies)
+
 // Get Book with given id
 router.get('/:id', BookController.getBookById)
 

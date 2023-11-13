@@ -15,7 +15,12 @@ const getBookById = async (
   const id = req.params.id
   const book = await BooksServices.getOneById(id)
 
-  if (book === undefined) {
+  if (book instanceof Error) {
+    next(ApiError.badRequest('Bad request.', book.message))
+    return
+  }
+
+  if (book === null) {
     next(ApiError.notFound('Book not found.'))
     return
   }
@@ -42,6 +47,11 @@ const getBookByISBN = async (
   }
 
   res.json(book)
+}
+
+const getAllBookCopies = async (_: Request, res: Response): Promise<void> => {
+  const books = await BooksServices.getAllCopies()
+  res.json(books)
 }
 
 const createNewBook = async (
@@ -158,6 +168,7 @@ export default {
   getAllBooks,
   getBookById,
   getBookByISBN,
+  getAllBookCopies,
   createNewBook,
   createNewCopy,
   updateBookInfo,

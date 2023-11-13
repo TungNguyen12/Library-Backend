@@ -20,7 +20,7 @@ const CopiesBooksSchema = new Schema({
 
 const BorrowedBookSchema = new Schema({
   copy_id: { type: ObjectId, ref: 'CopiesBook' },
-  user_id: String, // temp
+  user_id: { type: ObjectId, ref: 'User' },
   borrowed_Date: Date,
   returned_Date: Date,
 })

@@ -33,6 +33,11 @@ const getOneByISBN = async (ISBN: string): Promise<Book | null | Error> => {
   }
 }
 
+const getAllCopies = async (): Promise<BookCopy[]> => {
+  const books = await CopiesBookRepo.find().exec()
+  return books as BookCopy[]
+}
+
 const createOne = async (
   payload: AtleastOne<Book, 'ISBN'>
 ): Promise<Book | undefined> => {
@@ -122,6 +127,7 @@ export default {
   getAll,
   getOneByISBN,
   getOneById,
+  getAllCopies,
   createOne,
   createOneCopy,
   updateOne,
