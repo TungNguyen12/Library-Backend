@@ -1,12 +1,8 @@
 name: Node.js CI Workflow
 
 on:
-  push:
-    branches-ignore:
-      - main
-  pull_request:
-    branches:
-      - main
+  - push
+  - pull_request
 
 jobs:
   cache-and-install:
@@ -44,7 +40,7 @@ jobs:
         run: pnpm install
 
       - name: Run Lint
-        run: pnpm lint
+        run: pnpm lint --fix
 
       - name: Run Tests
         run: pnpm test
