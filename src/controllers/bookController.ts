@@ -161,7 +161,7 @@ const deleteBookById = async (
     return
   }
 
-  res.json({ isDeleted: true })
+  res.status(204)
 }
 
 export default {
