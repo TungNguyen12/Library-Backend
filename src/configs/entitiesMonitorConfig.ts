@@ -1,4 +1,4 @@
-import { type MonitoredEntities } from '../types/monitoringTypes.js'
+import { type MonitoredEntities } from '../types/temp.monitoringTypes.js'
 
 const monitoredEntities: MonitoredEntities = {
   authors: {
