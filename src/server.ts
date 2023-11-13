@@ -10,10 +10,6 @@ const PORT =
 
 const dbUrl = process.env.DB_URL as string
 
-app.listen(PORT, () => {
-  console.log(`Server is running on localhost:${PORT}`)
-})
-
 mongoose
   .connect(dbUrl)
   .then(() => {
@@ -22,3 +18,7 @@ mongoose
   .catch((error) => {
     console.log('ERROR: ', error)
   })
+
+app.listen(PORT, () => {
+  console.log(`Server is running on localhost:${PORT}`)
+})
