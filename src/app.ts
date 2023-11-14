@@ -10,6 +10,7 @@ import booksRoutes from './routes/bookRoutes.js'
 import crudStatsRoutes from './routes/crudStatsRoutes.js'
 import usersRoutes from './routes/usersRoutes.js'
 import rolesRoutes from './routes/rolesRoutes.js'
+import bookAuthorRoutes from './routes/bookAuthorRoutes.js'
 
 const app = express()
 
@@ -25,6 +26,7 @@ app.use('/api/v1/authors', authorsRoutes)
 app.use('/api/v1/books', booksRoutes)
 app.use('/api/v1/crud-stats', crudStatsRoutes)
 app.use('/api/v1/roles', rolesRoutes)
+app.use('/api/v1/book-author', bookAuthorRoutes)
 
 // Error Handler
 app.use(apiErrorHandler)
