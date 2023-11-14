@@ -9,31 +9,7 @@ async function findAll(): Promise<UserRole[]> {
     .populate('user')
     .populate('role')
     .exec()
-
   return users as UserRole[]
-}
-
-async function addRoleToUser(
-  userId: mongoose.Types.ObjectId,
-  role: string
-): Promise<UserRole | Error | null> {
-  const roleId = new mongoose.Types.ObjectId(role)
-
-  // const newUserRole = new UserRoleRepo({
-  //   user: userId,
-  //   role: roleId,
-  // })
-  // await newUserRole.save()
-  try {
-    const newUserRole = await UserRoleRepo.create({
-      user: userId,
-      role: roleId,
-    })
-    return newUserRole as UserRole
-  } catch (e) {
-    const error = e as Error
-    return error
-  }
 }
 
 async function findOne(userId: string): Promise<User | Error | null> {
@@ -96,5 +72,4 @@ export default {
   createUser,
   deleteUser,
   updateUser,
-  addRoleToUser,
 }

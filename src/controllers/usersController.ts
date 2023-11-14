@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from 'express'
 
+import UserRolesService from '../services/userRolesService.js'
 import UsersService from '../services/usersService.js'
 import { ApiError } from '../utils/ApiError.js'
 
@@ -40,7 +41,7 @@ export async function createNewUser(
     )
     return
   } else if (!(user instanceof Error)) {
-    const newUserRole = await UsersService.addRoleToUser(
+    const newUserRole = await UserRolesService.addRoleToUser(
       user.id,
       '65538c9e585bf88600914da5'
     )
@@ -94,7 +95,7 @@ export async function addRoleToUserController(
   next: NextFunction
 ): Promise<void> {
   const body = req.body
-  await UsersService.addRoleToUser(body.userId, body.roleId)
+  await UserRolesService.addRoleToUser(body.userId, body.roleId)
   res.json({})
 }
 
