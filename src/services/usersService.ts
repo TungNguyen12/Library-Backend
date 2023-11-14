@@ -2,23 +2,40 @@ import mongoose from 'mongoose'
 
 import UserRoleRepo from '../models/userRolesModel.js'
 import UserRepo from '../models/usersModel.js'
-import { type User, type UserUpdate } from '../types/User.js'
+import { type UserRole, type User, type UserUpdate } from '../types/User.js'
 
-async function findAll(): Promise<User[]> {
+async function findAll(): Promise<UserRole[]> {
   const users = await UserRoleRepo.find()
     .populate('user')
     .populate('role')
     .exec()
 
-  return users as unknown as User[]
+  return users as UserRole[]
 }
-async function addRoleToUser(userId: string, roleId: string) {
-  const newUserRole = new UserRoleRepo({
-    user: userId,
-    role: roleId,
-  })
-  await newUserRole.save()
+
+async function addRoleToUser(
+  userId: mongoose.Types.ObjectId,
+  role: string
+): Promise<UserRole | Error | null> {
+  const roleId = new mongoose.Types.ObjectId(role)
+
+  // const newUserRole = new UserRoleRepo({
+  //   user: userId,
+  //   role: roleId,
+  // })
+  // await newUserRole.save()
+  try {
+    const newUserRole = await UserRoleRepo.create({
+      user: userId,
+      role: roleId,
+    })
+    return newUserRole as UserRole
+  } catch (e) {
+    const error = e as Error
+    return error
+  }
 }
+
 async function findOne(userId: string): Promise<User | Error | null> {
   try {
     const id = new mongoose.Types.ObjectId(userId)
@@ -36,7 +53,7 @@ async function createUser(newUser: User): Promise<User | Error | null> {
     const isAvailable = await UserRepo.exists({ email: newUser.email })
     if (isAvailable === null) {
       const user = await UserRepo.create(newUser)
-      return user as unknown as User
+      return user as User
     }
     return null
   } catch (e) {

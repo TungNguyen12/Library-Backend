@@ -39,7 +39,14 @@ export async function createNewUser(
       ApiError.badRequest('Email is not available, please insert another one')
     )
     return
+  } else if (!(user instanceof Error)) {
+    const newUserRole = await UsersService.addRoleToUser(
+      user.id,
+      '65538c9e585bf88600914da5'
+    )
+    console.log('newUserRole is here.✅✅✅✅', newUserRole)
   }
+
   res.status(201).json(user)
 }
 

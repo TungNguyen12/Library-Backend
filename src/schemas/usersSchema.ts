@@ -28,12 +28,6 @@ export const userSchema = z
         required_error: 'Phone number is required',
       })
       .min(1, 'Phone number cannot be empty.'),
-    roles: z
-      .string({
-        required_error: 'Role ID is required',
-      })
-      .array()
-      .min(1, 'Role ID cannot be empty.'),
   })
   .strict()
 

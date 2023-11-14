@@ -12,12 +12,12 @@ type ObjectId = mongoose.Types.ObjectId
 // User
 type UserDTO = z.infer<typeof userSchema>
 export type User = UserDTO & { id: ObjectId }
-export type UserUpdate = Omit<Partial<User>, 'id' | 'roles'>
+export type UserUpdate = Omit<Partial<User>, 'id'>
 
 // User-Role (bridge table)
 export type UserRole = {
-  user_id: ObjectId
-  role_id: ObjectId
+  user: ObjectId
+  role: ObjectId
 }
 
 // Role
