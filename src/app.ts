@@ -9,7 +9,6 @@ import authorsRoutes from './routes/authorsRoutes.js'
 import booksRoutes from './routes/bookRoutes.js'
 import crudStatsRoutes from './routes/crudStatsRoutes.js'
 import usersRoutes from './routes/usersRoutes.js'
-import userRolesRoutes from './routes/userRolesRoutes.js'
 import rolesRoutes from './routes/rolesRoutes.js'
 
 const app = express()
@@ -25,7 +24,6 @@ app.use('/api/v1/users', usersRoutes)
 app.use('/api/v1/authors', authorsRoutes)
 app.use('/api/v1/books', booksRoutes)
 app.use('/api/v1/crud-stats', crudStatsRoutes)
-app.use('/api/v1/user-roles', userRolesRoutes)
 app.use('/api/v1/roles', rolesRoutes)
 
 // Error Handler
