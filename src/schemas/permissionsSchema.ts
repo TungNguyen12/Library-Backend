@@ -8,3 +8,7 @@ export const permissionSchema = z.object({
 export const permissionCreateSchema = z.object({
   body: permissionSchema,
 })
+
+export const permissionUpdateSchema = z.object({
+  body: permissionSchema,
+})

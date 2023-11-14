@@ -33,3 +33,4 @@ export type RolePermission = {
 export type Permission = z.infer<typeof permissionSchema> & {
   id: ObjectId
 }
+export type PermissionUpdate = Omit<Permission, 'id'>

@@ -21,7 +21,6 @@ export async function findOneUser(
     next(ApiError.notFound('User not found'))
     return
   } else if (user instanceof Error) {
-    console.log(user.message)
     next(ApiError.badRequest('Bad request.', user.message))
     return
   }
