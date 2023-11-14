@@ -1,13 +1,24 @@
 import mongoose from 'mongoose'
 
-import { type UserUpdate, type User } from '../types/User.js'
+import UserRoleRepo from '../models/userRolesModel.js'
 import UserRepo from '../models/usersModel.js'
+import { type User, type UserUpdate } from '../types/User.js'
 
 async function findAll(): Promise<User[]> {
-  const users = await UserRepo.find().exec()
+  const users = await UserRoleRepo.find()
+    .populate('user')
+    .populate('role')
+    .exec()
+
   return users as unknown as User[]
 }
-
+async function addRoleToUser(userId: string, roleId: string) {
+  const newUserRole = new UserRoleRepo({
+    user: userId,
+    role: roleId,
+  })
+  await newUserRole.save()
+}
 async function findOne(userId: string): Promise<User | Error | null> {
   try {
     const id = new mongoose.Types.ObjectId(userId)
@@ -68,4 +79,5 @@ export default {
   createUser,
   deleteUser,
   updateUser,
+  addRoleToUser,
 }

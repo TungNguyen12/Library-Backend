@@ -81,10 +81,21 @@ export async function updateUser(
   res.json(user)
 }
 
+export async function addRoleToUserController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  const body = req.body
+  await UsersService.addRoleToUser(body.userId, body.roleId)
+  res.json({})
+}
+
 export default {
   findOneUser,
   findAllUsers,
   createNewUser,
   deleteUser,
   updateUser,
+  addRoleToUserController,
 }
