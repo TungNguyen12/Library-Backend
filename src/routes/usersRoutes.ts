@@ -1,4 +1,5 @@
 import express from 'express'
+
 import UsersController from '../controllers/usersController.js'
 import {
   validateCreateUser,
@@ -8,6 +9,7 @@ import {
 const router = express.Router()
 
 router.get('/', UsersController.findAllUsers)
+// router.post('/addrole', UsersController.addRoleToUserController)
 router.get('/:userId', UsersController.findOneUser)
 
 router.post('/', validateCreateUser, UsersController.createNewUser)

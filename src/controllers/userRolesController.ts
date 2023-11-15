@@ -1,23 +1,26 @@
 import type { NextFunction, Request, Response } from 'express'
 
 import UserRolesService from '../services/userRolesService.js'
-import UsersService from '../services/usersService.js'
+
 import { ApiError } from '../utils/ApiError.js'
 import mongoose from 'mongoose'
 
-export async function findAllUsers(_: Request, res: Response): Promise<void> {
-  const users = await UsersService.findAll()
+export async function findAllUserRole(
+  _: Request,
+  res: Response
+): Promise<void> {
+  const users = await UserRolesService.findAllUserRole()
 
   res.json(users)
 }
 
-export async function findOneUser(
+export async function findByUserId(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   const userId = req.params.userId
-  const user = await UsersService.findOne(userId)
+  const user = await UserRolesService.findByUserId(userId)
 
   if (user === null) {
     next(ApiError.notFound('User not found'))
@@ -29,56 +32,54 @@ export async function findOneUser(
   res.json(user)
 }
 
-export async function createNewUser(
+export async function addRoleToUser(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const newUser = req.body
-  const user = await UsersService.createUser(newUser)
-  if (user === null) {
-    next(
-      ApiError.badRequest('Email is not available, please insert another one')
-    )
+  const userId = new mongoose.Types.ObjectId(req.params.userId)
+  const roleId = new mongoose.Types.ObjectId(req.body.role)
+  const newRoleToUser = await UserRolesService.addRoleToUser({
+    user: userId,
+    role: roleId,
+  })
+
+  if (newRoleToUser === null) {
+    next(ApiError.badRequest('User or Role does not exist'))
     return
-  } else if (!(user instanceof Error)) {
-    const roleId = new mongoose.Types.ObjectId('655461aee5407a09ec63d104')
-    await UserRolesService.addRoleToUser({
-      user: user.id,
-      role: roleId,
-    })
+  } else if (newRoleToUser instanceof Error) {
+    next(ApiError.badRequest('Bad request.', newRoleToUser.message))
+    return
   }
 
-  res.status(201).json(user)
+  res.json(newRoleToUser)
 }
 
-export async function deleteUser(
+export async function deleteUserRole(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const deletedUserId = req.params.userId
-  const user = await UsersService.deleteUser(deletedUserId)
-
+  const userId = req.params.userId
+  const user = await UserRolesService.deleteUserRole(userId)
   if (user === null) {
-    next(ApiError.notFound('User does not exist'))
+    next(ApiError.notFound('User not found'))
     return
   } else if (user instanceof Error) {
-    console.log(user.message)
     next(ApiError.badRequest('Bad request.', user.message))
     return
   }
-  res.status(204).json(user)
-}
 
-export async function updateUser(
+  res.sendStatus(204)
+}
+export async function updateUserRole(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   const userId = req.params.userId
   const body = req.body
-  const user = await UsersService.updateUser(userId, body)
+  const user = await UserRolesService.updateUserRole(userId, body)
   if (user === null) {
     next(ApiError.notFound('User not found'))
     return
@@ -91,9 +92,9 @@ export async function updateUser(
 }
 
 export default {
-  findOneUser,
-  findAllUsers,
-  createNewUser,
-  deleteUser,
-  updateUser,
+  findAllUserRole,
+  findByUserId,
+  deleteUserRole,
+  addRoleToUser,
+  updateUserRole,
 }

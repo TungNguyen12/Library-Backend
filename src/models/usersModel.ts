@@ -8,7 +8,6 @@ const userSchema = new Schema({
   email: String,
   address: String,
   phoneNumber: String,
-  role: { type: String, enum: ['admin', 'user'], default: 'user' },
 })
 
 export default mongoose.model('User', userSchema)
