@@ -9,7 +9,7 @@ import {
 const router = express.Router()
 
 router.get('/', UsersController.findAllUsers)
-router.post('/addrole', UsersController.addRoleToUserController)
+// router.post('/addrole', UsersController.addRoleToUserController)
 router.get('/:userId', UsersController.findOneUser)
 
 router.post('/', validateCreateUser, UsersController.createNewUser)

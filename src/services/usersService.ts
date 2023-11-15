@@ -1,15 +1,12 @@
 import mongoose from 'mongoose'
 
-import UserRoleRepo from '../models/userRolesModel.js'
+// import UserRoleRepo from '../models/userRolesModel.js'
 import UserRepo from '../models/usersModel.js'
-import { type UserRole, type User, type UserUpdate } from '../types/User.js'
+import { type User, type UserUpdate } from '../types/User.js'
 
-async function findAll(): Promise<UserRole[]> {
-  const users = await UserRoleRepo.find()
-    .populate('user')
-    .populate('role')
-    .exec()
-  return users as UserRole[]
+async function findAll(): Promise<User[]> {
+  const users = await UserRepo.find().exec()
+  return users as User[]
 }
 
 async function findOne(userId: string): Promise<User | Error | null> {
