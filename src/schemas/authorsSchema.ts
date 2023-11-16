@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import { z } from 'zod'
 
 export const authorCreateSchema = z
@@ -13,7 +14,12 @@ export const authorCreateSchema = z
       })
       .min(1, 'Last name cannot be empty.'),
     books: z
-      .array(z.string().min(1, 'Book title cannot be empty.'))
+      .array(
+        z
+          .string()
+          .min(1, 'Book id cannot be empty.')
+          .transform((val) => new mongoose.Types.ObjectId(val))
+      )
       .min(1, { message: 'Book array cannot be empty.' })
       .default([]),
   })
@@ -25,7 +31,8 @@ export const authorUpdateSchema = z
     lastName: z.string().min(1, 'Last name cannot be empty.').optional(),
     books: z
       .string()
-      .min(1, 'Book title cannot be empty.')
+      .min(1, 'Book id cannot be empty.')
+      .transform((val) => new mongoose.Types.ObjectId(val))
       .array()
       .nonempty({ message: 'Book array cannot be empty.' })
       .optional(),
