@@ -40,8 +40,8 @@ export async function addRoleToUser(
   const userId = new mongoose.Types.ObjectId(req.params.userId)
   const roleId = new mongoose.Types.ObjectId(req.body.role)
   const newRoleToUser = await UserRolesService.addRoleToUser({
-    user: userId,
-    role: roleId,
+    user_id: userId,
+    role_id: roleId,
   })
 
   if (newRoleToUser === null) {
