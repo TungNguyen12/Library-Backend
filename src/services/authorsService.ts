@@ -4,7 +4,7 @@ import AuthorRepo from '../models/authorsModel.js'
 import { type Author } from '../types/Author.js'
 
 async function getAll(): Promise<Author[]> {
-  const authors = await AuthorRepo.find().exec()
+  const authors = await AuthorRepo.find().populate('books').exec()
   return authors as Author[]
 }
 

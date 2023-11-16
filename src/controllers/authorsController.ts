@@ -54,7 +54,7 @@ async function deleteAuthor(
     return
   }
 
-  res.json({ isDeleted: true })
+  res.sendStatus(204)
 }
 
 async function updateAuthorInfo(
