@@ -28,6 +28,11 @@ export const userSchema = z
         required_error: 'Phone number is required',
       })
       .min(1, 'Phone number cannot be empty.'),
+    password: z
+      .string({
+        required_error: 'Password is required',
+      })
+      .min(1, 'Password cannot be empty.'),
   })
   .strict()
 

@@ -6,6 +6,12 @@ async function findAll(): Promise<Role[]> {
   return roles as Role[]
 }
 
+// findByTitle
+async function findByTitle(title: string): Promise<Role | null> {
+  const role = await RoleRepo.findOne({ title })
+  return role as Role | null
+}
+
 async function createRole(newRole: Role): Promise<Role | Error | null> {
   try {
     const isAvailable = await RoleRepo.exists({ title: newRole.title })
@@ -22,5 +28,6 @@ async function createRole(newRole: Role): Promise<Role | Error | null> {
 
 export default {
   findAll,
+  findByTitle,
   createRole,
 }

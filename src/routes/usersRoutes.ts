@@ -1,5 +1,6 @@
 import express from 'express'
 
+import authController from '../controllers/authsController.js'
 import UsersController from '../controllers/usersController.js'
 import {
   validateCreateUser,
@@ -9,6 +10,8 @@ import {
 const router = express.Router()
 
 router.get('/', UsersController.findAllUsers)
+router.post('/signup', validateCreateUser, authController.signup)
+router.post('/signin', authController.signin)
 // router.post('/addrole', UsersController.addRoleToUserController)
 router.get('/:userId', UsersController.findOneUser)
 

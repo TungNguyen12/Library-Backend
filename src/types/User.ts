@@ -1,30 +1,33 @@
-/* eslint-disable @typescript-eslint/consistent-type-definitions */
-import type { userSchema } from '../schemas/usersSchema.js'
-import type { roleSchema } from '../schemas/rolesSchema.js'
-import type { permissionSchema } from '../schemas/permissionsSchema.js'
-
+import type mongoose from 'mongoose'
 import type { z } from 'zod'
 
-import type mongoose from 'mongoose'
+import type { permissionSchema } from '../schemas/permissionsSchema.js'
+import type { roleSchema } from '../schemas/rolesSchema.js'
+import type { userSchema } from '../schemas/usersSchema.js'
 
 type ObjectId = mongoose.Types.ObjectId
 
 // User
-type UserDTO = z.infer<typeof userSchema>
+export type UserDTO = z.infer<typeof userSchema>
 export type User = UserDTO & { id: ObjectId }
 export type UserUpdate = Omit<Partial<User>, 'id'>
 
 // User-Role (bridge table)
-export type UserRole = {
+export interface UserRole {
   user: ObjectId
   role: ObjectId
+}
+
+export interface UserWithRole {
+  user: User
+  role: Role
 }
 
 // Role
 export type Role = z.infer<typeof roleSchema> & { id: ObjectId }
 
 // Role_Permission (bridge table)
-export type RolePermission = {
+export interface RolePermission {
   role_id: ObjectId
   permission_id: ObjectId
 }
