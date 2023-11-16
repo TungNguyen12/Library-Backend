@@ -13,9 +13,10 @@ export type User = UserDTO & { id: ObjectId }
 export type UserUpdate = Omit<Partial<User>, 'id'>
 
 // User-Role (bridge table)
-export interface UserRole {
-  user: ObjectId
-  role: ObjectId
+
+export type UserRole = {
+  user_id: ObjectId
+  role_id: ObjectId
 }
 
 export interface UserWithRole {
