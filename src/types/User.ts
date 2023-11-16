@@ -16,8 +16,8 @@ export type UserUpdate = Omit<Partial<User>, 'id'>
 
 // User-Role (bridge table)
 export type UserRole = {
-  user: ObjectId
-  role: ObjectId
+  user_id: ObjectId
+  role_id: ObjectId
 }
 
 // Role
