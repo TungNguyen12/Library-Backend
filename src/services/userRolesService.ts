@@ -27,17 +27,14 @@ async function findAllUserRole(): Promise<UserRole[]> {
 
 async function findByUserId(
   userId: string | Types.ObjectId
-): Promise<UserWithRole | Error | null> {
+): Promise<UserWithRole[] | Error | null> {
   try {
     const id =
       typeof userId === 'string' ? new mongoose.Types.ObjectId(userId) : userId
 
-    const userRole = await UserRoleRepo.findOne({ user: id })
-      .populate('user')
-      .populate('role')
-      .exec()
+    const userRole = await UserRoleRepo.find({ user_id: id }).exec()
 
-    return userRole as UserWithRole | null
+    return userRole as unknown as UserWithRole[] | null
   } catch (e) {
     const error = e as Error
     return error

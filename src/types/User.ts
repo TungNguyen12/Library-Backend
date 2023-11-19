@@ -29,15 +29,18 @@ export interface UserRole {
 }
 
 export interface UserWithRole {
-  user: User
-  role: Role
+  user_id: User
+  role_id: Role
 }
 
 // Role
 export type Role = z.infer<typeof roleSchema> & { id: ObjectId }
+export type RoleWithPermissions = Role & {
+  permissions: Permission[]
+}
 
 // Role_Permission (bridge table)
-export interface RolePermission {
+export type RolePermission = {
   role_id: ObjectId
   permission_id: ObjectId
 }

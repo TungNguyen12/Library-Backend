@@ -3,6 +3,7 @@ import express from 'express'
 import authController from '../controllers/authsController.js'
 import UsersController from '../controllers/usersController.js'
 import { checkAuth } from '../middlewares/checkAuth.js'
+import { checkPermission } from '../middlewares/checkPermission.js'
 import {
   validateCreateUser,
   validateUpdateUser,
@@ -10,7 +11,12 @@ import {
 
 const router = express.Router()
 
-router.get('/', checkAuth, UsersController.findAllUsers)
+router.get(
+  '/',
+  checkAuth,
+  checkPermission('USERS_READ'),
+  UsersController.findAllUsers
+)
 router.post('/signup', validateCreateUser, authController.signup)
 router.post('/signin', authController.signin)
 // router.post('/addrole', UsersController.addRoleToUserController)
