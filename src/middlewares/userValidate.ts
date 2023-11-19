@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express'
-import type { ZodError } from 'zod'
+import { z, type ZodError } from 'zod'
 
 import { userCreateSchema, userUpdateSchema } from '../schemas/usersSchema.js'
 import { ApiError } from '../utils/ApiError.js'
@@ -9,8 +9,12 @@ export async function validateCreateUser(
   _: Response,
   next: NextFunction
 ): Promise<void> {
+  const bodySchema = z.object({
+    body: userCreateSchema,
+  })
+
   try {
-    await userCreateSchema.parseAsync({
+    await bodySchema.parseAsync({
       body: req.body,
       query: req.query,
       params: req.params,
@@ -22,7 +26,6 @@ export async function validateCreateUser(
     JSON.parse(e.message).forEach((element: any) => {
       errorMessages.push(element.message)
     })
-
     next(ApiError.badRequest('Bad request.', errorMessages.join(' ')))
   }
 }

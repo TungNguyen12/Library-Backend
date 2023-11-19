@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 
 // import UserRoleRepo from '../models/userRolesModel.js'
 import UserRepo from '../models/usersModel.js'
-import { type User, type UserDTO, type UserUpdate } from '../types/User.js'
+import { type UserCreate, type User, type UserUpdate } from '../types/User.js'
 
 async function findAll(): Promise<User[]> {
   const users = await UserRepo.find().exec()
@@ -28,7 +28,7 @@ async function findByEmail(email: string): Promise<User | null> {
 }
 
 async function createUser(
-  newUser: UserDTO,
+  newUser: UserCreate,
   options = {}
 ): Promise<User | Error | null> {
   try {
