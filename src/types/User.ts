@@ -1,10 +1,11 @@
+import { type Request } from 'express'
+import type { JwtPayload } from 'jsonwebtoken'
 import type mongoose from 'mongoose'
 import type { z } from 'zod'
 
 import type { permissionSchema } from '../schemas/permissionsSchema.js'
 import type { roleSchema } from '../schemas/rolesSchema.js'
 import type { userSchema } from '../schemas/usersSchema.js'
-import type { JwtPayload } from 'jsonwebtoken'
 
 type ObjectId = mongoose.Types.ObjectId
 
@@ -17,6 +18,9 @@ export interface DecodedUser extends JwtPayload {
   email: string
 }
 
+export interface WithAuthRequest extends Request {
+  decoded?: DecodedUser
+}
 // User-Role (bridge table)
 
 export interface UserRole {
