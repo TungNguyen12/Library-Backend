@@ -13,7 +13,7 @@ export async function checkAuth(
   next: NextFunction
 ): Promise<void> {
   const token = req.headers.authorization?.split(' ')[1]
-  if (!token) {
+  if (token === undefined) {
     next(
       ApiError.forbidden(
         'TOKEN is missing (Unauthorized to proceed action) ❌🔙❌'

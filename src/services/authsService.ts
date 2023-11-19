@@ -23,7 +23,7 @@ async function signin(credential: {
   const isValid = bcrypt.compareSync(credential.password, user.password)
   console.log('🚀 ~ file: authsService.ts:21 ~ signin ~ isValid:', isValid)
 
-  if (!isValid) {
+  if (isValid === false) {
     return ApiError.unauthorized('Invalid password')
   }
 

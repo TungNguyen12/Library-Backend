@@ -19,7 +19,7 @@ export interface DecodedUser extends JwtPayload {
 
 // User-Role (bridge table)
 
-export type UserRole = {
+export interface UserRole {
   user_id: ObjectId
   role_id: ObjectId
 }
