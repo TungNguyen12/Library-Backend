@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import mongoose from 'mongoose'
 
-import { type UserDTO } from '../types/User.js'
+import { type UserCreate } from '../types/User.js'
 import { ApiError } from '../utils/ApiError.js'
 import rolesService from './rolesService.js'
 import userRolesService from './userRolesService.js'
@@ -39,7 +39,7 @@ async function signin(credential: {
   return accessToken
 }
 
-async function signup(user: UserDTO): Promise<string | ApiError> {
+async function signup(user: UserCreate): Promise<string | ApiError> {
   const session = await mongoose.startSession()
   session.startTransaction()
 
