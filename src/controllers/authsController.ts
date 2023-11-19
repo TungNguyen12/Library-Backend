@@ -2,6 +2,7 @@ import { type NextFunction, type Request, type Response } from 'express'
 
 import authsService from '../services/authsService.js'
 import { ApiError } from '../utils/ApiError.js'
+import type { UserCreate } from '../types/User.js'
 
 async function signin(
   req: Request,
@@ -32,9 +33,24 @@ async function signup(
   next: NextFunction
 ): Promise<void> {
   try {
-    const { firstName, lastName, email, password, phoneNumber, address } =
-      req.body
-    const user = { firstName, lastName, email, password, phoneNumber, address }
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      phoneNumber,
+      address,
+    } = req.body
+    const user: UserCreate = {
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      phoneNumber,
+      address,
+    }
     const accessToken = await authsService.signup(user)
     res.status(201).json({ accessToken })
   } catch (error) {
