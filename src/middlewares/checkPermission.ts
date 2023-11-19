@@ -36,15 +36,28 @@ export function checkPermission(...permissions: Permission[]) {
       await Promise.all(permissionsPromises)
     }
 
-    const hasMatchedPermission = permissions.some((permission) =>
-      userPermissions.includes(permission)
+    const hasGeneralPermission = permissions.some(
+      (permission) =>
+        !permission.endsWith('_ONE') && userPermissions.includes(permission)
+    )
+    const hasSelfOnlyPermission = permissions.some(
+      (permission) =>
+        permission.endsWith('_ONE') && userPermissions.includes(permission)
     )
 
-    if (!hasMatchedPermission) {
-      next(ApiError.forbidden('GET OUT WRONG PERMISSION!!!!'))
+    if (hasGeneralPermission) {
+      next()
       return
     }
 
-    next()
+    if (hasSelfOnlyPermission) {
+      const userId = req.params.userId.length > 0 || req.params.id
+      if (user.userId === userId) {
+        next()
+        return
+      }
+    }
+
+    next(ApiError.forbidden('Access Denied: Insufficient Permissions.'))
   }
 }

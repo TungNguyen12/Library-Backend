@@ -20,7 +20,12 @@ router.get(
 router.post('/signup', validateCreateUser, authController.signup)
 router.post('/signin', authController.signin)
 
-router.get('/:userId', UsersController.findOneUser)
+router.get(
+  '/:userId',
+  checkAuth,
+  checkPermission('USERS_READ', 'USERS_READ_ONE'),
+  UsersController.findOneUser
+)
 
 router.post('/', validateCreateUser, UsersController.createNewUser)
 router.delete('/:userId', UsersController.deleteUser)
