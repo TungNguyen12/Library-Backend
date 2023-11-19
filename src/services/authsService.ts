@@ -8,11 +8,11 @@ import rolesService from './rolesService.js'
 import userRolesService from './userRolesService.js'
 import usersService from './usersService.js'
 
-async function signin(credencial: {
+async function signin(credential: {
   email: string
   password: string
 }): Promise<string | ApiError> {
-  const user = await usersService.findByEmail(credencial.email)
+  const user = await usersService.findByEmail(credential.email)
 
   if (user === null) {
     return ApiError.notFound('User not found')
@@ -20,7 +20,7 @@ async function signin(credencial: {
     return ApiError.badRequest('Bad request.', user.message)
   }
 
-  const isValid = bcrypt.compareSync(credencial.password, user.password)
+  const isValid = bcrypt.compareSync(credential.password, user.password)
   console.log('🚀 ~ file: authsService.ts:21 ~ signin ~ isValid:', isValid)
 
   if (!isValid) {
@@ -54,7 +54,7 @@ async function signup(user: UserDTO): Promise<string | ApiError> {
       return ApiError.conflict('User already exists')
     }
     if (newUser instanceof Error) {
-      return ApiError.internal('Something wrong happend')
+      return ApiError.internal('Something wrong happened')
     }
 
     const newRole = { user_id: newUser.id, role_id: defaultRole.id }

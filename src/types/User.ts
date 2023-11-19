@@ -4,6 +4,7 @@ import type { z } from 'zod'
 import type { permissionSchema } from '../schemas/permissionsSchema.js'
 import type { roleSchema } from '../schemas/rolesSchema.js'
 import type { userSchema } from '../schemas/usersSchema.js'
+import type { JwtPayload } from 'jsonwebtoken'
 
 type ObjectId = mongoose.Types.ObjectId
 
@@ -11,6 +12,10 @@ type ObjectId = mongoose.Types.ObjectId
 export type UserDTO = z.infer<typeof userSchema>
 export type User = UserDTO & { id: ObjectId }
 export type UserUpdate = Omit<Partial<User>, 'id'>
+export interface DecodedUser extends JwtPayload {
+  userId: string
+  email: string
+}
 
 // User-Role (bridge table)
 

@@ -6,6 +6,7 @@ import {
   validateCreateUser,
   validateUpdateUser,
 } from '../middlewares/userValidate.js'
+import { checkAuth } from '../middlewares/checkAuth.js'
 
 const router = express.Router()
 
@@ -17,6 +18,11 @@ router.get('/:userId', UsersController.findOneUser)
 
 router.post('/', validateCreateUser, UsersController.createNewUser)
 router.delete('/:userId', UsersController.deleteUser)
-router.put('/:userId', validateUpdateUser, UsersController.updateUser)
+router.put(
+  '/:userId',
+  checkAuth,
+  validateUpdateUser,
+  UsersController.updateUser
+)
 
 export default router
