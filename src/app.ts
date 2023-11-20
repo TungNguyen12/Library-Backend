@@ -13,6 +13,8 @@ import rolesRoutes from './routes/rolesRoutes.js'
 import bookAuthorRoutes from './routes/bookAuthorRoutes.js'
 import permissionsRoutes from './routes/permissionsRoutes.js'
 import userRolesRoutes from './routes/userRolesRoutes.js'
+import passport from 'passport'
+import { loginWithGoogle } from './middlewares/loginWithGoogle.js'
 
 const app = express()
 
@@ -22,6 +24,8 @@ app.use(loggingMiddleware)
 app.use(entitiesMonitorMiddleware)
 app.use(crudCounterMiddleware)
 
+app.use(passport.initialize())
+passport.use(loginWithGoogle())
 // Routes
 app.use('/api/v1/users', usersRoutes)
 app.use('/api/v1/authors', authorsRoutes)
