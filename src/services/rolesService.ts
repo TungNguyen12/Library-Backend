@@ -1,9 +1,27 @@
 import RoleRepo from '../models/rolesModel.js'
-import type { Role } from '../types/User.js'
+import type { Role, RoleWithPermissions } from '../types/User.js'
 
 async function findAll(): Promise<Role[]> {
   const roles = await RoleRepo.find().exec()
   return roles as Role[]
+}
+
+// findByTitle
+async function findByTitle(title: string): Promise<Role | null> {
+  const role = await RoleRepo.findOne({ title })
+  return role as Role | null
+}
+
+async function findById(roleId: string): Promise<Role | null> {
+  const role = await RoleRepo.findOne({ _id: roleId })
+  return role as Role | null
+}
+
+async function findByIdWithPermissions(
+  roleId: string
+): Promise<RoleWithPermissions | null> {
+  const role = await RoleRepo.findOne({ _id: roleId }).populate('permissions')
+  return role as RoleWithPermissions | null
 }
 
 async function createRole(newRole: Role): Promise<Role | Error | null> {
@@ -22,5 +40,8 @@ async function createRole(newRole: Role): Promise<Role | Error | null> {
 
 export default {
   findAll,
+  findByTitle,
+  findById,
+  findByIdWithPermissions,
   createRole,
 }

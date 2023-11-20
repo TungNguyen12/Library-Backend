@@ -1,8 +1,9 @@
+import bcrypt from 'bcrypt'
 import mongoose from 'mongoose'
 
 // import UserRoleRepo from '../models/userRolesModel.js'
 import UserRepo from '../models/usersModel.js'
-import { type User, type UserUpdate } from '../types/User.js'
+import { type UserCreate, type User, type UserUpdate } from '../types/User.js'
 
 async function findAll(): Promise<User[]> {
   const users = await UserRepo.find().exec()
@@ -21,11 +22,22 @@ async function findOne(userId: string): Promise<User | Error | null> {
   }
 }
 
-async function createUser(newUser: User): Promise<User | Error | null> {
+async function findByEmail(email: string): Promise<User | null> {
+  const user = await UserRepo.findOne({ email })
+  return user as User | null
+}
+
+async function createUser(
+  newUser: UserCreate,
+  options = {}
+): Promise<User | Error | null> {
   try {
     const isAvailable = await UserRepo.exists({ email: newUser.email })
     if (isAvailable === null) {
-      const user = await UserRepo.create(newUser)
+      const hashedPassword = bcrypt.hashSync(newUser.password, 10)
+      newUser.password = hashedPassword
+      const user = new UserRepo(newUser)
+      await user.save(options)
       return user as User
     }
     return null
@@ -66,6 +78,7 @@ async function updateUser(
 export default {
   findOne,
   findAll,
+  findByEmail,
   createUser,
   deleteUser,
   updateUser,

@@ -31,6 +31,14 @@ export class ApiError {
     return new ApiError(405, message)
   }
 
+  static conflict(message: string): ApiError {
+    return new ApiError(409, message)
+  }
+
+  static unprocessableEntity(message: string): ApiError {
+    return new ApiError(422, message)
+  }
+
   static internal(message: string): ApiError {
     return new ApiError(500, message)
   }

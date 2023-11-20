@@ -1,14 +1,15 @@
-import mongoose from 'mongoose'
-import type { ObjectId } from 'mongoose'
+import mongoose, { type ObjectId, type Types } from 'mongoose'
 
 import UserRoleRepo from '../models/userRolesModel.js'
-import type { UserRole } from '../types/User.js'
+import type { UserRole, UserWithRole } from '../types/User.js'
 
 async function addRoleToUser(
-  newUserRole: UserRole
+  newUserRole: UserRole,
+  options = {}
 ): Promise<UserRole | Error | null> {
   try {
-    const userRole = await UserRoleRepo.create(newUserRole)
+    const userRole = new UserRoleRepo(newUserRole)
+    await userRole.save(options)
     return userRole as UserRole | null
   } catch (e) {
     const error = e as Error
@@ -24,14 +25,16 @@ async function findAllUserRole(): Promise<UserRole[]> {
   return users as UserRole[]
 }
 
-async function findByUserId(userId: string): Promise<UserRole | Error | null> {
+async function findByUserId(
+  userId: string | Types.ObjectId
+): Promise<UserWithRole[] | Error | null> {
   try {
-    const id = new mongoose.Types.ObjectId(userId)
-    const userRole = await UserRoleRepo.findOne({ user: id })
-      .populate('user')
-      .populate('role')
-      .exec()
-    return userRole as UserRole | null
+    const id =
+      typeof userId === 'string' ? new mongoose.Types.ObjectId(userId) : userId
+
+    const userRole = await UserRoleRepo.find({ user_id: id }).exec()
+
+    return userRole as unknown as UserWithRole[] | null
   } catch (e) {
     const error = e as Error
     return error

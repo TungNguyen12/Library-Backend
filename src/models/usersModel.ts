@@ -8,6 +8,7 @@ const userSchema = new Schema({
   email: String,
   address: String,
   phoneNumber: String,
+  password: String,
 })
 
 export default mongoose.model('User', userSchema)
