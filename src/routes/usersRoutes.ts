@@ -1,20 +1,21 @@
+import type { Request, Response } from 'express'
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import express from 'express'
-import type { Response, Request } from 'express'
+import jwt from 'jsonwebtoken'
+import passport from 'passport'
 
 import authController from '../controllers/authsController.js'
 import UsersController from '../controllers/usersController.js'
+import { checkAuth } from '../middlewares/checkAuth.js'
 import {
   validateCreateUser,
   validateUpdateUser,
 } from '../middlewares/userValidate.js'
-import { checkAuth } from '../middlewares/checkAuth.js'
-import passport from 'passport'
 import type { User } from '../types/User.js'
-import jwt from 'jsonwebtoken'
 
-type WithUserRequest = Request & { user?: User }
-
+interface WithUserRequest extends Request {
+  user?: User | Express.User
+}
 const router = express.Router()
 
 router.get('/', UsersController.findAllUsers)
@@ -26,7 +27,7 @@ router.post(
   passport.authenticate('google-id-token', { session: false }),
   (req: WithUserRequest, res: Response) => {
     console.log('request custom is here ❌❌.', req)
-    const user = req.user
+    const user = req.user as User
 
     if (user) {
       const payload = {
