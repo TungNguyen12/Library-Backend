@@ -59,22 +59,35 @@ async function removeFromCart(
   next: NextFunction
 ): Promise<void> {
   const userId = req.params.userId
-  const bookId = req.body.book_id
-
-  if (bookId === undefined) {
-    next(
-      ApiError.badRequest('Bad request.', 'Missing book_id in request body.')
-    )
-    return
-  }
+  const bookId = req.params.bookId
 
   const result = await CartsService.removeFromCart({ userId, bookId })
 
   if (result instanceof Error) {
     next(ApiError.badRequest('Bad request.', result.message))
     return
-  } else if (result === undefined) {
-    next(ApiError.internal('Something went wrong.'))
+  } else if (!result) {
+    next(ApiError.notFound('Cart not found.'))
+    return
+  }
+
+  res.sendStatus(204)
+}
+
+async function deleteCart(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  const userId = req.params.userId
+
+  const result = await CartsService.deleteCart(userId)
+
+  if (result instanceof Error) {
+    next(ApiError.badRequest('Bad request.', result.message))
+    return
+  } else if (!result) {
+    next(ApiError.notFound('Cart not found.'))
     return
   }
 
@@ -87,4 +100,5 @@ export default {
   getCartByUserId,
   addToCart,
   removeFromCart,
+  deleteCart,
 }

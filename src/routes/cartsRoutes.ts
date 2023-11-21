@@ -8,6 +8,7 @@ router.get('/', CartsController.getAllCarts)
 router.get('/items', CartsController.getAllCartItems)
 router.get('/:userId', CartsController.getCartByUserId)
 router.post('/:userId', CartsController.addToCart)
-router.delete('/:userId', CartsController.removeFromCart)
+router.delete('/:userId/:bookId', CartsController.removeFromCart)
+router.delete('/:userId', CartsController.deleteCart)
 
 export default router

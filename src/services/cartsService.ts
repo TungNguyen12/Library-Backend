@@ -74,7 +74,7 @@ async function removeFromCart({
 }: {
   userId: string
   bookId: string
-}): Promise<CartItem | boolean | Error> {
+}): Promise<boolean | Error> {
   try {
     const id = new mongoose.Types.ObjectId(userId)
     const cart = await CartsRepo.findOne({ user_id: id })
@@ -99,10 +99,30 @@ async function removeFromCart({
   }
 }
 
+async function deleteCart(userId: string): Promise<boolean | Error> {
+  try {
+    const id = new mongoose.Types.ObjectId(userId)
+    const cart = await CartsRepo.findOne({ user_id: id })
+
+    if (cart !== null) {
+      const cartId = cart._id
+      await CartItemRepo.deleteMany({ cart_id: cartId })
+      await cart.deleteOne()
+      return true
+    }
+
+    return false
+  } catch (e) {
+    const err = e as Error
+    return err
+  }
+}
+
 export default {
   getAllCarts,
   getAllCartItems,
   getCartByUserId,
   addToCart,
   removeFromCart,
+  deleteCart,
 }
