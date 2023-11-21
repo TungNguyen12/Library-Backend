@@ -38,9 +38,9 @@ async function addToCart(
   next: NextFunction
 ): Promise<void> {
   const userId = req.params.userId
-  const copyId = req.body.copy_id
+  const bookId = req.body.book_id
 
-  const result = await CartsService.addToCart({ userId, copyId })
+  const result = await CartsService.addToCart({ userId, bookId })
 
   if (result instanceof Error) {
     next(ApiError.badRequest('Bad request.', result.message))
@@ -59,16 +59,16 @@ async function removeFromCart(
   next: NextFunction
 ): Promise<void> {
   const userId = req.params.userId
-  const copyId = req.body.copy_id
+  const bookId = req.body.book_id
 
-  if (copyId === undefined) {
+  if (bookId === undefined) {
     next(
-      ApiError.badRequest('Bad request.', 'Missing copy_id in request body.')
+      ApiError.badRequest('Bad request.', 'Missing book_id in request body.')
     )
     return
   }
 
-  const result = await CartsService.removeFromCart({ userId, copyId })
+  const result = await CartsService.removeFromCart({ userId, bookId })
 
   if (result instanceof Error) {
     next(ApiError.badRequest('Bad request.', result.message))

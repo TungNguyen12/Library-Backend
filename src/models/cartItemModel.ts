@@ -8,9 +8,9 @@ const CartItemSchema = new Schema({
     type: ObjectId,
     ref: 'Cart',
   },
-  copy_id: {
+  book_id: {
     type: ObjectId,
-    ref: 'CopiesBook',
+    ref: 'Book',
   },
 })
 

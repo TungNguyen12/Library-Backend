@@ -37,10 +37,10 @@ async function getCartByUserId(
 
 async function addToCart({
   userId,
-  copyId,
+  bookId,
 }: {
   userId: string
-  copyId: string
+  bookId: string
 }): Promise<CartItem | undefined | Error> {
   try {
     const id = new mongoose.Types.ObjectId(userId)
@@ -57,7 +57,7 @@ async function addToCart({
     const cartId = cart._id
     const newCartItem = new CartItemRepo({
       cart_id: cartId,
-      copy_id: new mongoose.Types.ObjectId(copyId),
+      book_id: new mongoose.Types.ObjectId(bookId),
     })
     const res = await newCartItem.save()
 
@@ -70,10 +70,10 @@ async function addToCart({
 
 async function removeFromCart({
   userId,
-  copyId,
+  bookId,
 }: {
   userId: string
-  copyId: string
+  bookId: string
 }): Promise<CartItem | boolean | Error> {
   try {
     const id = new mongoose.Types.ObjectId(userId)
@@ -83,7 +83,7 @@ async function removeFromCart({
       const cartId = cart._id
       const cartItem = await CartItemRepo.findOne({
         cart_id: cartId,
-        copy_id: new mongoose.Types.ObjectId(copyId),
+        book_id: new mongoose.Types.ObjectId(bookId),
       })
 
       if (!(cartItem instanceof Error || cartItem === null)) {
