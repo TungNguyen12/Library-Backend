@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-confusing-void-expression */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import GoogleTokenStrategy from 'passport-google-id-token'
 
@@ -8,6 +9,11 @@ export function loginWithGoogle(): GoogleTokenStrategy {
   return new GoogleTokenStrategy(
     { clientID: process.env.GOOGLE_CLIENT_ID as string },
     async function (parsedToken, googleId, done) {
+      console.log(
+        'THIS IS USER INFO FROM GOOGLE: 😶‍🌫️😶‍🌫️😶‍🌫️',
+        parsedToken.payload,
+        googleId
+      )
       const email = parsedToken.payload.email
 
       try {

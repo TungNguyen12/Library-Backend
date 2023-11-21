@@ -24,8 +24,18 @@ app.use(loggingMiddleware)
 app.use(entitiesMonitorMiddleware)
 app.use(crudCounterMiddleware)
 
+// Google login
+/*
+Go to the OAuth 2.0 Playground.
+On the left side, select the "Google OAuth2 API v2" from the list.
+Enter your client ID and secret.
+In the "Request" section, select the scope "openid" and click "Authorize APIs."
+In the "Exchange authorization code for tokens" section, click "Exchange authorization code for tokens."
+The id_token will be part of the response.
+*/
 app.use(passport.initialize())
 passport.use(loginWithGoogle())
+
 // Routes
 app.use('/api/v1/users', usersRoutes)
 app.use('/api/v1/authors', authorsRoutes)
