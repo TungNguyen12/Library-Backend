@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 
 const StatsSchema = new Schema({
   name: String,
-  data: Object,
+  data: Schema.Types.Mixed,
 })
 
 export default mongoose.model('Stats', StatsSchema)

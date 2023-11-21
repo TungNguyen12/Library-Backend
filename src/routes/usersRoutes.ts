@@ -6,6 +6,9 @@ import passport from 'passport'
 import authController from '../controllers/authsController.js'
 import UsersController from '../controllers/usersController.js'
 import { checkAuth } from '../middlewares/checkAuth.js'
+
+import { checkPermission } from '../middlewares/checkPermission.js'
+
 import {
   validateCreateUser,
   validateUpdateUser,
@@ -13,9 +16,15 @@ import {
 
 const router = express.Router()
 
-router.get('/', UsersController.findAllUsers)
+router.get(
+  '/',
+  checkAuth,
+  checkPermission('USERS_READ'),
+  UsersController.findAllUsers
+)
 router.post('/signup', validateCreateUser, authController.signup)
 router.post('/signin', authController.signin)
+
 
 router.post(
   '/login-google',
@@ -23,7 +32,13 @@ router.post(
   authController.loginWithGoogle
 )
 
-router.get('/:userId', UsersController.findOneUser)
+router.get(
+  '/:userId',
+  checkAuth,
+  checkPermission('USERS_READ', 'USERS_READ_ONE'),
+  UsersController.findOneUser
+)
+
 
 router.post('/', validateCreateUser, UsersController.createNewUser)
 router.delete('/:userId', UsersController.deleteUser)

@@ -1,11 +1,8 @@
-import type { NextFunction, Request, Response } from 'express'
+import type { NextFunction, Response } from 'express'
 import jwt from 'jsonwebtoken'
-import type { DecodedUser } from '../types/User.js'
-import { ApiError } from '../utils/ApiError.js'
 
-export interface WithAuthRequest extends Request {
-  decoded?: DecodedUser
-}
+import type { DecodedUser, WithAuthRequest } from '../types/User.js'
+import { ApiError } from '../utils/ApiError.js'
 
 export async function checkAuth(
   req: WithAuthRequest,
@@ -27,7 +24,6 @@ export async function checkAuth(
       token,
       process.env.TOKEN_SECRET as string
     ) as DecodedUser
-    console.log('DECODED INFO: 🧠🧠', decoded)
 
     req.decoded = decoded
     next()

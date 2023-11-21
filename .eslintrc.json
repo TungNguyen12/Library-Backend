@@ -14,6 +14,7 @@
       {
         "checksVoidReturn": false
       }
-    ]
+    ],
+    "@typescript-eslint/consistent-type-definitions": 0
   }
 }

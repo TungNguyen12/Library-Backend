@@ -1,11 +1,11 @@
+import { type Request } from 'express'
+import type { JwtPayload } from 'jsonwebtoken'
 import type mongoose from 'mongoose'
 import type { z } from 'zod'
 
 import type { permissionSchema } from '../schemas/permissionsSchema.js'
 import type { roleSchema } from '../schemas/rolesSchema.js'
 import type { userCreateSchema, userSchema } from '../schemas/usersSchema.js'
-
-import type { JwtPayload } from 'jsonwebtoken'
 
 type ObjectId = mongoose.Types.ObjectId
 
@@ -19,6 +19,9 @@ export interface DecodedUser extends JwtPayload {
   email: string
 }
 
+export interface WithAuthRequest extends Request {
+  decoded?: DecodedUser
+}
 // User-Role (bridge table)
 
 export interface UserRole {
@@ -27,15 +30,18 @@ export interface UserRole {
 }
 
 export interface UserWithRole {
-  user: User
-  role: Role
+  user_id: User
+  role_id: Role
 }
 
 // Role
 export type Role = z.infer<typeof roleSchema> & { id: ObjectId }
+export type RoleWithPermissions = Role & {
+  permissions: Permission[]
+}
 
 // Role_Permission (bridge table)
-export interface RolePermission {
+export type RolePermission = {
   role_id: ObjectId
   permission_id: ObjectId
 }
