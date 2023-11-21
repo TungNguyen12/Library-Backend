@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import express from 'express'
+
+import passport from 'passport'
 
 import authController from '../controllers/authsController.js'
 import UsersController from '../controllers/usersController.js'
+import { checkAuth } from '../middlewares/checkAuth.js'
 import {
   validateCreateUser,
   validateUpdateUser,
 } from '../middlewares/userValidate.js'
-import { checkAuth } from '../middlewares/checkAuth.js'
-import passport from 'passport'
 
 const router = express.Router()
 
