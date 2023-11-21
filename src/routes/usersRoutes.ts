@@ -25,7 +25,6 @@ router.get(
 router.post('/signup', validateCreateUser, authController.signup)
 router.post('/signin', authController.signin)
 
-
 router.post(
   '/login-google',
   passport.authenticate('google-id-token', { session: false }),
@@ -38,7 +37,6 @@ router.get(
   checkPermission('USERS_READ', 'USERS_READ_ONE'),
   UsersController.findOneUser
 )
-
 
 router.post('/', validateCreateUser, UsersController.createNewUser)
 router.delete('/:userId', UsersController.deleteUser)
