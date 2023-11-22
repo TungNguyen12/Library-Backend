@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { type NextFunction, type Request, type Response } from 'express'
+import jwt from 'jsonwebtoken'
 
 import authsService from '../services/authsService.js'
 import { ApiError } from '../utils/ApiError.js'
-import type { UserCreate } from '../types/User.js'
+import type { User, UserCreate } from '../types/User.js'
 
 async function signin(
   req: Request,
@@ -24,6 +26,22 @@ async function signin(
     res.json({ accessToken })
   } catch (err) {
     next(ApiError.internal('Internal server error'))
+  }
+}
+
+function loginWithGoogle(req: any, res: Response): void {
+  const user = req.user as User | undefined
+
+  if (user) {
+    const payload = {
+      userId: user.id,
+      email: user.email,
+    }
+
+    const accessToken = jwt.sign(payload, process.env.TOKEN_SECRET as string, {
+      expiresIn: '1h',
+    })
+    res.json({ accessToken })
   }
 }
 
@@ -64,5 +82,6 @@ async function signup(
 
 export default {
   signin,
+  loginWithGoogle,
   signup,
 }

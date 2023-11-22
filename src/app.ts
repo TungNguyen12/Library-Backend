@@ -1,9 +1,11 @@
 import express from 'express'
+import passport from 'passport'
 
 import { crudCounterMiddleware } from './middlewares/crudCounterMiddleware.js'
 import { entitiesMonitorMiddleware } from './middlewares/entitiesMonitoring.js'
 import { apiErrorHandler } from './middlewares/error.js'
 import { loggingMiddleware } from './middlewares/logging.js'
+import { loginWithGoogle } from './middlewares/loginWithGoogle.js'
 import { routeNotFound } from './middlewares/routeNotFound.js'
 import authorsRoutes from './routes/authorsRoutes.js'
 import bookAuthorRoutes from './routes/bookAuthorRoutes.js'
@@ -20,6 +22,18 @@ app.use(express.json())
 app.use(loggingMiddleware)
 app.use(entitiesMonitorMiddleware)
 app.use(crudCounterMiddleware)
+
+// Google login
+/*
+Go to the OAuth 2.0 Playground.
+On the left side, select the "Google OAuth2 API v2" from the list.
+Enter your client ID and secret.
+In the "Request" section, select the scope "openid" and click "Authorize APIs."
+In the "Exchange authorization code for tokens" section, click "Exchange authorization code for tokens."
+The id_token will be part of the response.
+*/
+app.use(passport.initialize())
+passport.use(loginWithGoogle())
 
 // Routes
 app.use('/api/v1/users', usersRoutes)
