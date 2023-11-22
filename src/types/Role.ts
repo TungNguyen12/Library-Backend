@@ -6,7 +6,7 @@ import { type Permission } from './User.js'
 
 export type RoleDTO = z.infer<typeof roleSchema>
 
-type BasicRole = RoleDTO & { _id: Types.ObjectId }
+type BasicRole = RoleDTO & { id: Types.ObjectId }
 
 export type RoleWithPermissionIds = BasicRole & {
   permissions: Types.ObjectId[]
