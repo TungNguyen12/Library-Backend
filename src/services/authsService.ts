@@ -57,7 +57,7 @@ async function signup(user: UserCreate): Promise<string | ApiError> {
       return ApiError.internal('Something wrong happened')
     }
 
-    const newRole = { user_id: newUser.id, role_id: defaultRole.id }
+    const newRole = { user_id: newUser.id, role_id: defaultRole._id }
 
     await userRolesService.addRoleToUser(newRole, { session })
 

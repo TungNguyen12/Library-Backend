@@ -4,8 +4,8 @@ import type mongoose from 'mongoose'
 import type { z } from 'zod'
 
 import type { permissionSchema } from '../schemas/permissionsSchema.js'
-import type { roleSchema } from '../schemas/rolesSchema.js'
 import type { userCreateSchema, userSchema } from '../schemas/usersSchema.js'
+import { type RoleWithPermissionIds } from './Role.js'
 
 type ObjectId = mongoose.Types.ObjectId
 
@@ -31,20 +31,7 @@ export interface UserRole {
 
 export interface UserWithRole {
   user_id: User
-  role_id: Role
-}
-
-// Role
-export type RoleDTO = z.infer<typeof roleSchema>
-export type Role = RoleDTO & { id: ObjectId }
-export type RoleWithPermissions = Role & {
-  permissions: Permission[]
-}
-
-// Role_Permission (bridge table)
-export type RolePermission = {
-  role_id: ObjectId
-  permission_id: ObjectId
+  role_id: RoleWithPermissionIds
 }
 
 // Permission
