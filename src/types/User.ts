@@ -35,7 +35,8 @@ export interface UserWithRole {
 }
 
 // Role
-export type Role = z.infer<typeof roleSchema> & { id: ObjectId }
+export type RoleDTO = z.infer<typeof roleSchema>
+export type Role = RoleDTO & { id: ObjectId }
 export type RoleWithPermissions = Role & {
   permissions: Permission[]
 }
