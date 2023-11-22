@@ -1,10 +1,10 @@
-import request from 'supertest'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
+import request from 'supertest'
 
-import app from '../app.js'
-import { authorsData } from './authorsData.js'
-import AuthorRepo from '../models/authorsModel.js'
+import app from '../../app.js'
+import AuthorRepo from '../../models/authorsModel.js'
+import { authorsData } from '../mockData/authorsData.js'
 
 beforeAll(async () => {
   const mongoServer = await MongoMemoryServer.create()
