@@ -23,7 +23,7 @@ async function signin(credential: {
   const isValid = bcrypt.compareSync(credential.password, user.password)
   console.log('🚀 ~ file: authsService.ts:21 ~ signin ~ isValid:', isValid)
 
-  if (!isValid) {
+  if (isValid === false) {
     return ApiError.unauthorized('Invalid password')
   }
 
@@ -57,11 +57,9 @@ async function signup(user: UserCreate): Promise<string | ApiError> {
       return ApiError.internal('Something wrong happened')
     }
 
-    const newRole = { user_id: newUser.id, role_id: defaultRole.id }
+    const newRole = { user_id: newUser.id, role_id: defaultRole._id }
 
     await userRolesService.addRoleToUser(newRole, { session })
-
-    await session.commitTransaction()
 
     const payload = {
       userId: newUser.id,
@@ -71,6 +69,8 @@ async function signup(user: UserCreate): Promise<string | ApiError> {
     const accessToken = jwt.sign(payload, process.env.TOKEN_SECRET as string, {
       expiresIn: '1h',
     })
+
+    await session.commitTransaction()
 
     return accessToken
   } catch (error) {

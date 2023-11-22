@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-import { type Author } from '../types/Author.js'
+import { type Author } from '../../types/Author.js'
 
 const ObjectId = mongoose.Types.ObjectId
 
