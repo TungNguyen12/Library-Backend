@@ -5,5 +5,6 @@ const { Schema } = mongoose
 const permissionSchema = new Schema({
   action: String,
 })
+const PermissionRepo = mongoose.model('Permission', permissionSchema)
 
-export default mongoose.model('Permission', permissionSchema)
+export default PermissionRepo
