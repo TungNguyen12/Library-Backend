@@ -116,8 +116,10 @@ const updateMultiAvailableStatus = async (
   newStatus: boolean
 ): Promise<boolean | Error> => {
   const userId = req.decoded?.userId
+
   const session = await mongoose.startSession()
   session.startTransaction()
+
   try {
     for (const bookId of bookIds) {
       const copiesBook = await CopiesBookRepo.find({
@@ -133,14 +135,15 @@ const updateMultiAvailableStatus = async (
 
       if (!newStatus) {
         selectedCopyId = copiesBook[0]._id
+
         const newBorrowBook = new BorrowedBookRepo({
           user_id: userId,
           copy_id: selectedCopyId,
           borrowed_Date: new Date(),
         })
+
         await newBorrowBook.save()
       } else {
-        console.log('something is')
         const availableBooks = await CopiesBookRepo.aggregate([
           {
             $match: {
@@ -170,8 +173,6 @@ const updateMultiAvailableStatus = async (
           },
         ]).exec()
 
-        console.log('something is')
-
         if (availableBooks.length === 0) {
           return false
         }
@@ -193,6 +194,7 @@ const updateMultiAvailableStatus = async (
         { is_Available: newStatus }
       ).exec()
     }
+
     await session.commitTransaction()
     return true
   } catch (e) {
