@@ -7,7 +7,6 @@ import {
 } from '../models/bookModel.js'
 import { type BookCopy, type Book } from '../types/Book.js'
 import { type AtleastOne } from '../types/AdditionalType.js'
-import { type WithAuthRequest } from '../types/User.js'
 
 const getAll = async (): Promise<Book[]> => {
   const books = await BooksRepo.find().exec()
@@ -111,12 +110,10 @@ const updateAvailableStatus = async (
 }
 
 const updateMultiAvailableStatus = async (
-  req: WithAuthRequest,
-  bookIds: [string],
+  userId: string,
+  bookIds: string[],
   newStatus: boolean
 ): Promise<boolean | Error> => {
-  const userId = req.decoded?.userId
-
   const session = await mongoose.startSession()
   session.startTransaction()
 
