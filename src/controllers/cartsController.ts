@@ -94,6 +94,26 @@ async function deleteCart(
   res.sendStatus(204)
 }
 
+async function checkout(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  const userId = req.params.userId
+
+  const result = await CartsService.checkout(userId)
+
+  if (result instanceof Error) {
+    next(ApiError.badRequest('Bad request.', result.message))
+    return
+  } else if (!result) {
+    next(ApiError.internal('Something went wrong.'))
+    return
+  }
+
+  res.status(200).json({ acknowledged: true })
+}
+
 export default {
   getAllCarts,
   getAllCartItems,
@@ -101,4 +121,5 @@ export default {
   addToCart,
   removeFromCart,
   deleteCart,
+  checkout,
 }
