@@ -6,7 +6,10 @@ import {
 } from '../../types/Permission.js'
 import { ApiError } from '../../utils/ApiError.js'
 import connect, { type MongoHelper } from '../db-helper.js'
-import { permissionsData } from '../mockData/permissionsData.js'
+import {
+  convertedPermissionsData,
+  permissionsData,
+} from '../mockData/permissionsData.js'
 
 describe(' Service', () => {
   let mongoHelper: MongoHelper
@@ -16,7 +19,7 @@ describe(' Service', () => {
   })
 
   beforeEach(async () => {
-    await PermissionRepo.create(permissionsData)
+    await PermissionRepo.create(convertedPermissionsData)
   })
 
   afterEach(async () => {
@@ -34,7 +37,7 @@ describe(' Service', () => {
         '6546a7febac08f6bd30c0505'
       )
 
-      expect(foundPermission).toHaveProperty('_id', existingPermission._id)
+      expect(foundPermission).toHaveProperty('_id', existingPermission.id)
     })
 
     it('should return null if permission is not found by ID', async () => {
