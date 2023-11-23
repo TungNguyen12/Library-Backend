@@ -2,7 +2,7 @@ import { type Types } from 'mongoose'
 import { type z } from 'zod'
 
 import { type roleSchema } from '../schemas/rolesSchema.js'
-import { type Permission } from './User.js'
+import { type BasicPermission } from './Permission.js'
 
 export type RoleDTO = z.infer<typeof roleSchema>
 
@@ -13,5 +13,5 @@ export type RoleWithPermissionIds = BasicRole & {
 }
 
 export type RoleWithPopulatedPermissions = BasicRole & {
-  permissions: Permission[]
+  permissions: BasicPermission[]
 }
