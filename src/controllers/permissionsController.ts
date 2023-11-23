@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from 'express'
+
 import PermissionsService from '../services/permissionsService.js'
 import { ApiError } from '../utils/ApiError.js'
 
@@ -16,7 +17,7 @@ export async function findOnePermission(
   next: NextFunction
 ): Promise<void> {
   const permissionId = req.params.permissionId
-  const permission = await PermissionsService.findOne(permissionId)
+  const permission = await PermissionsService.findById(permissionId)
 
   if (permission === null) {
     next(ApiError.notFound('Permission not found'))
