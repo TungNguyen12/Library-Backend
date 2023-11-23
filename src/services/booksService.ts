@@ -1,11 +1,13 @@
-import { Types } from 'mongoose'
+import mongoose, { Types } from 'mongoose'
 
 import {
   BookModel as BooksRepo,
   CopiesBookModel as CopiesBookRepo,
+  BorrowedBookModel as BorrowedBookRepo,
 } from '../models/bookModel.js'
 import { type BookCopy, type Book } from '../types/Book.js'
 import { type AtleastOne } from '../types/AdditionalType.js'
+import { type WithAuthRequest } from '../types/User.js'
 
 const getAll = async (): Promise<Book[]> => {
   const books = await BooksRepo.find().exec()
@@ -108,6 +110,100 @@ const updateAvailableStatus = async (
   }
 }
 
+const updateMultiAvailableStatus = async (
+  req: WithAuthRequest,
+  bookIds: [string],
+  newStatus: boolean
+): Promise<boolean | Error> => {
+  const userId = req.decoded?.userId
+
+  const session = await mongoose.startSession()
+  session.startTransaction()
+
+  try {
+    for (const bookId of bookIds) {
+      const copiesBook = await CopiesBookRepo.find({
+        book_id: bookId,
+        is_Available: !newStatus,
+      })
+
+      if (copiesBook.length === 0) {
+        return false
+      }
+
+      let selectedCopyId: mongoose.Types.ObjectId
+
+      if (!newStatus) {
+        selectedCopyId = copiesBook[0]._id
+
+        const newBorrowBook = new BorrowedBookRepo({
+          user_id: userId,
+          copy_id: selectedCopyId,
+          borrowed_Date: new Date(),
+        })
+
+        await newBorrowBook.save()
+      } else {
+        const availableBooks = await CopiesBookRepo.aggregate([
+          {
+            $match: {
+              book_id: new mongoose.Types.ObjectId(bookId),
+              is_Available: false,
+            },
+          },
+          {
+            $lookup: {
+              from: 'borrowedbooks',
+              localField: '_id',
+              foreignField: 'copy_id',
+              as: 'data',
+            },
+          },
+          {
+            $unwind: {
+              path: '$data',
+              preserveNullAndEmptyArrays: false,
+            },
+          },
+          {
+            $match: {
+              'data.returned_Date': { $exists: false },
+              'data.user_id': new mongoose.Types.ObjectId(userId),
+            },
+          },
+        ]).exec()
+
+        if (availableBooks.length === 0) {
+          return false
+        }
+
+        await BorrowedBookRepo.findByIdAndUpdate(
+          {
+            _id: availableBooks[0].data._id,
+          },
+          {
+            returned_Date: new Date(),
+          }
+        )
+
+        selectedCopyId = availableBooks[0]._id
+      }
+
+      await CopiesBookRepo.findByIdAndUpdate(
+        { _id: selectedCopyId },
+        { is_Available: newStatus }
+      ).exec()
+    }
+
+    await session.commitTransaction()
+    return true
+  } catch (e) {
+    await session.abortTransaction()
+    const err = e as Error
+    return err
+  }
+}
+
 const deleteOne = async (bookId: string): Promise<boolean | Error> => {
   try {
     const id = new Types.ObjectId(bookId)
@@ -140,5 +236,6 @@ export default {
   createOneCopy,
   updateOne,
   updateAvailableStatus,
+  updateMultiAvailableStatus,
   deleteOne,
 }
