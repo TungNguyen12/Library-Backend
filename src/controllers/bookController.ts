@@ -102,15 +102,19 @@ const updateBookInfo = async (
 }
 
 const borrowBookById = async (
-  req: Request,
+  req: WithAuthRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
   const id = req.body.id
-  const result = await BooksServices.updateMultiAvailableStatus(req, id, false)
+  const result = await BooksServices.updateMultiAvailableStatus(
+    req.decoded?.userId as string,
+    id,
+    false
+  )
 
   if (result === false) {
-    next(ApiError.notFound('Book not found or availble to borrow'))
+    next(ApiError.notFound('Book not found or available to borrow'))
     return
   }
 
@@ -128,10 +132,14 @@ const returnBookById = async (
   next: NextFunction
 ): Promise<void> => {
   const id = req.body.id
-  const result = await BooksServices.updateMultiAvailableStatus(req, id, true)
+  const result = await BooksServices.updateMultiAvailableStatus(
+    req.decoded?.userId as string,
+    id,
+    true
+  )
 
   if (result === false) {
-    next(ApiError.notFound('Book not found or availble to return'))
+    next(ApiError.notFound('Book not found or available to return'))
     return
   }
 
