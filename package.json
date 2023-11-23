@@ -10,7 +10,9 @@
     "start": "nodemon dist/server.js",
     "dev": "nodemon src/server.ts",
     "build": "tsc",
-    "test": "jest --coverage --detectOpenHandles --force-exit"
+    "test": "jest --detectOpenHandles --force-exit",
+    "test:coverage": "jest --coverage --detectOpenHandles --force-exit",
+    "test:coverageWatch": "jest --watch --coverage --detectOpenHandles"
   },
   "keywords": [],
   "author": "",
