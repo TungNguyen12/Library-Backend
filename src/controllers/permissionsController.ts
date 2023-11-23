@@ -2,17 +2,16 @@ import type { NextFunction, Request, Response } from 'express'
 
 import PermissionsService from '../services/permissionsService.js'
 import { ApiError } from '../utils/ApiError.js'
-import { type ExtendedResponse } from '../utils/responseExtensions.js'
 
 const permissionsController = {
   async findAllPermissions(_: Request, res: Response): Promise<void> {
     const permissions = await PermissionsService.findAll()
-    res.ok(permissions)
+    res.status(200).json(permissions)
   },
 
   async findOnePermission(
     req: Request,
-    res: ExtendedResponse,
+    res: Response,
     next: NextFunction
   ): Promise<void> {
     const permissionId = req.params.permissionId
@@ -23,7 +22,7 @@ const permissionsController = {
       return
     }
 
-    res.ok(permission)
+    res.status(200).json(permission)
   },
 
   async createNewPermission(
@@ -39,7 +38,7 @@ const permissionsController = {
       return
     }
 
-    res.created(permission)
+    res.status(201).json(permission)
   },
 
   async deletePermission(
@@ -55,7 +54,7 @@ const permissionsController = {
       next(permission)
       return
     }
-    res.deleted()
+    res.status(204).json()
   },
 
   async updatePermission(
@@ -75,7 +74,7 @@ const permissionsController = {
       return
     }
 
-    res.ok(permission)
+    res.status(200).json(permission)
   },
 }
 
