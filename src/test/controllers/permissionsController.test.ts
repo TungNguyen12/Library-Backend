@@ -19,6 +19,9 @@ describe('Permissions Controller', () => {
     res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn().mockReturnThis(),
+      ok: jest.fn().mockReturnThis(),
+      created: jest.fn().mockReturnThis(),
+      deleted: jest.fn().mockReturnThis(),
     } as unknown as Response
 
     next = jest.fn() as NextFunction
@@ -38,7 +41,7 @@ describe('Permissions Controller', () => {
       await permissionsController.findAllPermissions(req, res)
 
       expect(findAllPermissionsMock).toHaveBeenCalled()
-      expect(res.json).toHaveBeenCalledWith(permissions)
+      expect(res.ok).toHaveBeenCalledWith(permissions)
     })
   })
 
@@ -57,7 +60,7 @@ describe('Permissions Controller', () => {
       await permissionsController.findOnePermission(req, res, next)
 
       expect(findByIdMock).toHaveBeenCalledWith(permissionId)
-      expect(res.json).toHaveBeenCalledWith(permission)
+      expect(res.ok).toHaveBeenCalledWith(permission)
     })
 
     it('should call next with an error if permission not found', async () => {
@@ -92,8 +95,7 @@ describe('Permissions Controller', () => {
       await permissionsController.createNewPermission(req, res, next)
 
       expect(createPermissionMock).toHaveBeenCalledWith(newPermission)
-      expect(res.status).toHaveBeenCalledWith(201)
-      expect(res.json).toHaveBeenCalledWith(newPermission)
+      expect(res.created).toHaveBeenCalledWith(newPermission)
     })
 
     it('should call next with an error if permission not created', async () => {
@@ -134,8 +136,7 @@ describe('Permissions Controller', () => {
         String(updatedPermission.id),
         updatedPermission
       )
-      expect(res.status).toHaveBeenCalledWith(200)
-      expect(res.json).toHaveBeenCalledWith(updatedPermission)
+      expect(res.ok).toHaveBeenCalledWith(updatedPermission)
     })
 
     it('should call next with an error if permission not found', async () => {
@@ -178,8 +179,7 @@ describe('Permissions Controller', () => {
       expect(deletePermissionMock).toHaveBeenCalledWith(
         String(deletedPermissionResponse.id)
       )
-      expect(res.status).toHaveBeenCalledWith(204)
-      expect(res.json).toHaveBeenCalledWith(deletedPermissionResponse)
+      expect(res.deleted).toHaveBeenCalled()
     })
 
     it('should return 404 status code if permission not found', async () => {

@@ -6,7 +6,7 @@ import { ApiError } from '../utils/ApiError.js'
 const permissionsController = {
   async findAllPermissions(_: Request, res: Response): Promise<void> {
     const permissions = await PermissionsService.findAll()
-    res.json(permissions)
+    res.ok(permissions)
   },
 
   async findOnePermission(
@@ -22,7 +22,7 @@ const permissionsController = {
       return
     }
 
-    res.json(permission)
+    res.ok(permission)
   },
 
   async createNewPermission(
@@ -38,7 +38,7 @@ const permissionsController = {
       return
     }
 
-    res.status(201).json(permission)
+    res.created(permission)
   },
 
   async deletePermission(
@@ -54,7 +54,7 @@ const permissionsController = {
       next(permission)
       return
     }
-    res.status(204).json(permission)
+    res.deleted()
   },
 
   async updatePermission(
@@ -64,14 +64,17 @@ const permissionsController = {
   ): Promise<void> {
     const permissionId = req.params.permissionId
     const body = req.body
-    const user = await PermissionsService.updatePermission(permissionId, body)
+    const permission = await PermissionsService.updatePermission(
+      permissionId,
+      body
+    )
 
-    if (user instanceof ApiError) {
-      next(user)
+    if (permission instanceof ApiError) {
+      next(permission)
       return
     }
 
-    res.status(200).json(user)
+    res.ok(permission)
   },
 }
 
