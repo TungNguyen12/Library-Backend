@@ -10,6 +10,7 @@ type Resource =
   | 'PERMISSIONS'
   | 'ROLES'
   | 'BORROW'
+  | 'CART'
 
 type Action =
   | 'DELETE'
