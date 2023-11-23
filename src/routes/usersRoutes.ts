@@ -1,14 +1,10 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import express from 'express'
-
 import passport from 'passport'
 
 import authController from '../controllers/authsController.js'
 import UsersController from '../controllers/usersController.js'
 import { checkAuth } from '../middlewares/checkAuth.js'
-
 import { checkPermission } from '../middlewares/checkPermission.js'
-
 import {
   validateCreateUser,
   validateUpdateUser,
@@ -25,7 +21,6 @@ router.get(
 router.post('/signup', validateCreateUser, authController.signup)
 router.post('/signin', authController.signin)
 
-
 router.post(
   '/login-google',
   passport.authenticate('google-id-token', { session: false }),
@@ -38,7 +33,6 @@ router.get(
   checkPermission('USERS_READ', 'USERS_READ_ONE'),
   UsersController.findOneUser
 )
-
 
 router.post('/', validateCreateUser, UsersController.createNewUser)
 router.delete('/:userId', UsersController.deleteUser)

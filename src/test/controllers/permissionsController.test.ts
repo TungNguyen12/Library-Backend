@@ -1,13 +1,14 @@
-import { type NextFunction, type Request, type Response } from 'express'
+import { type NextFunction, type Request } from 'express'
 
 import permissionsController from '../../controllers/permissionsController.js'
 import PermissionsService from '../../services/permissionsService.js'
 import { ApiError } from '../../utils/ApiError.js'
+import { type ExtendedResponse } from '../../utils/responseExtensions.js'
 import { permissionsData } from '../mockData/permissionsData.js'
 
 describe('Permissions Controller', () => {
   let req: Request
-  let res: Response
+  let res: ExtendedResponse
   let next: NextFunction
 
   beforeEach(() => {
@@ -22,7 +23,7 @@ describe('Permissions Controller', () => {
       ok: jest.fn().mockReturnThis(),
       created: jest.fn().mockReturnThis(),
       deleted: jest.fn().mockReturnThis(),
-    } as unknown as Response
+    } as unknown as ExtendedResponse
 
     next = jest.fn() as NextFunction
   })

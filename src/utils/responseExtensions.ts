@@ -1,5 +1,10 @@
 import { type Express, type Response } from 'express'
 
+export interface ExtendedResponse extends Response {
+  ok: (data: any) => Response
+  created: (data: any) => Response
+  deleted: () => Response
+}
 declare module 'express-serve-static-core' {
   interface Response {
     ok: (data: any) => Response

@@ -3,7 +3,13 @@ export const ROLE = {
   ADMIN: 'ADMIN',
 } as const
 
-type Resource = 'USERS' | 'BOOKS' | 'AUTHORS' | 'PERMISSIONS' | 'ROLES' | 'BORROW'
+type Resource =
+  | 'USERS'
+  | 'BOOKS'
+  | 'AUTHORS'
+  | 'PERMISSIONS'
+  | 'ROLES'
+  | 'BORROW'
 
 type Action =
   | 'DELETE'
