@@ -1,6 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import BooksServices from '../services/booksService.js'
 import { ApiError } from '../utils/ApiError.js'
+import { type WithAuthRequest } from '../types/User.js'
 
 const getAllBooks = async (_: Request, res: Response): Promise<void> => {
   const books = await BooksServices.getAll()
@@ -105,8 +106,8 @@ const borrowBookById = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const id = req.params.id
-  const result = await BooksServices.updateAvailableStatus(id, false)
+  const id = req.body.id
+  const result = await BooksServices.updateMultiAvailableStatus(req, id, false)
 
   if (result === false) {
     next(ApiError.notFound('Book not found or availble to borrow'))
@@ -122,12 +123,12 @@ const borrowBookById = async (
 }
 
 const returnBookById = async (
-  req: Request,
+  req: WithAuthRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const id = req.params.id
-  const result = await BooksServices.updateAvailableStatus(id, true)
+  const id = req.body.id
+  const result = await BooksServices.updateMultiAvailableStatus(req, id, true)
 
   if (result === false) {
     next(ApiError.notFound('Book not found or availble to return'))
