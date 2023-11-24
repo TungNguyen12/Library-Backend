@@ -3,7 +3,6 @@ import type { JwtPayload } from 'jsonwebtoken'
 import type mongoose from 'mongoose'
 import type { z } from 'zod'
 
-import type { permissionSchema } from '../schemas/permissionsSchema.js'
 import type { userCreateSchema, userSchema } from '../schemas/usersSchema.js'
 import { type RoleWithPermissionIds } from './Role.js'
 
@@ -33,9 +32,3 @@ export interface UserWithRole {
   user_id: User
   role_id: RoleWithPermissionIds
 }
-
-// Permission
-export type Permission = z.infer<typeof permissionSchema> & {
-  id: ObjectId
-}
-export type PermissionUpdate = Omit<Permission, 'id'>

@@ -8,7 +8,7 @@ export const rolesData: Array<
   Partial<RoleWithPermissionIds & { _id: mongoose.Types.ObjectId }>
 > = [
   {
-    _id: new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505'),
+    _id: new ObjectId('6546a7febac08f6bd30c0505'),
     title: 'Borrower',
     permissions: [
       new ObjectId('6546a7febac08f6bd30c0506'),

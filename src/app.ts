@@ -12,6 +12,7 @@ import bookAuthorRoutes from './routes/bookAuthorRoutes.js'
 import booksRoutes from './routes/bookRoutes.js'
 import crudStatsRoutes from './routes/crudStatsRoutes.js'
 import permissionsRoutes from './routes/permissionsRoutes.js'
+import cartsRoutes from './routes/cartsRoutes.js'
 import rolesRoutes from './routes/rolesRoutes.js'
 import usersRoutes from './routes/usersRoutes.js'
 
@@ -43,6 +44,7 @@ app.use('/api/v1/crud-stats', crudStatsRoutes)
 app.use('/api/v1/roles', rolesRoutes)
 app.use('/api/v1/permissions', permissionsRoutes)
 app.use('/api/v1/book-author', bookAuthorRoutes)
+app.use('/api/v1/carts', cartsRoutes)
 
 // Error Handler
 app.use(apiErrorHandler)

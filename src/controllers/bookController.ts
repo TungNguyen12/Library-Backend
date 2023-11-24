@@ -1,6 +1,7 @@
 import { type NextFunction, type Request, type Response } from 'express'
 import BooksServices from '../services/booksService.js'
 import { ApiError } from '../utils/ApiError.js'
+import { type WithAuthRequest } from '../types/User.js'
 
 const getAllBooks = async (_: Request, res: Response): Promise<void> => {
   const books = await BooksServices.getAll()
@@ -101,15 +102,19 @@ const updateBookInfo = async (
 }
 
 const borrowBookById = async (
-  req: Request,
+  req: WithAuthRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const id = req.params.id
-  const result = await BooksServices.updateAvailableStatus(id, false)
+  const id = req.body.id
+  const result = await BooksServices.updateMultiAvailableStatus(
+    req.decoded?.userId as string,
+    id,
+    false
+  )
 
   if (result === false) {
-    next(ApiError.notFound('Book not found or availble to borrow'))
+    next(ApiError.notFound('Book not found or available to borrow'))
     return
   }
 
@@ -122,15 +127,19 @@ const borrowBookById = async (
 }
 
 const returnBookById = async (
-  req: Request,
+  req: WithAuthRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  const id = req.params.id
-  const result = await BooksServices.updateAvailableStatus(id, true)
+  const id = req.body.id
+  const result = await BooksServices.updateMultiAvailableStatus(
+    req.decoded?.userId as string,
+    id,
+    true
+  )
 
   if (result === false) {
-    next(ApiError.notFound('Book not found or availble to return'))
+    next(ApiError.notFound('Book not found or available to return'))
     return
   }
 
