@@ -4,7 +4,7 @@ import connect, { type MongoHelper } from '../db-helper.js'
 import usersService from '../../services/usersService.js'
 import type { User } from '../../types/User.js'
 
-describe('User controller', () => {
+describe('User Service', () => {
   let mongoHelper: MongoHelper
 
   beforeAll(async () => {
@@ -36,6 +36,7 @@ describe('User controller', () => {
     const testUser = usersData[0]
     it('should find a user by their id', async () => {
       const foundUser = await usersService.findOne('655c81c6155012574e0bd4af')
+      console.log('😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️', foundUser)
 
       expect(foundUser).toMatchObject(testUser)
     })
