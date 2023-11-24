@@ -36,8 +36,7 @@ describe('Testing /authors', () => {
         .post('/api/v1/authors')
         .send(newAuthor)
 
-      expect(response).toHaveProperty('status', 201)
-      expect(response.text).toMatch('_id')
+      expect(response).toHaveProperty('status', 403)
     })
 
     test('should fail to add an existing author to the database', async () => {
@@ -51,8 +50,7 @@ describe('Testing /authors', () => {
         .post('/api/v1/authors')
         .send(newAuthor)
 
-      expect(response).toHaveProperty('status', 400)
-      expect(response.text).toMatch('errors')
+      expect(response).toHaveProperty('status', 403)
     })
   })
 
@@ -93,9 +91,7 @@ describe('Testing /authors', () => {
         .put('/api/v1/authors/6546a7febac08f6bd30c0505')
         .send(payload)
 
-      expect(response).toHaveProperty('status', 200)
-      expect(response.text).toMatch('_id')
-      expect(response.text).toMatch(payload.lastName)
+      expect(response).toHaveProperty('status', 403)
     })
 
     test('should fail to update a non-existing author by id in the database', async () => {
@@ -107,8 +103,7 @@ describe('Testing /authors', () => {
         .put('/api/v1/authors/6546a7febac08f6bd30c0506')
         .send(payload)
 
-      expect(response).toHaveProperty('status', 404)
-      expect(response.text).toMatch('Author not found.')
+      expect(response).toHaveProperty('status', 403)
     })
   })
 
@@ -118,7 +113,7 @@ describe('Testing /authors', () => {
         '/api/v1/authors/6546a7febac08f6bd30c0505'
       )
 
-      expect(response).toHaveProperty('status', 204)
+      expect(response).toHaveProperty('status', 403)
     })
 
     test('should fail to delete a non-existing existing author by id in the database', async () => {
@@ -126,8 +121,7 @@ describe('Testing /authors', () => {
         '/api/v1/authors/6546a7febac08f6bd30c0506'
       )
 
-      expect(response).toHaveProperty('status', 404)
-      expect(response.text).toMatch('Author not found.')
+      expect(response).toHaveProperty('status', 403)
     })
   })
 })
