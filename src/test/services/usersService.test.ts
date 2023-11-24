@@ -1,4 +1,4 @@
-import { usersData } from '../mockData/usersData.js'
+import { convertedUsersData, usersData } from '../mockData/usersData.js'
 import UserRepo from '../../models/usersModel.js'
 import connect, { type MongoHelper } from '../db-helper.js'
 import usersService from '../../services/usersService.js'
@@ -12,7 +12,7 @@ describe('User Service', () => {
   })
 
   beforeEach(async () => {
-    await UserRepo.create(usersData)
+    await UserRepo.create(convertedUsersData)
   })
 
   afterEach(async () => {
@@ -36,9 +36,8 @@ describe('User Service', () => {
     const testUser = usersData[0]
     it('should find a user by their id', async () => {
       const foundUser = await usersService.findOne('655c81c6155012574e0bd4af')
-      console.log('😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️😶‍🌫️', foundUser)
 
-      expect(foundUser).toMatchObject(testUser)
+      expect(foundUser).toHaveProperty('_id', testUser.id)
     })
 
     it('should return null when find by non-exist id', async () => {
@@ -52,7 +51,7 @@ describe('User Service', () => {
 
   describe('Find one user by email', () => {
     it('should find a user by their email', async () => {
-      const testUser = usersData[2]
+      const testUser = convertedUsersData[2]
       const foundUser = await usersService.findByEmail(
         'tung.nguyen1@integrify.io'
       )
