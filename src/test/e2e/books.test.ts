@@ -12,6 +12,7 @@ describe('Test book controller', () => {
   let mongoHelper: MongoHelper
   beforeAll(async () => {
     mongoHelper = await connect()
+
     for (const book of booksData) {
       const newBook = new BookRepo(book)
       await newBook.save()
