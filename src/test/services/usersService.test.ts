@@ -79,6 +79,7 @@ describe('User controller', () => {
       }
       const newUser = (await usersService.createUser(user)) as User
 
+      expect(newUser).toHaveProperty('_id')
       expect(newUser.email).toEqual('TEST@mail.com')
     })
 
@@ -125,7 +126,7 @@ describe('User controller', () => {
         { email: 'newemail@integrify.io' }
       )) as User
 
-      console.log(updatedUser)
+      expect(updatedUser).toHaveProperty('_id')
       expect(updatedUser.email).toEqual('newemail@integrify.io')
     })
 
