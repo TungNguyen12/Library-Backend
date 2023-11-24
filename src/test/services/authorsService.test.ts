@@ -95,14 +95,12 @@ describe('Testing /authors services', () => {
       expect(response).toBe(true)
     })
 
-    describe('Delete author', () => {
-      test('should fail to delete a non-existing existing author by id in the database', async () => {
-        const response = await AuthorsService.deleteOne(
-          '6546a7febac08f6bd30c0506'
-        )
+    test('should fail to delete a non-existing existing author by id in the database', async () => {
+      const response = await AuthorsService.deleteOne(
+        '6546a7febac08f6bd30c0506'
+      )
 
-        expect(response).toBe(false)
-      })
+      expect(response).toBe(false)
     })
   })
 })
