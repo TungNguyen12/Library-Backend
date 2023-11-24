@@ -48,6 +48,7 @@ app.use('/api/v1/permissions', permissionsRoutes)
 app.use('/api/v1/book-author', bookAuthorRoutes)
 app.use('/api/v1/carts', cartsRoutes)
 app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+
 // Error Handler
 app.use(apiErrorHandler)
 app.use(routeNotFound)
