@@ -1,0 +1,27 @@
+name: Sync to Public Repository
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
+      - name: Commit files
+        run: |
+          git config --local user.name ${{ secrets.GIT_USER_NAME }}
+          git config --local user.email ${{ secrets.GIT_USER_EMAIL }}
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GH_PAT }}
+          repository: ${{ secrets.PUBLIC_REPO_URL }}
+          force: true
