@@ -1,4 +1,4 @@
-import { type NextFunction, type Response } from 'express'
+import { type NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 
 import { checkAuth } from '../../middlewares/checkAuth.js'
@@ -8,7 +8,7 @@ jest.mock('jsonwebtoken')
 
 describe('checkAuth', () => {
   let req: any
-  let res: Response
+  let res: any
   let next: NextFunction
 
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('checkAuth', () => {
         authorization: 'Bearer valid_token',
       },
     }
-    res = {} as unknown as Response
+    res = {}
 
     next = jest.fn()
 
