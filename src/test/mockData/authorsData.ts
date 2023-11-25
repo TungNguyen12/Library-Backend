@@ -17,6 +17,15 @@ export const authorsData: Array<
     ],
   },
   {
+    _id: new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505'),
+    firstName: 'Leo',
+    lastName: 'Messi',
+    books: [
+      new ObjectId('655d13daf50dd1ceca878b43'),
+      new ObjectId('655ec8104202fd2aa0055472'),
+    ],
+  },
+  {
     _id: new mongoose.Types.ObjectId('6546a899f28fbf438938fb11'),
     firstName: 'William',
     lastName: 'Shakespeare',
