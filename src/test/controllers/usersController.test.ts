@@ -81,14 +81,14 @@ describe('Users Controller Test', () => {
 
     // I'M STUCK HERE
 
-    // it('should create new user with non-existing email', async () => {
-    //   createNewUserMock.mockResolvedValue(newUser)
-    //   req.body = newUser
+    it('should create new user with non-existing email', async () => {
+      createNewUserMock.mockResolvedValue(newUser)
+      req.body = newUser
 
-    //   await usersController.createNewUser(req, res, next)
+      await usersController.createNewUser(req, res, next)
 
-    //   expect(res.json).toHaveBeenCalledWith(newUser)
-    // })
+      expect(res.json).toHaveBeenCalledWith(newUser)
+    })
 
     it('should NOW create new user with existing email', async () => {
       const errorResult = null
