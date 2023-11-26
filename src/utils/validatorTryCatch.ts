@@ -10,6 +10,7 @@ const validatorTryCatch = (
   next: NextFunction
 ): void => {
   try {
+    console.log(data)
     schema.parse(data, errorMap)
     next()
   } catch (error) {

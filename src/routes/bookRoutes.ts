@@ -4,6 +4,7 @@ import BookController from '../controllers/bookController.js'
 import {
   validateCreateBook,
   validateDuplication,
+  validateFilteringQuery,
   validateUpdateBook,
 } from '../middlewares/bookValidate.js'
 import { checkAuth } from '../middlewares/checkAuth.js'
@@ -15,6 +16,8 @@ router.get('/', BookController.getAllBooks)
 
 // Get all book copies
 router.get('/copy', BookController.getAllBookCopies)
+
+router.get('/filter', validateFilteringQuery, BookController.filterByQuery)
 
 // Get Book with given id
 router.get('/:id', BookController.getBookById)

@@ -2,6 +2,8 @@ import { type NextFunction, type Request, type Response } from 'express'
 import BooksServices from '../services/booksService.js'
 import { ApiError } from '../utils/ApiError.js'
 import { type WithAuthRequest } from '../types/User.js'
+import gerneralService from '../services/gerneralService.js'
+import { BookModel as BookRepo } from '../models/bookModel.js'
 
 const getAllBooks = async (_: Request, res: Response): Promise<void> => {
   const books = await BooksServices.getAll()
@@ -53,6 +55,16 @@ const getBookByISBN = async (
 const getAllBookCopies = async (_: Request, res: Response): Promise<void> => {
   const books = await BooksServices.getAllCopies()
   res.json(books)
+}
+
+const filterByQuery = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const query = req.query
+  const result = await gerneralService.filter(query, BookRepo)
+  res.status(200).json(result)
 }
 
 const createNewBook = async (
@@ -178,6 +190,7 @@ export default {
   getBookById,
   getBookByISBN,
   getAllBookCopies,
+  filterByQuery,
   createNewBook,
   createNewCopy,
   updateBookInfo,

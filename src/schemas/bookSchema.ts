@@ -85,6 +85,19 @@ export const booksSchema = z
   })
   .strict()
 
+export const bookFilterSchema = booksSchema
+  .merge(
+    z.object({
+      offset: z.string().optional(),
+      limit: z.string().optional(),
+      search: z.string().optional(),
+      sortBy: z.string().optional(),
+      sortOrder: z.string().optional(),
+    })
+  )
+  .partial()
+  .strict()
+
 export const bookCreateSchema = booksSchema
 
 export const bookUpdateSchema = booksSchema.partial()
