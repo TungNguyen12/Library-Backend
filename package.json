@@ -11,6 +11,8 @@
     "dev": "nodemon src/server.ts",
     "build": "tsc",
     "initialize-permissions": "npm run build && node src/script/initializePermissionsAndRoles.js",
+    "initialize-admin": "npm run build && node src/script/initialzeAdminUser.js",
+    "initialize": "npm run initialize-permissions && npm run initialize-admin",
     "test": "jest --detectOpenHandles --force-exit",
     "test:coverage": "jest --coverage --detectOpenHandles --force-exit",
     "test:coverageWatch": "jest --watch --coverage --detectOpenHandles"
