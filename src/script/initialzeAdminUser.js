@@ -23,6 +23,7 @@ const createAdmin = async (email, password) => {
     }
 
     const adminRole = await RoleRepo.findOne({ title: 'Admin' })
+
     if (adminRole == null) {
       throw new Error('Admin role not found')
     }
@@ -40,7 +41,7 @@ const createAdmin = async (email, password) => {
   } catch (err) {
     console.error('Error creating admin user:', err)
   } finally {
-    disconnectFromMongoDB()
+    void mongoose.disconnect()
     rl.close()
   }
 }
@@ -50,7 +51,7 @@ const start = async () => {
   rl.question('Enter Admin Email: ', async (email) => {
     if (!isValidEmail(email)) {
       console.error('Invalid email address')
-      mongoose.disconnect()
+      void mongoose.disconnect()
       rl.close()
     } else {
       rl.question('Enter Admin Password: ', async (password) => {
