@@ -26,6 +26,7 @@ export function checkPermission(...permissions: Permission[]) {
         const role = await rolesService.findByIdWithPermissions(
           userRole.role_id
         )
+
         if (role !== null && role !== undefined && !(role instanceof Error)) {
           role.permissions.forEach((permission) => {
             userPermissions.push(permission.action)
@@ -40,6 +41,7 @@ export function checkPermission(...permissions: Permission[]) {
       (permission) =>
         !permission.endsWith('_ONE') && userPermissions.includes(permission)
     )
+
     const hasSelfOnlyPermission = permissions.some(
       (permission) =>
         permission.endsWith('_ONE') && userPermissions.includes(permission)
@@ -51,7 +53,7 @@ export function checkPermission(...permissions: Permission[]) {
     }
 
     if (hasSelfOnlyPermission) {
-      const userId = req.params.userId.length > 0 || req.params.id
+      const userId = req.params.userId
       if (user.userId === userId) {
         next()
         return

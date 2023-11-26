@@ -1,35 +1,59 @@
-# Backend Assignment - API
+# Library Management System API
 
-This is the README for an Express backend assignment that requires you to implement the REST APIs for a library management system or E-commerce based on the Entity-Relationship Diagram (ERD) assignment. The ERD assignment should outline the data model, including the relationships and attributes of entities within the system. You are tasked with designing and documenting the REST APIs according to the ERD specifications.
+## Project Overview
 
-## Introduction
+This project is a backend API for a library management system built using Express.js, TypeScript, MongoDB, and Jest.
 
-This Express backend assignment involves building a RESTful API for a library management system or E-commerce. You are provided with an Entity-Relationship Diagram (ERD) assignment that outlines the data model, including the relationships and attributes of entities such as books, users, authors, and admin roles.
+## Technical Details
 
-## Entity CRUD Operations
+- **Framework**: Express.js
+- **Programming Language**: TypeScript
+- **Database**: MongoDB
+- **Testing**: Jest
 
-`Before` implementing JWT authentication, `you are required to create the basic CRUD` (Create, Read, Update, Delete) operations for the entities based on the specifications provided in the ERD assignment. This section focuses on designing and implementing the core functionality to manage and interact with the specified entities.
+## Installation Instructions
 
-## Authentication
+1. Clone the project: `git clone https://github.com/phuoc94/fs16-backend-project.git`
+2. Create `.env` from `.env.example` with `cp .env.example .env` or manually.
+3. Fill in the `.env` file with your MongoDB connection string and JWT encoding secret.
+4. Install dependencies: `npm install`
+5. Run the project in development mode: `npm run dev`
 
-For security, this API should implement user authentication using JSON Web Tokens (JWT). Each user should have a unique username and password OR broker authentication. Certain admin endpoints may require special privileges for access.
+## Usage
 
-## Minimum requirements
+For detailed API usage, visit `/api/v1/api-docs` after starting the project.
 
-Please check the REST API slides where you can find the minimum requirements of the project.
+## Configuration
 
-## Response Format
+Ensure you have a valid MongoDB connection string in your `.env` file for database connections.
 
-All API responses should be provided in JSON format. A typical response should include a `status`, `data`, and an optional `message` field. The `status` field should indicate the success or failure of the request.
+## Authentication and Authorization
+
+Run the provided script to initialize roles and permissions. Authentication is managed via JWT.
 
 ## Error Handling
 
-The API should include comprehensive error handling with clear and informative error messages. Errors should be accompanied by appropriate HTTP status codes.
+The API follows standard HTTP error codes for error handling.
 
 ## Testing
 
-Developers should conduct unit tests and integration tests to ensure the reliability and correctness of the API. Instructions for running the tests should be provided in the project's documentation.
+To run tests, execute the command `npm test`. Make sure all dependencies are installed and the environment is properly set up as described in the Installation Instructions.
 
-## Deployment
+## Contributing
 
-The API should be deployed before the **`DEADLINE`** which is end of Week 47 24th of Nov
+We welcome contributions. If interested, please fork the repository and make a pull request.
+
+## License
+
+This project is licensed under the MIT License.
+
+## Project Live Link
+
+[Click here](https://library-management-system-api-172j.onrender.com/api/v1/api-docs) to access the live version of the project.
+
+## Contact Information
+
+- Phuoc Nguyen - [phuoc94](https://github.com/phuoc94)
+- Kien Pham - [Frozen-Potato](https://github.com/Frozen-Potato)
+- Tuan Nguyen - [tuannguyen-TN](https://github.com/tuannguyen-TN)
+- Tung Nguyen (Pete) - [TungNguyen12](https://github.com/TungNguyen12)
