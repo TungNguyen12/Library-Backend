@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { type NextFunction, type Response } from 'express'
 import mongoose from 'mongoose'
 

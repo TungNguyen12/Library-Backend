@@ -2,6 +2,7 @@ import type { NextFunction } from 'express'
 import UsersService from '../../services/usersService.js'
 import { usersData } from '../mockData/usersData.js'
 import usersController from '../../controllers/usersController.js'
+import { ApiError } from '../../utils/ApiError.js'
 
 describe('Users Controller Test', () => {
   let req: any
@@ -41,10 +42,10 @@ describe('Users Controller Test', () => {
 
   describe('findOneUser', () => {
     const findOneUserMock = jest.spyOn(UsersService, 'findOne')
+    const user = usersData[0]
+    const userId = String(user.id)
 
     it('should return one user', async () => {
-      const user = usersData[0]
-      const userId = String(user.id)
       findOneUserMock.mockResolvedValue(user)
 
       req.params = {
@@ -55,6 +56,127 @@ describe('Users Controller Test', () => {
 
       expect(findOneUserMock).toHaveBeenCalledWith(userId)
       expect(res.json).toHaveBeenCalledWith(user)
+    })
+
+    it('should call next with an error if user not found', async () => {
+      const errorResult = null
+      const error = ApiError.notFound('User not found')
+      findOneUserMock.mockResolvedValue(errorResult)
+
+      req.params = {
+        userId,
+      }
+
+      await usersController.findOneUser(req, res, next)
+
+      expect(findOneUserMock).toHaveBeenCalled()
+      expect(findOneUserMock).toHaveBeenCalledWith(userId)
+      expect(next).toHaveBeenCalledWith(error)
+    })
+  })
+
+  describe('createNewUser', () => {
+    const createNewUserMock = jest.spyOn(UsersService, 'createUser')
+    const newUser = usersData[0]
+
+    // I'M STUCK HERE
+
+    // it('should create new user with non-existing email', async () => {
+    //   createNewUserMock.mockResolvedValue(newUser)
+    //   req.body = newUser
+
+    //   await usersController.createNewUser(req, res, next)
+
+    //   expect(res.json).toHaveBeenCalledWith(newUser)
+    // })
+
+    it('should NOW create new user with existing email', async () => {
+      const errorResult = null
+      const error = ApiError.badRequest(
+        'Email is not available, please insert another one'
+      )
+
+      createNewUserMock.mockResolvedValue(errorResult)
+
+      req.body = newUser
+
+      await usersController.createNewUser(req, res, next)
+
+      expect(createNewUserMock).toHaveBeenCalledWith(newUser)
+      expect(next).toHaveBeenCalledWith(error)
+    })
+  })
+
+  describe('deleteUser', () => {
+    const deleteUserMock = jest.spyOn(UsersService, 'deleteUser')
+    const user = usersData[0]
+    const userId = String(user.id)
+
+    it('should delete an user with correct ID', async () => {
+      deleteUserMock.mockResolvedValue(user)
+
+      req.params = {
+        userId,
+      }
+
+      await usersController.deleteUser(req, res, next)
+
+      expect(deleteUserMock).toHaveBeenCalledWith(String(user.id))
+      expect(res.status).toHaveBeenCalledWith(204)
+    })
+
+    it('should NOT delete any user with incorrect ID', async () => {
+      const errorResult = null
+      const error = ApiError.notFound('User does not exist')
+      deleteUserMock.mockResolvedValue(errorResult)
+
+      req.params = {
+        userId,
+      }
+
+      await usersController.deleteUser(req, res, next)
+
+      expect(deleteUserMock).toHaveBeenCalledWith(userId)
+      expect(next).toHaveBeenCalledWith(error)
+    })
+  })
+
+  describe('updateUser', () => {
+    const updateUserMock = jest.spyOn(UsersService, 'updateUser')
+    const user = usersData[0]
+    const userId = String(user.id)
+
+    it('should update an user with correct ID', async () => {
+      updateUserMock.mockResolvedValue(user)
+
+      req.params = {
+        userId,
+      }
+
+      req.body = user
+
+      await usersController.updateUser(req, res, next)
+
+      expect(updateUserMock).toHaveBeenCalledWith(userId, user)
+      expect(res.json).toHaveBeenCalledWith(user)
+    })
+
+    it('should NOT update any user with incorrect ID', async () => {
+      const errorResult = null
+      const error = ApiError.notFound('User not found')
+      updateUserMock.mockResolvedValue(errorResult)
+
+      req.params = {
+        userId,
+      }
+
+      req.body = {
+        user,
+      }
+
+      await usersController.updateUser(req, res, next)
+
+      expect(next).toHaveBeenCalledWith(error)
     })
   })
 })

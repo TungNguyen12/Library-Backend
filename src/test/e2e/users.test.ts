@@ -26,7 +26,6 @@ describe('User controller', () => {
   describe('GET /users', () => {
     it('should return all users', async () => {
       const response = await request(app).get('/api/v1/users')
-      console.log(response)
 
       expect(response.status).toBe(403)
     })

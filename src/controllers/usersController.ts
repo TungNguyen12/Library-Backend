@@ -68,7 +68,7 @@ export async function deleteUser(
     next(ApiError.badRequest('Bad request.', user.message))
     return
   }
-  res.status(204).json(user)
+  res.status(204).json()
 }
 
 export async function updateUser(

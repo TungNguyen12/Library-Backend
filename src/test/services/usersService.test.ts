@@ -94,7 +94,6 @@ describe('User Service', () => {
         confirmPassword: 'TEST',
       }
       const isAvailable = await usersService.createUser(user)
-      console.log(isAvailable)
 
       expect(isAvailable).toBeNull()
     })
@@ -105,7 +104,6 @@ describe('User Service', () => {
       const id = '655c81c6155012574e0bd4af'
 
       const deletedUser = (await usersService.deleteUser(id)) as User
-      console.log(deletedUser)
 
       expect(deletedUser.email).toEqual('phuoc5@mail.com')
     })
@@ -113,7 +111,6 @@ describe('User Service', () => {
     it('should NOT delete any user with non-existing ID', async () => {
       const wrongID = '655c81c6155012574e0bd4aA'
       const nonExistUser = await usersService.deleteUser(wrongID)
-      console.log(nonExistUser)
 
       expect(nonExistUser).toBeNull()
     })
@@ -134,8 +131,6 @@ describe('User Service', () => {
       const isNull = await usersService.updateUser('655e4ea5ad90a281f06aa8cA', {
         email: 'newemail@integrify.io',
       })
-
-      console.log(isNull)
 
       expect(isNull).toBeNull()
     })
