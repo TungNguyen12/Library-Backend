@@ -1,8 +1,11 @@
 import type { NextFunction } from 'express'
-import UsersService from '../../services/usersService.js'
-import { usersData } from '../mockData/usersData.js'
+import mongoose from 'mongoose'
+
 import usersController from '../../controllers/usersController.js'
+import UserRolesService from '../../services/userRolesService.js'
+import UsersService from '../../services/usersService.js'
 import { ApiError } from '../../utils/ApiError.js'
+import { usersData } from '../mockData/usersData.js'
 
 describe('Users Controller Test', () => {
   let req: any
@@ -77,11 +80,17 @@ describe('Users Controller Test', () => {
 
   describe('createNewUser', () => {
     const createNewUserMock = jest.spyOn(UsersService, 'createUser')
+    const UserRolesServiceMock = jest.spyOn(UserRolesService, 'addRoleToUser')
+
     const newUser = usersData[0]
 
-    // I'M STUCK HERE
-
     it('should create new user with non-existing email', async () => {
+      createNewUserMock.mockResolvedValue(newUser)
+      UserRolesServiceMock.mockResolvedValue({
+        user_id: new mongoose.Types.ObjectId('655c81c6155012574e0bd4af'),
+        role_id: new mongoose.Types.ObjectId('655461aee5407a09ec63d104'),
+      })
+
       createNewUserMock.mockResolvedValue(newUser)
       req.body = newUser
 
