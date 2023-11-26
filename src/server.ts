@@ -1,24 +1,19 @@
 import dotenv from 'dotenv'
-import mongoose from 'mongoose'
 
 import app from './app.js'
+import connectToMongoDB from './mongoose.js'
 
 dotenv.config()
 
 const PORT =
   process.env.PORT != null && process.env.PORT !== '' ? process.env.PORT : 8080
 
-const dbUrl = process.env.DB_URL as string
-
-mongoose
-  .connect(dbUrl)
+connectToMongoDB()
   .then(() => {
-    console.log('Connected!')
+    app.listen(PORT, () => {
+      console.log(`Server is running on localhost:${PORT}`)
+    })
   })
   .catch((error) => {
-    console.log('ERROR: ', error)
+    console.log('Error starting the server: ', error)
   })
-
-app.listen(PORT, () => {
-  console.log(`Server is running on localhost:${PORT}`)
-})
