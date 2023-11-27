@@ -63,8 +63,19 @@ const filterByQuery = async (
   next: NextFunction
 ): Promise<void> => {
   const query = req.query
-  const result = await gerneralService.filter(query, BookRepo)
-  res.status(200).json(result)
+  const book = await gerneralService.filter('title', query, BookRepo)
+
+  if (book instanceof Error) {
+    next(ApiError.badRequest('Bad request.', book.message))
+    return
+  }
+
+  if (book.length === 0) {
+    next(ApiError.notFound('Book not found.'))
+    return
+  }
+
+  res.status(200).json(book)
 }
 
 const createNewBook = async (

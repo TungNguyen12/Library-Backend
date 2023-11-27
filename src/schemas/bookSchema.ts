@@ -91,10 +91,16 @@ export const bookFilterSchema = booksSchema
       offset: z.string().optional(),
       limit: z.string().optional(),
       search: z.string().optional(),
-      sortBy: z.string().optional(),
-      sortOrder: z.string().optional(),
+      sortBy: z
+        .enum(['id', 'title', 'edition', 'category', 'publisher'])
+        .optional(),
+      sortOrder: z.enum(['asc', 'desc']).optional(),
     })
   )
+  .omit({
+    title: true,
+    description: true,
+  })
   .partial()
   .strict()
 
