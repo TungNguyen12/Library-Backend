@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const { Schema } = mongoose
 
 const roleSchema = new Schema({
-  title: String,
+  title: { type: String, unique: true },
   permissions: [
     {
       type: Schema.Types.ObjectId,
