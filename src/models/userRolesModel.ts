@@ -8,4 +8,6 @@ const UserRoleSchema = new Schema({
   role_id: { type: ObjectId, ref: 'Role' },
 })
 
+UserRoleSchema.index({ user_id: 1, role_id: 1 }, { unique: true })
+
 export default mongoose.model('UserRole', UserRoleSchema)
