@@ -18,7 +18,6 @@ export function loginWithGoogle(): GoogleTokenStrategy {
         googleId
       )
       const email = parsedToken.payload.email
-
       try {
         let user = await UserRepo.findOne({ email })
         const defaultRole = await rolesService.findByTitle('Borrower')
