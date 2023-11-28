@@ -46,6 +46,7 @@ export const convertedBookData = booksData.map((book) => ({
   description: book.description,
   publisher: book.publisher,
   author: book.author,
+  __v: 0,
 }))
 
 export const BookCopiesData = [
