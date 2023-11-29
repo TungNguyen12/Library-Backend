@@ -6,20 +6,35 @@ const filter = async (
   repo: Model<any>
 ): Promise<Record<string, any> | Error> => {
   const Repo = repo
+
   const searchQuery = filter.search ?? ''
+
   const sortBy = filter.sortBy ?? '_id'
   const sortOrder =
     filter.sortOrder === 'asc' ? 1 : filter.sortOrder === 'desc' ? -1 : 1
-  const limit =
-    'limit' in filter ? (!Number.isNaN(+filter.limit) ? +filter.limit : 10) : 10
-  const offset =
-    'offset' in filter
-      ? !Number.isNaN(+filter.offset)
-        ? +filter.offset
-        : 0
-      : 0
-  delete filter.limit
-  delete filter.offset
+
+  const page =
+    'page' in filter
+      ? !Number.isNaN(+filter.page)
+        ? +filter.page !== 0
+          ? +filter.page
+          : 1
+        : 1
+      : 1
+
+  const perPage =
+    'perPage' in filter
+      ? !Number.isNaN(+filter.perPage)
+        ? +filter.perPage !== 0
+          ? +filter.perPage
+          : 10
+        : 10
+      : 10
+
+  const limit = perPage
+  const skip = perPage * (page - 1)
+  delete filter.perPage
+  delete filter.page
   delete filter.search
   delete filter.sortBy
   delete filter.sortOrder
@@ -30,11 +45,13 @@ const filter = async (
   }
 
   try {
-    const result = await Repo.find(filter)
+    const count = await Repo.find(filter).count()
+    const data = await Repo.find(filter)
       .sort({ [sortBy]: sortOrder })
       .limit(limit)
-      .skip(offset)
-    return result as Record<string, any>
+      .skip(skip)
+    const result = { data, page, perPage, totalCount: count }
+    return result
   } catch (e) {
     const err = e as Error
     return err

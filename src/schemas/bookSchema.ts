@@ -88,8 +88,8 @@ export const booksSchema = z
 export const bookFilterSchema = booksSchema
   .merge(
     z.object({
-      offset: z.string().optional(),
-      limit: z.string().optional(),
+      page: z.string().optional(),
+      perPage: z.string().optional(),
       search: z.string().optional(),
       sortBy: z
         .enum(['id', 'title', 'edition', 'category', 'publisher'])

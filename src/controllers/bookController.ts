@@ -4,6 +4,7 @@ import { ApiError } from '../utils/ApiError.js'
 import { type WithAuthRequest } from '../types/User.js'
 import gerneralService from '../services/gerneralService.js'
 import { BookModel as BookRepo } from '../models/bookModel.js'
+import { convertedPaginationData } from '../utils/convertPaginationData.js'
 
 const getAllBooks = async (_: Request, res: Response): Promise<void> => {
   const books = await BooksServices.getAll()
@@ -63,19 +64,16 @@ const filterByQuery = async (
   next: NextFunction
 ): Promise<void> => {
   const query = req.query
-  const book = await gerneralService.filter('title', query, BookRepo)
+  const result = await gerneralService.filter('title', query, BookRepo)
 
-  if (book instanceof Error) {
-    next(ApiError.badRequest('Bad request.', book.message))
+  if (result instanceof Error) {
+    next(ApiError.badRequest('Bad request.', result.message))
     return
   }
 
-  if (book.length === 0) {
-    next(ApiError.notFound('Book not found.'))
-    return
-  }
+  const { data, page, perPage, totalCount } = result
 
-  res.status(200).json(book)
+  res.status(200).json(convertedPaginationData(data, page, perPage, totalCount))
 }
 
 const createNewBook = async (
