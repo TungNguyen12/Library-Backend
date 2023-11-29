@@ -54,7 +54,7 @@ const permissionsService = {
       if (result === null) {
         return ApiError.notFound('Permission not found')
       }
-      return result as BasicPermission
+      return result as unknown as BasicPermission
     } catch (error) {
       return ApiError.internal((error as Error).message)
     }
