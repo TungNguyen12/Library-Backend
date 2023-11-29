@@ -49,7 +49,7 @@ async function deleteUserRole(
     const userRoleUpdate = await UserRoleRepo.findOneAndDelete({
       user: id,
     }).exec()
-    return userRoleUpdate as UserRole | null
+    return userRoleUpdate as unknown as UserRole | null
   } catch (e) {
     const error = e as Error
     return error
