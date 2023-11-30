@@ -45,7 +45,7 @@ const filter = async (
   }
 
   try {
-    const count = await Repo.find(filter).count()
+    const count = await Repo.countDocuments(filter)
     const data = await Repo.find(filter)
       .sort({ [sortBy]: sortOrder })
       .limit(limit)
