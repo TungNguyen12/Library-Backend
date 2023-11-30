@@ -6,9 +6,21 @@ import gerneralService from '../services/gerneralService.js'
 import { BookModel as BookRepo } from '../models/bookModel.js'
 import { convertedPaginationData } from '../utils/convertPaginationData.js'
 
+const getBooks = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const query = req.query
+  const filterStatus = query.filter
+  filterStatus === '1'
+    ? await filterByQuery(req, res, next)
+    : await getAllBooks(req, res)
+}
+
 const getAllBooks = async (_: Request, res: Response): Promise<void> => {
   const books = await BooksServices.getAll()
-  res.json(books)
+  res.json(convertedPaginationData(books))
 }
 
 const getBookById = async (
@@ -195,6 +207,7 @@ const deleteBookById = async (
 }
 
 export default {
+  getBooks,
   getAllBooks,
   getBookById,
   getBookByISBN,

@@ -95,6 +95,7 @@ export const bookFilterSchema = booksSchema
         .enum(['id', 'title', 'edition', 'category', 'publisher'])
         .optional(),
       sortOrder: z.enum(['asc', 'desc']).optional(),
+      filter: z.enum(['1', '0']).default('0'),
     })
   )
   .omit({
