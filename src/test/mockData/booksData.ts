@@ -13,7 +13,8 @@ export const booksData: Book[] = [
     category: 'something',
     description: 'something',
     publisher: 'something',
-    author: ['Someone'],
+    img: 'https://placehold.co/600x400',
+    author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
   },
   {
     id: new ObjectId('655ec8104202fd2aa0055472'),
@@ -23,7 +24,8 @@ export const booksData: Book[] = [
     category: 'something',
     description: 'something',
     publisher: 'something',
-    author: ['Someone'],
+    img: 'https://placehold.co/600x400',
+    author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
   },
   {
     id: new ObjectId('655ec83e4202fd2aa0055474'),
@@ -33,7 +35,8 @@ export const booksData: Book[] = [
     category: 'something',
     description: 'something',
     publisher: 'something',
-    author: ['Someone'],
+    img: 'https://placehold.co/600x400',
+    author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
   },
 ]
 
@@ -45,6 +48,7 @@ export const convertedBookData = booksData.map((book) => ({
   category: book.category,
   description: book.description,
   publisher: book.publisher,
+  img: book.img,
   author: book.author,
 }))
 
