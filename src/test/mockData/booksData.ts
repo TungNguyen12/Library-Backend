@@ -13,7 +13,7 @@ export const booksData: Book[] = [
     category: 'something',
     description: 'something',
     publisher: 'something',
-    img: 'placeholder.png',
+    img: 'https://placehold.co/600x400',
     author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
   },
   {
@@ -24,7 +24,7 @@ export const booksData: Book[] = [
     category: 'something',
     description: 'something',
     publisher: 'something',
-    img: 'placeholder.png',
+    img: 'https://placehold.co/600x400',
     author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
   },
   {
@@ -35,7 +35,7 @@ export const booksData: Book[] = [
     category: 'something',
     description: 'something',
     publisher: 'something',
-    img: 'placeholder.png',
+    img: 'https://placehold.co/600x400',
     author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
   },
 ]

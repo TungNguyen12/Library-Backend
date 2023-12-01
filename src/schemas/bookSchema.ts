@@ -82,7 +82,7 @@ export const booksSchema = z
     category: z.string().min(1),
     description: z.string().min(1),
     publisher: z.string().min(1),
-    img: z.string().min(1),
+    img: z.string().url().min(1).default('https://placehold.co/600x400'),
     author: z
       .array(
         z
