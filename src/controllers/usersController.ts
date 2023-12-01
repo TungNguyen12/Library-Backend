@@ -42,7 +42,7 @@ export async function createNewUser(
     )
     return
   } else if (!(user instanceof Error)) {
-    const roleId = new mongoose.Types.ObjectId('655461aee5407a09ec63d104')
+    const roleId = new mongoose.Types.ObjectId('655461b3e5407a09ec63d108')
     await UserRolesService.addRoleToUser({
       user_id: user.id,
       role_id: roleId,
