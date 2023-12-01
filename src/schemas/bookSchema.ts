@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import { type RefinementCtx, z, ZodIssueCode } from 'zod'
 
 export const booksSchema = z
@@ -81,7 +82,15 @@ export const booksSchema = z
     category: z.string().min(1),
     description: z.string().min(1),
     publisher: z.string().min(1),
-    author: z.array(z.string().min(1)).min(1).default([]),
+    author: z
+      .array(
+        z
+          .string()
+          .min(1)
+          .transform((val) => new mongoose.Types.ObjectId(val))
+      )
+      .min(1)
+      .default([]),
   })
   .strict()
 

@@ -1,4 +1,5 @@
 import connect, { type MongoHelper } from '../db-helper.js'
+
 import {
   BookModel as BookModelRepo,
   BorrowedBookModel as BorrowedBookRepo,
@@ -9,7 +10,13 @@ import {
   BorrowedBookData,
   booksData,
   convertedBookData,
+  populatedBookData,
 } from '../mockData/booksData.js'
+
+import authorsModel from '../../models/authorsModel.js'
+
+import { authorsData } from '../mockData/authorsData.js'
+
 import booksService from '../../services/booksService.js'
 import gerneralService from '../../services/gerneralService.js'
 
@@ -21,6 +28,7 @@ describe('Book service', () => {
   })
 
   beforeEach(async () => {
+    await authorsModel.create(authorsData[0])
     await BookModelRepo.create(convertedBookData[0])
     await CopiesBookRepo.create(BookCopiesData)
     await BorrowedBookRepo.create(BorrowedBookData)
@@ -75,7 +83,7 @@ describe('Book service', () => {
           sortOrder: 'desc',
         }
         const result = (await gerneralService.filter(
-          'title',
+          ['title'],
           query,
           BookModelRepo
         )) as Record<string, any>
@@ -92,7 +100,7 @@ describe('Book service', () => {
           sortOrder: 'desc',
         }
         const result = (await gerneralService.filter(
-          'title',
+          ['title'],
           query,
           BookModelRepo
         )) as Record<string, any>
@@ -109,7 +117,7 @@ describe('Book service', () => {
           sortOrder: 'desc',
         }
         const result = (await gerneralService.filter(
-          'title',
+          ['title'],
           query,
           BookModelRepo
         )) as Record<string, any>
@@ -124,7 +132,7 @@ describe('Book service', () => {
           sortBy: 'id',
         }
         const result = (await gerneralService.filter(
-          'title',
+          ['title'],
           query,
           BookModelRepo
         )) as Record<string, any>
@@ -142,7 +150,7 @@ describe('Book service', () => {
           sortOrder: 'desc',
         }
         const result = (await gerneralService.filter(
-          'title',
+          ['title'],
           query,
           BookModelRepo
         )) as Record<string, any>
@@ -158,12 +166,12 @@ describe('Book service', () => {
           sortOrder: 'desc',
         }
         const result = (await gerneralService.filter(
-          'title',
+          ['title'],
           query,
           BookModelRepo
         )) as Record<string, any>
 
-        const expectedResult = [convertedBookData[1], convertedBookData[0]]
+        const expectedResult = [populatedBookData[1], populatedBookData[0]]
         expect(JSON.stringify(result.data)).toEqual(
           JSON.stringify(expectedResult)
         )
@@ -178,7 +186,7 @@ describe('Book service', () => {
           sortBy: 'id',
         }
         const result = (await gerneralService.filter(
-          'title',
+          ['title'],
           query,
           BookModelRepo
         )) as Record<string, any>

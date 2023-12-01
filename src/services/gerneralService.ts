@@ -1,7 +1,7 @@
 import { type Model } from 'mongoose'
 
 const filter = async (
-  searchField: string, // This field will be used for search
+  searchFields: any[], // This field will be used for search
   filter: Record<string, any>,
   repo: Model<any>
 ): Promise<Record<string, any> | Error> => {
@@ -38,14 +38,26 @@ const filter = async (
   delete filter.search
   delete filter.sortBy
   delete filter.sortOrder
+  delete filter.filter
+
+  const searchFilter: any[] = []
+  searchFields.forEach((searchField) => {
+    searchFilter.push({ [searchField]: { $regex: `${searchQuery}` } })
+  })
 
   filter = {
     ...filter,
-    [searchField]: { $regex: `${searchQuery}` },
+    $and: [
+      {
+        $or: searchFilter,
+      },
+    ],
   }
 
   try {
-    const count = await Repo.countDocuments(filter)
+    const count = await Repo.countDocuments(filter, {
+      author: { $regex: `${searchQuery}` },
+    })
     const data = await Repo.find(filter)
       .sort({ [sortBy]: sortOrder })
       .limit(limit)

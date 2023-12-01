@@ -13,7 +13,7 @@ export const booksData: Book[] = [
     category: 'something',
     description: 'something',
     publisher: 'something',
-    author: ['Someone'],
+    author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
   },
   {
     id: new ObjectId('655ec8104202fd2aa0055472'),
@@ -23,7 +23,7 @@ export const booksData: Book[] = [
     category: 'something',
     description: 'something',
     publisher: 'something',
-    author: ['Someone'],
+    author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
   },
   {
     id: new ObjectId('655ec83e4202fd2aa0055474'),
@@ -33,7 +33,7 @@ export const booksData: Book[] = [
     category: 'something',
     description: 'something',
     publisher: 'something',
-    author: ['Someone'],
+    author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
   },
 ]
 
@@ -47,6 +47,17 @@ export const convertedBookData = booksData.map((book) => ({
   publisher: book.publisher,
   author: book.author,
   __v: 0,
+}))
+
+export const populatedBookData = convertedBookData.map((book) => ({
+  ...book,
+  author: [
+    {
+      _id: new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505'),
+      firstName: 'Leo',
+      lastName: 'Tolstoy',
+    },
+  ],
 }))
 
 export const BookCopiesData = [

@@ -12,7 +12,7 @@ import { checkPermission } from '../middlewares/checkPermission.js'
 const router = express.Router()
 
 // Get all Book
-router.get('/', validateFilteringQuery, BookController.getAllBooks)
+router.get('/', validateFilteringQuery, BookController.getBooks)
 
 // Get all book copies
 router.get('/copy', BookController.getAllBookCopies)
