@@ -13,12 +13,8 @@ export const booksData: Book[] = [
     category: 'something',
     description: 'something',
     publisher: 'something',
-<<<<<<< Updated upstream
-    author: ['Someone'],
-=======
     img: 'placeholder.png',
     author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
->>>>>>> Stashed changes
   },
   {
     id: new ObjectId('655ec8104202fd2aa0055472'),
@@ -28,12 +24,8 @@ export const booksData: Book[] = [
     category: 'something',
     description: 'something',
     publisher: 'something',
-<<<<<<< Updated upstream
-    author: ['Someone'],
-=======
     img: 'placeholder.png',
     author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
->>>>>>> Stashed changes
   },
   {
     id: new ObjectId('655ec83e4202fd2aa0055474'),
@@ -43,12 +35,8 @@ export const booksData: Book[] = [
     category: 'something',
     description: 'something',
     publisher: 'something',
-<<<<<<< Updated upstream
-    author: ['Someone'],
-=======
     img: 'placeholder.png',
     author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
->>>>>>> Stashed changes
   },
 ]
 
