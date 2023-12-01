@@ -10,7 +10,17 @@ const BookSchema = new Schema({
   category: String,
   description: String,
   publisher: String,
+<<<<<<< Updated upstream
   author: [String],
+=======
+  img: String,
+  author: [
+    {
+      type: ObjectId,
+      ref: 'Author',
+    },
+  ],
+>>>>>>> Stashed changes
 })
 
 const CopiesBooksSchema = new Schema({
