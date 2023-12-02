@@ -41,7 +41,7 @@ const router = express.Router()
  *        name: sortBy
  *        schema:
  *          type: string
- *        description: Choose which field the data is sorted by (allows: id, title, edition, category, publisher)
+ *        description: Choose which field the data is sorted by allows id, title, edition, category, publisher
  *      - in: query
  *        name: sortOrder
  *        schema:
