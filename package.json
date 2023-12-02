@@ -6,11 +6,16 @@
   "main": "dist/server.js",
   "scripts": {
     "lint": "eslint src/**/*.ts",
-    "ts-watch": "tsc -w",
-    "start": "nodemon dist/server.js",
-    "dev": "nodemon src/server.ts",
+    "build:watch": "tsc -w",
     "build": "tsc",
-    "test": "jest --force-exit"
+    "serve:prod": "nodemon dist/src/server.js",
+    "dev": "nodemon src/server.ts",
+    "init:permissions": "npm run build && node src/script/initializePermissionsAndRoles.js",
+    "init:admin": "npm run build && node src/script/initialzeAdminUser.js",
+    "init:all": "npm run init:permissions && npm run init:admin",
+    "test": "jest --detectOpenHandles --force-exit",
+    "test:coverage": "jest --coverage --detectOpenHandles --force-exit",
+    "test:watch": "jest --watch --coverage --detectOpenHandles"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +31,8 @@
     "passport": "^0.6.0",
     "passport-google-id-token": "^0.4.7",
     "passport-google-oidc": "^0.1.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
     "uuid": "^9.0.1",
     "zod": "^3.22.4"
   },
@@ -37,6 +44,8 @@
     "@types/passport": "^1.0.15",
     "@types/passport-google-id-token": "^0.4.3",
     "@types/supertest": "^2.0.15",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.6",
     "@types/uuid": "^9.0.6",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "eslint": "^8.52.0",

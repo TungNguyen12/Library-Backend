@@ -1,4 +1,6 @@
 import type { NextFunction, Request, Response } from 'express'
+import mongoose from 'mongoose'
+
 import RolesService from '../services/rolesService.js'
 import { ApiError } from '../utils/ApiError.js'
 
@@ -25,7 +27,20 @@ export async function createNewRole(
   res.status(201).json(role)
 }
 
+export async function addPermission(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  const roleId = new mongoose.Types.ObjectId(req.params.roleId)
+  const permissionId = new mongoose.Types.ObjectId(req.body.permissionId)
+  const role = await RolesService.addPermission(roleId, permissionId)
+
+  res.status(201).json(role)
+}
+
 export default {
   findAllRoles,
   createNewRole,
+  addPermission,
 }

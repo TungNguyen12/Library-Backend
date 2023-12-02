@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const { Schema } = mongoose
 
 const roleSchema = new Schema({
-  title: String,
+  title: { type: String, unique: true },
   permissions: [
     {
       type: Schema.Types.ObjectId,
@@ -12,4 +12,6 @@ const roleSchema = new Schema({
   ],
 })
 
-export default mongoose.model('Role', roleSchema)
+const RoleRepo = mongoose.model('Role', roleSchema)
+
+export default RoleRepo

@@ -61,8 +61,6 @@ async function signup(user: UserCreate): Promise<string | ApiError> {
 
     await userRolesService.addRoleToUser(newRole, { session })
 
-    await session.commitTransaction()
-
     const payload = {
       userId: newUser.id,
       email: newUser.email,
@@ -71,6 +69,8 @@ async function signup(user: UserCreate): Promise<string | ApiError> {
     const accessToken = jwt.sign(payload, process.env.TOKEN_SECRET as string, {
       expiresIn: '1h',
     })
+
+    await session.commitTransaction()
 
     return accessToken
   } catch (error) {

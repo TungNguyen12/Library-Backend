@@ -3,21 +3,22 @@ import mongoose from 'mongoose'
 
 // import UserRoleRepo from '../models/userRolesModel.js'
 import UserRepo from '../models/usersModel.js'
-import { type UserCreate, type User, type UserUpdate } from '../types/User.js'
+import { type User, type UserCreate, type UserUpdate } from '../types/User.js'
+import type { ApiError } from '../utils/ApiError.js'
 
 async function findAll(): Promise<User[]> {
   const users = await UserRepo.find().exec()
   return users as User[]
 }
 
-async function findOne(userId: string): Promise<User | Error | null> {
+async function findOne(userId: string): Promise<User | ApiError | null> {
   try {
     const id = new mongoose.Types.ObjectId(userId)
     const user = await UserRepo.findById(id)
 
     return user as User | null
   } catch (e) {
-    const error = e as Error
+    const error = e as ApiError
     return error
   }
 }
@@ -51,7 +52,7 @@ async function deleteUser(userId: string): Promise<User | Error | null> {
   try {
     const id = new mongoose.Types.ObjectId(userId)
     const result = await UserRepo.findByIdAndDelete(id).exec()
-    return result as User | null
+    return result as unknown as User | null
   } catch (e) {
     const error = e as Error
     return error

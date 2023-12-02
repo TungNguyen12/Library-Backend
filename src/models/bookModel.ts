@@ -10,7 +10,13 @@ const BookSchema = new Schema({
   category: String,
   description: String,
   publisher: String,
-  author: [String],
+  img: String,
+  author: [
+    {
+      type: ObjectId,
+      ref: 'Author',
+    },
+  ],
 })
 
 const CopiesBooksSchema = new Schema({
