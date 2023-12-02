@@ -50,6 +50,18 @@ export const convertedBookData = booksData.map((book) => ({
   publisher: book.publisher,
   img: book.img,
   author: book.author,
+  __v: 0,
+}))
+
+export const populatedBookData = convertedBookData.map((book) => ({
+  ...book,
+  author: [
+    {
+      _id: new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505'),
+      firstName: 'Leo',
+      lastName: 'Tolstoy',
+    },
+  ],
 }))
 
 export const BookCopiesData = [

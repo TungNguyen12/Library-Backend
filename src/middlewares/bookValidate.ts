@@ -1,6 +1,10 @@
 import { type NextFunction, type Request, type Response } from 'express'
 
-import { bookCreateSchema, bookUpdateSchema } from '../schemas/bookSchema.js'
+import {
+  bookCreateSchema,
+  bookFilterSchema,
+  bookUpdateSchema,
+} from '../schemas/bookSchema.js'
 import validatorTryCatch from '../utils/validatorTryCatch.js'
 import booksService from '../services/booksService.js'
 import { ApiError } from '../utils/ApiError.js'
@@ -23,6 +27,14 @@ export const validateDuplication = async (
   if (book != null) {
     next(ApiError.badRequest('Bad request, ISBN already exist'))
   }
+}
+
+export const validateFilteringQuery = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  validatorTryCatch(req.query, bookFilterSchema, next)
 }
 
 export const validateCreateBook = (

@@ -28,7 +28,7 @@ describe('Test book controller', () => {
   describe('GET /books', () => {
     test('should respond with status code 200 and all books', async () => {
       const response = await request(app).get('/api/v1/books')
-      const books = response.body
+      const books = response.body.data
 
       expect(response.statusCode).toBe(200)
       expect(books.length).toBe(booksData.length)
