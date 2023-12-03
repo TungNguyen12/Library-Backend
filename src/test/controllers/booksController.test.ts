@@ -36,8 +36,16 @@ describe('Book Controller Test', () => {
 
       await bookController.getAllBooks(req, res)
 
+      const result = {
+        data: books,
+        page: 1,
+        perPage: 3,
+        totalCount: 3,
+        totalPageCount: 1,
+      }
+
       expect(getAllBookMock).toHaveBeenCalled()
-      expect(res.json).toHaveBeenCalledWith(books)
+      expect(res.json).toHaveBeenCalledWith(result)
     })
   })
 

@@ -4,14 +4,52 @@ import BookController from '../controllers/bookController.js'
 import {
   validateCreateBook,
   validateDuplication,
+  validateFilteringQuery,
   validateUpdateBook,
 } from '../middlewares/bookValidate.js'
 import { checkAuth } from '../middlewares/checkAuth.js'
 import { checkPermission } from '../middlewares/checkPermission.js'
 const router = express.Router()
 
-// Get all Book
-router.get('/', BookController.getAllBooks)
+/**
+ * @swagger
+ * /api/v1/books:
+ *  get:
+ *    summery: Return all books or books with filtering and pagination
+ *    parameter:
+ *      - in: query
+ *        name: filter
+ *        schema:
+ *          type: interger
+ *        description: Choose between 1 and 0 to indicate wherether the data is filtered or not (default is 0)
+ *      - in: query
+ *        name: page
+ *        schema:
+ *          type: interger
+ *        description: Choose page number
+ *      - in: query
+ *        name: perPage
+ *        schema:
+ *          type: interger
+ *        description: Number of data entries per page
+ *      - in: query
+ *        name: search
+ *        schema:
+ *          type: string
+ *        description: Search string
+ *      - in: query
+ *        name: sortBy
+ *        schema:
+ *          type: string
+ *        description: Choose which field the data is sorted by allows id, title, edition, category, publisher
+ *      - in: query
+ *        name: sortOrder
+ *        schema:
+ *          type: string
+ *        description: Choose sort order ('asc' or 'desc')
+ *
+ */
+router.get('/', validateFilteringQuery, BookController.getBooks)
 
 // Get all book copies
 router.get('/copy', BookController.getAllBookCopies)
