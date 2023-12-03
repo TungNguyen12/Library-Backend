@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import { type RefinementCtx, z, ZodIssueCode } from 'zod'
 
 export const booksSchema = z
@@ -81,8 +82,37 @@ export const booksSchema = z
     category: z.string().min(1),
     description: z.string().min(1),
     publisher: z.string().min(1),
-    author: z.array(z.string().min(1)).min(1).default([]),
+    img: z.string().url().min(1).default('https://placehold.co/600x400'),
+    author: z
+      .array(
+        z
+          .string()
+          .min(1)
+          .transform((val) => new mongoose.Types.ObjectId(val))
+      )
+      .min(1)
+      .default([]),
   })
+  .strict()
+
+export const bookFilterSchema = booksSchema
+  .merge(
+    z.object({
+      page: z.string().optional(),
+      perPage: z.string().optional(),
+      search: z.string().optional(),
+      sortBy: z
+        .enum(['id', 'title', 'edition', 'category', 'publisher'])
+        .optional(),
+      sortOrder: z.enum(['asc', 'desc']).optional(),
+      filter: z.enum(['1', '0']).default('0'),
+    })
+  )
+  .omit({
+    title: true,
+    description: true,
+  })
+  .partial()
   .strict()
 
 export const bookCreateSchema = booksSchema

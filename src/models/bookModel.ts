@@ -10,7 +10,13 @@ const BookSchema = new Schema({
   category: String,
   description: String,
   publisher: String,
-  author: [String],
+  img: String,
+  author: [
+    {
+      type: ObjectId,
+      ref: 'Author',
+    },
+  ],
 })
 
 const CopiesBooksSchema = new Schema({
@@ -23,6 +29,10 @@ const BorrowedBookSchema = new Schema({
   user_id: { type: ObjectId, ref: 'User' },
   borrowed_Date: Date,
   returned_Date: Date,
+})
+
+BookSchema.pre('find', function () {
+  void this.populate('author', 'firstName lastName')
 })
 
 export const BookModel = mongoose.model('Book', BookSchema)
