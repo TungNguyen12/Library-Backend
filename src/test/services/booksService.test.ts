@@ -10,7 +10,7 @@ import {
   BorrowedBookData,
   booksData,
   convertedBookData,
-  populatedBookData,
+  convertedPopulatedBookData,
 } from '../mockData/booksData.js'
 
 import AuthorsModel from '../../models/authorsModel.js'
@@ -18,8 +18,9 @@ import AuthorsModel from '../../models/authorsModel.js'
 import { authorsData } from '../mockData/authorsData.js'
 
 import booksService from '../../services/booksService.js'
-import { type BookFilterSchema, type FilteredBook } from '../../types/Book.js'
+import { type BookFilterSchema, type PopulatedBook } from '../../types/Book.js'
 import { type PaginatedData } from '../../types/AdditionalType.js'
+import gerneralService from '../../services/gerneralService.js'
 
 describe('Book service', () => {
   let mongoHelper: MongoHelper
@@ -85,7 +86,24 @@ describe('Book service', () => {
         }
         const result = (await booksService.getFilteredBook(
           query
-        )) as PaginatedData<FilteredBook>
+        )) as PaginatedData<PopulatedBook>
+        expect(result.data).toHaveLength(1)
+      })
+      it('should return a book', async () => {
+        const query = {
+          page: '1',
+          perPage: '1',
+          search: '69',
+          category: 'something',
+          publisher: 'something',
+          sortBy: 'id',
+          sortOrder: 'desc',
+        }
+        const result = (await gerneralService.filter(
+          ['title'],
+          query,
+          BookModelRepo
+        )) as Record<string, any>
         expect(result.data).toHaveLength(1)
       })
       it('should return an empty array', async () => {
@@ -100,8 +118,7 @@ describe('Book service', () => {
         }
         const result = (await booksService.getFilteredBook(
           query
-        )) as PaginatedData<FilteredBook>
-        console.log(result)
+        )) as PaginatedData<PopulatedBook>
         expect(result.data).toHaveLength(0)
       })
     })
@@ -116,7 +133,7 @@ describe('Book service', () => {
         }
         const result = (await booksService.getFilteredBook(
           query
-        )) as PaginatedData<FilteredBook>
+        )) as PaginatedData<PopulatedBook>
         expect(result.data).toHaveLength(1)
       })
       it('should return an empty array', async () => {
@@ -129,7 +146,7 @@ describe('Book service', () => {
         }
         const result = (await booksService.getFilteredBook(
           query
-        )) as PaginatedData<FilteredBook>
+        )) as PaginatedData<PopulatedBook>
         expect(result.data).toHaveLength(0)
       })
     })
@@ -145,7 +162,7 @@ describe('Book service', () => {
         }
         const result = (await booksService.getFilteredBook(
           query
-        )) as PaginatedData<FilteredBook>
+        )) as PaginatedData<PopulatedBook>
         expect(result.data).toHaveLength(1)
       })
       it('should return both book', async () => {
@@ -159,9 +176,12 @@ describe('Book service', () => {
         }
         const result = (await booksService.getFilteredBook(
           query
-        )) as PaginatedData<FilteredBook>
+        )) as PaginatedData<PopulatedBook>
 
-        const expectedResult = [populatedBookData[1], populatedBookData[0]]
+        const expectedResult = [
+          convertedPopulatedBookData[1],
+          convertedPopulatedBookData[0],
+        ]
         expect(JSON.stringify(result.data)).toEqual(
           JSON.stringify(expectedResult)
         )
@@ -177,7 +197,7 @@ describe('Book service', () => {
         }
         const result = (await booksService.getFilteredBook(
           query
-        )) as PaginatedData<FilteredBook>
+        )) as PaginatedData<PopulatedBook>
         expect(result.data).toHaveLength(0)
       })
     })

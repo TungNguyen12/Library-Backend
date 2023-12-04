@@ -14,7 +14,7 @@ export const booksData: Book[] = [
     description: 'something',
     publisher: 'something',
     img: 'https://placehold.co/600x400',
-    author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
+    author: [new ObjectId('6546a7febac08f6bd30c0505')],
   },
   {
     id: new ObjectId('655ec8104202fd2aa0055472'),
@@ -25,7 +25,7 @@ export const booksData: Book[] = [
     description: 'something',
     publisher: 'something',
     img: 'https://placehold.co/600x400',
-    author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
+    author: [new ObjectId('6546a7febac08f6bd30c0505')],
   },
   {
     id: new ObjectId('655ec83e4202fd2aa0055474'),
@@ -36,9 +36,19 @@ export const booksData: Book[] = [
     description: 'something',
     publisher: 'something',
     img: 'https://placehold.co/600x400',
-    author: [new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505')],
+    author: [new ObjectId('6546a7febac08f6bd30c0505')],
   },
 ]
+
+export const populatedBookData = booksData.map((book) => ({
+  ...book,
+  author: [
+    {
+      id: new ObjectId('6546a7febac08f6bd30c0505'),
+      fullName: 'Leo Tolstoy',
+    },
+  ],
+}))
 
 export const convertedBookData = booksData.map((book) => ({
   _id: book.id,
@@ -53,11 +63,11 @@ export const convertedBookData = booksData.map((book) => ({
   __v: 0,
 }))
 
-export const populatedBookData = convertedBookData.map((book) => ({
+export const convertedPopulatedBookData = convertedBookData.map((book) => ({
   ...book,
   author: [
     {
-      _id: new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505'),
+      _id: new ObjectId('6546a7febac08f6bd30c0505'),
       fullName: 'Leo Tolstoy',
     },
   ],

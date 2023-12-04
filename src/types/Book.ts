@@ -26,9 +26,9 @@ export type BookFilterSchema = z.infer<typeof bookFilterSchema>
 
 export type Book = BookDTO & { id: mongoose.Types.ObjectId }
 
-export type FilteredBook = Omit<Book, 'author'> & {
-  author: {
+export type PopulatedBook = Omit<Book, 'author'> & {
+  author: Array<{
     id: mongoose.Types.ObjectId
     fullName: string
-  }
+  }>
 }

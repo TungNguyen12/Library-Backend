@@ -9,18 +9,36 @@ import {
   type BookCopy,
   type Book,
   type BookFilterSchema,
-  type FilteredBook,
+  type PopulatedBook,
 } from '../types/Book.js'
 import { type PaginatedData, type AtleastOne } from '../types/AdditionalType.js'
 
-const getAll = async (): Promise<Book[]> => {
-  const books = await BooksRepo.find().exec()
-  return books as Book[]
+const getAll = async (): Promise<PopulatedBook[]> => {
+  const books = await BooksRepo.aggregate([
+    {
+      $lookup: {
+        from: 'authors',
+        localField: 'author',
+        foreignField: '_id',
+        pipeline: [
+          {
+            $addFields: {
+              fullName: { $concat: ['$firstName', ' ', '$lastName'] },
+            },
+          },
+          { $project: { fullName: 1 } },
+        ],
+        as: 'author',
+      },
+    },
+  ])
+
+  return books as PopulatedBook[]
 }
 
 const getFilteredBook = async (
   filter: BookFilterSchema
-): Promise<PaginatedData<FilteredBook> | Error> => {
+): Promise<PaginatedData<PopulatedBook> | Error> => {
   const searchQuery = filter.search ?? ''
 
   const sortBy =
