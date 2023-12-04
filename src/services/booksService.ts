@@ -87,6 +87,11 @@ const getFilteredBook = async (
     'author.fullName': authorFilter,
   }
 
+  const cleanedFilter = Object.entries(modifiedFilter).reduce(
+    (acc, [k, v]) => (v != null ? { ...acc, [k]: v } : acc),
+    {}
+  )
+
   try {
     const result = await BooksRepo.aggregate([
       {
@@ -107,7 +112,7 @@ const getFilteredBook = async (
       },
       {
         $match: {
-          ...modifiedFilter,
+          ...cleanedFilter,
           $and: [
             {
               $or: [

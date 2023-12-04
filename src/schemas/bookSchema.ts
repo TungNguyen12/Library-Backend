@@ -113,6 +113,7 @@ export const bookFilterSchema = booksSchema
     title: true,
     description: true,
     author: true,
+    img: true,
   })
   .partial()
   .strict()
