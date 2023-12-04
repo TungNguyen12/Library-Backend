@@ -95,6 +95,26 @@ export const booksSchema = z
   })
   .strict()
 
+export const bookFilterSchema = booksSchema
+  .merge(
+    z.object({
+      page: z.string().optional(),
+      perPage: z.string().optional(),
+      search: z.string().optional(),
+      sortBy: z
+        .enum(['id', 'title', 'edition', 'category', 'publisher'])
+        .optional(),
+      sortOrder: z.enum(['asc', 'desc']).optional(),
+      filter: z.enum(['1', '0']).default('0'),
+    })
+  )
+  .omit({
+    title: true,
+    description: true,
+  })
+  .partial()
+  .strict()
+
 export const bookCreateSchema = booksSchema
 
 export const bookUpdateSchema = booksSchema.partial()

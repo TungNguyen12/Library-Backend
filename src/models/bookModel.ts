@@ -31,6 +31,10 @@ const BorrowedBookSchema = new Schema({
   returned_Date: Date,
 })
 
+BookSchema.pre('find', function () {
+  void this.populate('author', 'firstName lastName')
+})
+
 export const BookModel = mongoose.model('Book', BookSchema)
 export const CopiesBookModel = mongoose.model('CopiesBook', CopiesBooksSchema)
 export const BorrowedBookModel = mongoose.model(

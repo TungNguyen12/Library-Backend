@@ -2,10 +2,25 @@ import { type NextFunction, type Request, type Response } from 'express'
 import BooksServices from '../services/booksService.js'
 import { ApiError } from '../utils/ApiError.js'
 import { type WithAuthRequest } from '../types/User.js'
+import gerneralService from '../services/gerneralService.js'
+import { BookModel as BookRepo } from '../models/bookModel.js'
+import { convertedPaginationData } from '../utils/convertPaginationData.js'
+
+const getBooks = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const query = req.query
+  const filterStatus = query.filter
+  filterStatus === '1'
+    ? await filterByQuery(req, res, next)
+    : await getAllBooks(req, res)
+}
 
 const getAllBooks = async (_: Request, res: Response): Promise<void> => {
   const books = await BooksServices.getAll()
-  res.json(books)
+  res.json(convertedPaginationData(books))
 }
 
 const getBookById = async (
@@ -53,6 +68,24 @@ const getBookByISBN = async (
 const getAllBookCopies = async (_: Request, res: Response): Promise<void> => {
   const books = await BooksServices.getAllCopies()
   res.json(books)
+}
+
+const filterByQuery = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const query = req.query
+  const result = await gerneralService.filter(['title'], query, BookRepo)
+
+  if (result instanceof Error) {
+    next(ApiError.badRequest('Bad request.', result.message))
+    return
+  }
+
+  const { data, page, perPage, totalCount } = result
+
+  res.status(200).json(convertedPaginationData(data, page, perPage, totalCount))
 }
 
 const createNewBook = async (
@@ -174,10 +207,12 @@ const deleteBookById = async (
 }
 
 export default {
+  getBooks,
   getAllBooks,
   getBookById,
   getBookByISBN,
   getAllBookCopies,
+  filterByQuery,
   createNewBook,
   createNewCopy,
   updateBookInfo,

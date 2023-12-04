@@ -1,4 +1,5 @@
 import connect, { type MongoHelper } from '../db-helper.js'
+
 import {
   BookModel as BookModelRepo,
   BorrowedBookModel as BorrowedBookRepo,
@@ -9,8 +10,15 @@ import {
   BorrowedBookData,
   booksData,
   convertedBookData,
+  populatedBookData,
 } from '../mockData/booksData.js'
+
+import authorsModel from '../../models/authorsModel.js'
+
+import { authorsData } from '../mockData/authorsData.js'
+
 import booksService from '../../services/booksService.js'
+import gerneralService from '../../services/gerneralService.js'
 
 describe('Book service', () => {
   let mongoHelper: MongoHelper
@@ -20,6 +28,7 @@ describe('Book service', () => {
   })
 
   beforeEach(async () => {
+    await authorsModel.create(authorsData[0])
     await BookModelRepo.create(convertedBookData[0])
     await CopiesBookRepo.create(BookCopiesData)
     await BorrowedBookRepo.create(BorrowedBookData)
@@ -58,6 +67,131 @@ describe('Book service', () => {
     it('Should return all books', async () => {
       const result = await booksService.getAllCopies()
       expect(result).toHaveLength(2)
+    })
+  })
+
+  describe('filtering books', () => {
+    describe('filtering with full query', () => {
+      it('should return a book', async () => {
+        const query = {
+          page: '1',
+          perPage: '1',
+          search: '69',
+          category: 'something',
+          publisher: 'something',
+          sortBy: 'id',
+          sortOrder: 'desc',
+        }
+        const result = (await gerneralService.filter(
+          ['title'],
+          query,
+          BookModelRepo
+        )) as Record<string, any>
+        expect(result.data).toHaveLength(1)
+      })
+      it('should return an empty array', async () => {
+        const query = {
+          page: '1',
+          perPage: '1',
+          search: '69',
+          category: 'something1',
+          publisher: 'something',
+          sortBy: 'id',
+          sortOrder: 'desc',
+        }
+        const result = (await gerneralService.filter(
+          ['title'],
+          query,
+          BookModelRepo
+        )) as Record<string, any>
+        expect(result.data).toHaveLength(0)
+      })
+    })
+    describe('filering with partial query', () => {
+      it('should return a book', async () => {
+        const query = {
+          perPage: '1',
+          search: '69',
+          category: 'something',
+          publisher: 'something',
+          sortOrder: 'desc',
+        }
+        const result = (await gerneralService.filter(
+          ['title'],
+          query,
+          BookModelRepo
+        )) as Record<string, any>
+        expect(result.data).toHaveLength(1)
+      })
+      it('should return an empty array', async () => {
+        const query = {
+          perPage: '1',
+          search: '69',
+          category: 'something1',
+          publisher: 'something',
+          sortBy: 'id',
+        }
+        const result = (await gerneralService.filter(
+          ['title'],
+          query,
+          BookModelRepo
+        )) as Record<string, any>
+        expect(result.data).toHaveLength(0)
+      })
+    })
+    describe('filter with more data', () => {
+      it('should return a book', async () => {
+        await booksService.createOne(convertedBookData[1])
+        const query = {
+          perPage: '1',
+          search: '69',
+          category: 'something',
+          publisher: 'something',
+          sortOrder: 'desc',
+        }
+        const result = (await gerneralService.filter(
+          ['title'],
+          query,
+          BookModelRepo
+        )) as Record<string, any>
+        expect(result.data).toHaveLength(1)
+      })
+      it('should return both book', async () => {
+        await booksService.createOne(convertedBookData[1])
+        const query = {
+          perPage: '2',
+          search: 'something',
+          category: 'something',
+          publisher: 'something',
+          sortOrder: 'desc',
+        }
+        const result = (await gerneralService.filter(
+          ['title'],
+          query,
+          BookModelRepo
+        )) as Record<string, any>
+
+        const expectedResult = [populatedBookData[1], populatedBookData[0]]
+        expect(JSON.stringify(result.data)).toEqual(
+          JSON.stringify(expectedResult)
+        )
+      })
+      it('should return an empty array', async () => {
+        await booksService.createOne(convertedBookData[1])
+        const query = {
+          limit: '1',
+          search: '69',
+          category: 'something1',
+          publisher: 'something',
+          sortBy: 'id',
+        }
+        const result = (await gerneralService.filter(
+          ['title'],
+          query,
+          BookModelRepo
+        )) as Record<string, any>
+        expect(result.data).toHaveLength(0)
+      })
     })
   })
 
