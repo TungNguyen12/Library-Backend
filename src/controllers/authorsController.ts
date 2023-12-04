@@ -35,6 +35,14 @@ async function createNewAuthor(
   const body = req.body
   const result = await AuthorsService.createOne(body)
 
+  if (result === false) {
+    next(ApiError.badRequest('Bad request.', 'Author already existed.'))
+    return
+  } else if (result === undefined) {
+    next(ApiError.internal('Something went wrong.'))
+    return
+  }
+
   res.status(201).json(result)
 }
 

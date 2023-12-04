@@ -4,7 +4,7 @@ import AuthorRepo from '../models/authorsModel.js'
 import { type Author } from '../types/Author.js'
 
 async function getAll(): Promise<Author[]> {
-  const authors = await AuthorRepo.find().populate('books').exec()
+  const authors = await AuthorRepo.find().exec()
   return authors as Author[]
 }
 
@@ -19,10 +19,18 @@ async function getOne(authorId: string): Promise<Author | null | Error> {
   }
 }
 
-async function createOne(payload: Author): Promise<Author | undefined> {
-  const newAuthor = new AuthorRepo(payload)
-  const res = await newAuthor.save()
-  return res as Author | undefined
+async function createOne(
+  payload: Partial<Author>
+): Promise<Author | undefined | boolean> {
+  const firstName = payload.firstName
+  const lastName = payload.lastName
+  const existingAuthor = await AuthorRepo.findOne({ firstName, lastName })
+  if (existingAuthor === null) {
+    const newAuthor = new AuthorRepo(payload)
+    const res = await newAuthor.save()
+    return res as Author | undefined
+  }
+  return false
 }
 
 async function deleteOne(authorId: string): Promise<boolean | Error> {
