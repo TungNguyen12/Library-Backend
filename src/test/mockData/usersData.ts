@@ -37,6 +37,16 @@ export const usersData: User[] = [
   },
 ]
 
+export const populatedUserData = usersData.map((user) => ({
+  ...user,
+  role: [
+    {
+      id: new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505'),
+      title: 'Borrower',
+    },
+  ],
+}))
+
 export const convertedUsersData = usersData.map((user) => ({
   _id: user.id,
   firstName: user.firstName,

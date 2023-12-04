@@ -3,7 +3,12 @@ import mongoose from 'mongoose'
 
 // import UserRoleRepo from '../models/userRolesModel.js'
 import UserRepo from '../models/usersModel.js'
-import { type User, type UserCreate, type UserUpdate } from '../types/User.js'
+import {
+  type PopulatedUser,
+  type User,
+  type UserCreate,
+  type UserUpdate,
+} from '../types/User.js'
 import type { ApiError } from '../utils/ApiError.js'
 
 async function findAll(): Promise<User[]> {
@@ -17,6 +22,49 @@ async function findOne(userId: string): Promise<User | ApiError | null> {
     const user = await UserRepo.findById(id)
 
     return user as User | null
+  } catch (e) {
+    const error = e as ApiError
+    return error
+  }
+}
+
+async function findProfile(
+  userId: string
+): Promise<PopulatedUser[] | ApiError> {
+  try {
+    const id = new mongoose.Types.ObjectId(userId)
+    const user = await UserRepo.aggregate([
+      {
+        $match: {
+          _id: id,
+        },
+      },
+      {
+        $lookup: {
+          from: 'userroles',
+          localField: '_id',
+          foreignField: 'user_id',
+          pipeline: [{ $project: { role_id: 1 } }],
+          as: 'role',
+        },
+      },
+      {
+        $lookup: {
+          from: 'roles',
+          localField: 'role.role_id',
+          foreignField: '_id',
+          pipeline: [{ $project: { title: 1 } }],
+          as: 'role',
+        },
+      },
+      {
+        $project: {
+          password: 0,
+        },
+      },
+    ])
+
+    return user as PopulatedUser[]
   } catch (e) {
     const error = e as ApiError
     return error
@@ -79,6 +127,7 @@ async function updateUser(
 export default {
   findOne,
   findAll,
+  findProfile,
   findByEmail,
   createUser,
   deleteUser,
