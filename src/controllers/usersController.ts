@@ -29,6 +29,23 @@ export async function findOneUser(
   }
   res.json(user)
 }
+export async function findByEmail(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  const userEmail = req.params.email
+  const user = await UsersService.findByEmail(userEmail)
+
+  if (user === null) {
+    next(ApiError.notFound('User not found'))
+    return
+  } else if (user instanceof Error) {
+    next(ApiError.badRequest('Bad request.', user.message))
+    return
+  }
+  res.json(user)
+}
 
 export async function getUserProfile(
   req: WithAuthRequest,
@@ -65,7 +82,7 @@ export async function createNewUser(
     )
     return
   } else if (!(user instanceof Error)) {
-    const roleId = new mongoose.Types.ObjectId('655461aee5407a09ec63d104')
+    const roleId = new mongoose.Types.ObjectId('6569d985a7c5b908fba44d07')
     await UserRolesService.addRoleToUser({
       user_id: user.id,
       role_id: roleId,
@@ -115,6 +132,7 @@ export async function updateUser(
 
 export default {
   findOneUser,
+  findByEmail,
   findAllUsers,
   getUserProfile,
   createNewUser,
