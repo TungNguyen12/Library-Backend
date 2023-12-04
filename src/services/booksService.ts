@@ -71,12 +71,21 @@ const getFilteredBook = async (
 
   const limit = perPage
   const skip = perPage * (page - 1)
+
+  const authorFilter = filter.authorName === '' ? null : filter.authorName
+
   delete filter.perPage
   delete filter.page
   delete filter.search
   delete filter.sortBy
   delete filter.sortOrder
   delete filter.filter
+  delete filter.authorName
+
+  const modifiedFilter = {
+    ...filter,
+    'author.fullName': authorFilter,
+  }
 
   try {
     const result = await BooksRepo.aggregate([
@@ -98,7 +107,7 @@ const getFilteredBook = async (
       },
       {
         $match: {
-          ...filter,
+          ...modifiedFilter,
           $and: [
             {
               $or: [
