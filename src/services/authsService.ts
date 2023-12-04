@@ -36,6 +36,14 @@ async function signin(credential: {
     expiresIn: '1h',
   })
 
+  const decodeUser = jwt.verify(
+    accessToken,
+    process.env.TOKEN_SECRET as string
+  ) as jwt.JwtPayload
+
+  const id = decodeUser.userId
+  console.log(id, '🧠🧠')
+
   return accessToken
 }
 

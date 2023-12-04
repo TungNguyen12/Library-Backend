@@ -33,12 +33,7 @@ router.get(
   checkPermission('USERS_READ', 'USERS_READ_ONE'),
   UsersController.findOneUser
 )
-router.get(
-  '/profile/:email',
-  checkAuth,
-  checkPermission('USERS_READ', 'USERS_READ_ONE'),
-  UsersController.findByEmail
-)
+router.get('/profile/:email', checkAuth, UsersController.findByEmail)
 
 router.post('/', validateCreateUser, UsersController.createNewUser)
 router.delete('/:userId', UsersController.deleteUser)
