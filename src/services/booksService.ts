@@ -112,7 +112,8 @@ const getFilteredBook = async (
       data: result[0].data,
       page,
       perPage,
-      totalCount: result[0].pagination[0].total,
+      totalCount:
+        result[0].pagination.length > 0 ? result[0].pagination[0].total : 0,
     }
   } catch (e) {
     const err = e as Error

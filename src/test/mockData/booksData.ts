@@ -58,8 +58,7 @@ export const populatedBookData = convertedBookData.map((book) => ({
   author: [
     {
       _id: new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505'),
-      firstName: 'Leo',
-      lastName: 'Tolstoy',
+      fullName: 'Leo Tolstoy',
     },
   ],
 }))
