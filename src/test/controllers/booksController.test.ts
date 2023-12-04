@@ -1,6 +1,6 @@
 import { type NextFunction } from 'express'
 import BooksService from '../../services/booksService.js'
-import { booksData } from '../mockData/booksData.js'
+import { booksData, populatedBookData } from '../mockData/booksData.js'
 import bookController from '../../controllers/bookController.js'
 import { ApiError } from '../../utils/ApiError.js'
 
@@ -31,7 +31,7 @@ describe('Book Controller Test', () => {
     const getAllBookMock = jest.spyOn(BooksService, 'getAll')
 
     it('Should return all books', async () => {
-      const books = booksData
+      const books = populatedBookData
       getAllBookMock.mockResolvedValue(books)
 
       await bookController.getAllBooks(req, res)
