@@ -58,6 +58,7 @@ async function signup(
       password,
       confirmPassword,
       phoneNumber,
+      avatar,
       address,
     } = req.body
     const user: UserCreate = {
@@ -67,6 +68,7 @@ async function signup(
       password,
       confirmPassword,
       phoneNumber,
+      avatar,
       address,
     }
     const accessToken = await authsService.signup(user)

@@ -106,11 +106,14 @@ export const bookFilterSchema = booksSchema
         .optional(),
       sortOrder: z.enum(['asc', 'desc']).optional(),
       filter: z.enum(['1', '0']).default('0'),
+      authorName: z.string().optional(),
     })
   )
   .omit({
     title: true,
     description: true,
+    author: true,
+    img: true,
   })
   .partial()
   .strict()

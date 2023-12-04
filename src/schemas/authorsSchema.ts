@@ -22,6 +22,9 @@ export const authorCreateSchema = z
       )
       .min(1, { message: 'Book array cannot be empty.' })
       .default([]),
+    image: z
+      .string({ required_error: 'Image URL cannot be empty.' })
+      .url({ message: 'Invalid URL.' }),
   })
   .strict()
 
@@ -35,6 +38,10 @@ export const authorUpdateSchema = z
       .transform((val) => new mongoose.Types.ObjectId(val))
       .array()
       .nonempty({ message: 'Book array cannot be empty.' })
+      .optional(),
+    image: z
+      .string({ required_error: 'Image URL cannot be empty.' })
+      .url({ message: 'Invalid URL.' })
       .optional(),
   })
   .strict()

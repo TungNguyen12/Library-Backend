@@ -28,10 +28,23 @@ router.post(
 )
 
 router.get(
+  '/profile',
+  checkAuth,
+  checkPermission('USERS_READ'),
+  UsersController.getUserProfile
+)
+
+router.get(
   '/:userId',
   checkAuth,
   checkPermission('USERS_READ', 'USERS_READ_ONE'),
   UsersController.findOneUser
+)
+router.get(
+  '/profile/:email',
+  checkAuth,
+  checkPermission('USERS_READ', 'USERS_READ_ONE'),
+  UsersController.findByEmail
 )
 
 router.post('/', validateCreateUser, UsersController.createNewUser)

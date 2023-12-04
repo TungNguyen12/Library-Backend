@@ -2,8 +2,6 @@ import { type NextFunction, type Request, type Response } from 'express'
 import BooksServices from '../services/booksService.js'
 import { ApiError } from '../utils/ApiError.js'
 import { type WithAuthRequest } from '../types/User.js'
-import gerneralService from '../services/gerneralService.js'
-import { BookModel as BookRepo } from '../models/bookModel.js'
 import { convertedPaginationData } from '../utils/convertPaginationData.js'
 
 const getBooks = async (
@@ -76,7 +74,7 @@ const filterByQuery = async (
   next: NextFunction
 ): Promise<void> => {
   const query = req.query
-  const result = await gerneralService.filter(['title'], query, BookRepo)
+  const result = await BooksServices.getFilteredBook(query)
 
   if (result instanceof Error) {
     next(ApiError.badRequest('Bad request.', result.message))
