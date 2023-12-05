@@ -16,7 +16,7 @@ const router = express.Router()
  * /api/v1/books:
  *  get:
  *    summery: Return all books or books with filtering and pagination
- *    parameter:
+ *    parameters:
  *      - in: query
  *        name: filter
  *        schema:
@@ -47,7 +47,26 @@ const router = express.Router()
  *        schema:
  *          type: string
  *        description: Choose sort order ('asc' or 'desc')
- *
+ *      - in: query
+ *        name: authorName
+ *        schema:
+ *          type: string
+ *        description: Filter result by author fullname
+ *      - in: query
+ *        name: categoryName
+ *        schema:
+ *          type: string
+ *        description: Filter result by category name
+ *      - in: query
+ *        name: edition
+ *        schema:
+ *          type: string
+ *        description: Filter result by edition
+ *      - in: query
+ *        name: publisher
+ *        schema:
+ *          type: string
+ *        description: Filter result by publisher
  */
 router.get('/', validateFilteringQuery, BookController.getBooks)
 
