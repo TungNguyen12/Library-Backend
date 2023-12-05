@@ -43,6 +43,45 @@ describe('Users Controller Test', () => {
     })
   })
 
+  describe('findByEmail', () => {
+    const findByEmailMock = jest.spyOn(UsersService, 'findByEmail')
+    const user = usersData[0]
+    const userEmail = user.email
+    console.log(userEmail)
+
+    it('should return one user', async () => {
+      findByEmailMock.mockResolvedValue(user)
+
+      req.params = {
+        userEmail,
+      }
+
+      console.log(req.params)
+
+      await usersController.findByEmail(req, res, next)
+
+      expect(findByEmailMock).toHaveBeenCalled()
+      // expect(findByEmailMock).toHaveBeenCalledWith(userEmail)
+      expect(res.json).toHaveBeenCalledWith(user)
+    })
+
+    it('should call next with an error if user not found', async () => {
+      const errorResult = null
+      const error = ApiError.notFound('User not found')
+      findByEmailMock.mockResolvedValue(errorResult)
+
+      req.params = {
+        userEmail,
+      }
+
+      await usersController.findByEmail(req, res, next)
+
+      expect(findByEmailMock).toHaveBeenCalled()
+      // expect(findByEmailMock).toHaveBeenCalledWith(userEmail)
+      expect(next).toHaveBeenCalledWith(error)
+    })
+  })
+
   describe('findOneUser', () => {
     const findOneUserMock = jest.spyOn(UsersService, 'findOne')
     const user = usersData[0]

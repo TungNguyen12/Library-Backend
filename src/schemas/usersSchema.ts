@@ -22,6 +22,7 @@ export const userSchema = z.object({
       required_error: 'Address is required',
     })
     .min(1, 'Address cannot be empty.'),
+  avatar: z.string().url().min(1).default('https://placehold.co/600x400'),
   phoneNumber: z
     .string({
       required_error: 'Phone number is required',

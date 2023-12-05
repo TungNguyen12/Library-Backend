@@ -1,32 +1,35 @@
-import express, {
-  type NextFunction,
-  type Request,
-  type Response,
-} from 'express'
+import express from 'express'
 
 import AuthorsController from '../controllers/authorsController.js'
 import {
   validateCreateAuthor,
   validateUpdateAuthor,
 } from '../middlewares/authorValidate.js'
+import { checkAuth } from '../middlewares/checkAuth.js'
+import { checkPermission } from '../middlewares/checkPermission.js'
 
 const router = express.Router()
 
 router.get('/', AuthorsController.getAllAuthors)
 router.post(
   '/',
-  (req: Request, res: Response, next: NextFunction) => {
-    validateCreateAuthor(req, res, next)
-  },
+  checkAuth,
+  checkPermission('AUTHORS_CREATE_ONE'),
+  validateCreateAuthor,
   AuthorsController.createNewAuthor
 )
 router.get('/:authorId', AuthorsController.getAuthorById)
-router.delete('/:authorId', AuthorsController.deleteAuthor)
+router.delete(
+  '/:authorId',
+  checkAuth,
+  checkPermission('AUTHORS_DELETE_ONE'),
+  AuthorsController.deleteAuthor
+)
 router.put(
   '/:authorId',
-  (req: Request, res: Response, next: NextFunction) => {
-    validateUpdateAuthor(req, res, next)
-  },
+  checkAuth,
+  checkPermission('AUTHORS_UPDATE_ONE'),
+  validateUpdateAuthor,
   AuthorsController.updateAuthorInfo
 )
 
