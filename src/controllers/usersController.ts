@@ -4,6 +4,7 @@ import UserRolesService from '../services/userRolesService.js'
 import UsersService from '../services/usersService.js'
 import { ApiError } from '../utils/ApiError.js'
 import mongoose from 'mongoose'
+import { type WithAuthRequest } from '../types/User.js'
 
 export async function findAllUsers(_: Request, res: Response): Promise<void> {
   const users = await UsersService.findAll()
@@ -44,6 +45,28 @@ export async function findByEmail(
     return
   }
   res.json(user)
+}
+
+export async function getUserProfile(
+  req: WithAuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  const decoded = req.decoded
+  const userId = decoded?.userId as string
+  const userData = await UsersService.findProfile(userId)
+
+  if (userData instanceof ApiError) {
+    next(ApiError.badRequest('Bad request.', userData.message))
+    return
+  }
+
+  if (userData.length === 0) {
+    next(ApiError.notFound('User not found'))
+    return
+  }
+
+  res.json(userData[0])
 }
 
 export async function createNewUser(
@@ -111,6 +134,7 @@ export default {
   findOneUser,
   findByEmail,
   findAllUsers,
+  getUserProfile,
   createNewUser,
   deleteUser,
   updateUser,

@@ -10,14 +10,16 @@ import {
   BorrowedBookData,
   booksData,
   convertedBookData,
-  populatedBookData,
+  convertedPopulatedBookData,
 } from '../mockData/booksData.js'
 
-import authorsModel from '../../models/authorsModel.js'
+import AuthorsModel from '../../models/authorsModel.js'
 
 import { authorsData } from '../mockData/authorsData.js'
 
 import booksService from '../../services/booksService.js'
+import { type BookFilterSchema, type PopulatedBook } from '../../types/Book.js'
+import { type PaginatedData } from '../../types/AdditionalType.js'
 import gerneralService from '../../services/gerneralService.js'
 
 describe('Book service', () => {
@@ -28,7 +30,7 @@ describe('Book service', () => {
   })
 
   beforeEach(async () => {
-    await authorsModel.create(authorsData[0])
+    await AuthorsModel.create(authorsData[0])
     await BookModelRepo.create(convertedBookData[0])
     await CopiesBookRepo.create(BookCopiesData)
     await BorrowedBookRepo.create(BorrowedBookData)
@@ -73,6 +75,21 @@ describe('Book service', () => {
   describe('filtering books', () => {
     describe('filtering with full query', () => {
       it('should return a book', async () => {
+        const query: BookFilterSchema = {
+          page: '1',
+          perPage: '1',
+          search: '69',
+          category: 'something',
+          publisher: 'something',
+          sortBy: 'id',
+          sortOrder: 'desc',
+        }
+        const result = (await booksService.getFilteredBook(
+          query
+        )) as PaginatedData<PopulatedBook>
+        expect(result.data).toHaveLength(1)
+      })
+      it('should return a book', async () => {
         const query = {
           page: '1',
           perPage: '1',
@@ -90,7 +107,7 @@ describe('Book service', () => {
         expect(result.data).toHaveLength(1)
       })
       it('should return an empty array', async () => {
-        const query = {
+        const query: BookFilterSchema = {
           page: '1',
           perPage: '1',
           search: '69',
@@ -99,97 +116,88 @@ describe('Book service', () => {
           sortBy: 'id',
           sortOrder: 'desc',
         }
-        const result = (await gerneralService.filter(
-          ['title'],
-          query,
-          BookModelRepo
-        )) as Record<string, any>
+        const result = (await booksService.getFilteredBook(
+          query
+        )) as PaginatedData<PopulatedBook>
         expect(result.data).toHaveLength(0)
       })
     })
     describe('filering with partial query', () => {
       it('should return a book', async () => {
-        const query = {
+        const query: BookFilterSchema = {
           perPage: '1',
           search: '69',
           category: 'something',
           publisher: 'something',
           sortOrder: 'desc',
         }
-        const result = (await gerneralService.filter(
-          ['title'],
-          query,
-          BookModelRepo
-        )) as Record<string, any>
+        const result = (await booksService.getFilteredBook(
+          query
+        )) as PaginatedData<PopulatedBook>
         expect(result.data).toHaveLength(1)
       })
       it('should return an empty array', async () => {
-        const query = {
+        const query: BookFilterSchema = {
           perPage: '1',
           search: '69',
           category: 'something1',
           publisher: 'something',
           sortBy: 'id',
         }
-        const result = (await gerneralService.filter(
-          ['title'],
-          query,
-          BookModelRepo
-        )) as Record<string, any>
+        const result = (await booksService.getFilteredBook(
+          query
+        )) as PaginatedData<PopulatedBook>
         expect(result.data).toHaveLength(0)
       })
     })
     describe('filter with more data', () => {
       it('should return a book', async () => {
         await booksService.createOne(convertedBookData[1])
-        const query = {
+        const query: BookFilterSchema = {
           perPage: '1',
           search: '69',
           category: 'something',
           publisher: 'something',
           sortOrder: 'desc',
         }
-        const result = (await gerneralService.filter(
-          ['title'],
-          query,
-          BookModelRepo
-        )) as Record<string, any>
+        const result = (await booksService.getFilteredBook(
+          query
+        )) as PaginatedData<PopulatedBook>
         expect(result.data).toHaveLength(1)
       })
       it('should return both book', async () => {
         await booksService.createOne(convertedBookData[1])
-        const query = {
+        const query: BookFilterSchema = {
           perPage: '2',
           search: 'something',
           category: 'something',
           publisher: 'something',
           sortOrder: 'desc',
         }
-        const result = (await gerneralService.filter(
-          ['title'],
-          query,
-          BookModelRepo
-        )) as Record<string, any>
+        const result = (await booksService.getFilteredBook(
+          query
+        )) as PaginatedData<PopulatedBook>
 
-        const expectedResult = [populatedBookData[1], populatedBookData[0]]
+        const expectedResult = [
+          convertedPopulatedBookData[1],
+          convertedPopulatedBookData[0],
+        ]
         expect(JSON.stringify(result.data)).toEqual(
           JSON.stringify(expectedResult)
         )
       })
       it('should return an empty array', async () => {
         await booksService.createOne(convertedBookData[1])
-        const query = {
-          limit: '1',
+        const query: BookFilterSchema = {
+          perPage: '1',
           search: '69',
           category: 'something1',
           publisher: 'something',
           sortBy: 'id',
         }
-        const result = (await gerneralService.filter(
-          ['title'],
-          query,
-          BookModelRepo
-        )) as Record<string, any>
+        const result = (await booksService.getFilteredBook(
+          query
+        )) as PaginatedData<PopulatedBook>
         expect(result.data).toHaveLength(0)
       })
     })

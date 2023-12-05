@@ -12,6 +12,7 @@ const AuthorSchema = new Schema({
       ref: 'Book',
     },
   ],
+  image: String,
 })
 
 export default mongoose.model('Author', AuthorSchema)

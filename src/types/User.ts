@@ -32,3 +32,10 @@ export interface UserWithRole {
   user_id: User
   role_id: RoleWithPermissionIds
 }
+
+export type PopulatedUser = UserDTO & {
+  role: Array<{
+    id: ObjectId
+    title: string
+  }>
+}

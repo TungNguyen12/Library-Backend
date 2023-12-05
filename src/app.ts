@@ -1,3 +1,4 @@
+import cors from 'cors'
 import express from 'express'
 import passport from 'passport'
 import swaggerUi from 'swagger-ui-express'
@@ -19,7 +20,7 @@ import usersRoutes from './routes/usersRoutes.js'
 import { swaggerSpec } from './utils/swagger.js'
 
 const app = express()
-
+app.use(cors())
 // Middleware
 app.use(express.json())
 app.use(loggingMiddleware)
