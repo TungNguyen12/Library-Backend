@@ -27,12 +27,7 @@ router.post(
   authController.loginWithGoogle
 )
 
-router.get(
-  '/profile',
-  checkAuth,
-  checkPermission('USERS_READ'),
-  UsersController.getUserProfile
-)
+router.get('/profile', checkAuth, UsersController.getUserProfile)
 
 router.get(
   '/:userId',
