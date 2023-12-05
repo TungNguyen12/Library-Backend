@@ -2,7 +2,6 @@ import cors from 'cors'
 import express from 'express'
 import passport from 'passport'
 import swaggerUi from 'swagger-ui-express'
-import cors from 'cors'
 
 import { crudCounterMiddleware } from './middlewares/crudCounterMiddleware.js'
 import { entitiesMonitorMiddleware } from './middlewares/entitiesMonitoring.js'
