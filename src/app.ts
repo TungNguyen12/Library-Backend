@@ -1,6 +1,7 @@
 import express from 'express'
 import passport from 'passport'
 import swaggerUi from 'swagger-ui-express'
+import cors from 'cors'
 
 import { crudCounterMiddleware } from './middlewares/crudCounterMiddleware.js'
 import { entitiesMonitorMiddleware } from './middlewares/entitiesMonitoring.js'
@@ -11,6 +12,7 @@ import { routeNotFound } from './middlewares/routeNotFound.js'
 import authorsRoutes from './routes/authorsRoutes.js'
 import bookAuthorRoutes from './routes/bookAuthorRoutes.js'
 import booksRoutes from './routes/bookRoutes.js'
+import categoriesRoutes from './routes/categoriesRoute.js'
 import cartsRoutes from './routes/cartsRoutes.js'
 import crudStatsRoutes from './routes/crudStatsRoutes.js'
 import permissionsRoutes from './routes/permissionsRoutes.js'
@@ -19,6 +21,9 @@ import usersRoutes from './routes/usersRoutes.js'
 import { swaggerSpec } from './utils/swagger.js'
 
 const app = express()
+
+// Cross-Origin Resource Sharing
+app.use(cors())
 
 // Middleware
 app.use(express.json())
@@ -42,6 +47,7 @@ passport.use(loginWithGoogle())
 app.use('/api/v1/users', usersRoutes)
 app.use('/api/v1/authors', authorsRoutes)
 app.use('/api/v1/books', booksRoutes)
+app.use('/api/v1/categories', categoriesRoutes)
 app.use('/api/v1/crud-stats', crudStatsRoutes)
 app.use('/api/v1/roles', rolesRoutes)
 app.use('/api/v1/permissions', permissionsRoutes)

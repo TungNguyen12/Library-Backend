@@ -10,7 +10,7 @@ export const booksData: Book[] = [
     ISBN: '0756603390',
     title: 'something69',
     edition: '1',
-    category: 'something',
+    category: new ObjectId('656ea26860a0da45f1752145'),
     description: 'something',
     publisher: 'something',
     img: 'https://placehold.co/600x400',
@@ -21,7 +21,7 @@ export const booksData: Book[] = [
     ISBN: '099777035X',
     title: 'something420',
     edition: '1',
-    category: 'something',
+    category: new ObjectId('656ea26860a0da45f1752145'),
     description: 'something',
     publisher: 'something',
     img: 'https://placehold.co/600x400',
@@ -32,7 +32,7 @@ export const booksData: Book[] = [
     ISBN: '0517682397',
     title: 'something69420',
     edition: '1',
-    category: 'something',
+    category: new ObjectId('656ea26860a0da45f1752145'),
     description: 'something',
     publisher: 'something',
     img: 'https://placehold.co/600x400',
@@ -42,6 +42,12 @@ export const booksData: Book[] = [
 
 export const populatedBookData = booksData.map((book) => ({
   ...book,
+  category: [
+    {
+      id: new ObjectId('656ea26860a0da45f1752145'),
+      name: 'Historical',
+    },
+  ],
   author: [
     {
       id: new ObjectId('6546a7febac08f6bd30c0505'),
@@ -65,6 +71,12 @@ export const convertedBookData = booksData.map((book) => ({
 
 export const convertedPopulatedBookData = convertedBookData.map((book) => ({
   ...book,
+  category: [
+    {
+      _id: new ObjectId('656ea26860a0da45f1752145'),
+      name: 'Historical',
+    },
+  ],
   author: [
     {
       _id: new ObjectId('6546a7febac08f6bd30c0505'),
@@ -101,3 +113,12 @@ export const BorrowedBookData = [
     borrowed_Date: '2023-11-22T22:15:21.852Z',
   },
 ]
+
+export const CategoryData = [
+  { id: new ObjectId('656ea26860a0da45f1752145'), name: 'Historical' },
+]
+
+export const convertedCategoryData = CategoryData.map((cate) => ({
+  _id: cate.id,
+  name: cate.name,
+}))

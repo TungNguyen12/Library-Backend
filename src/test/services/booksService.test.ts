@@ -10,10 +10,11 @@ import {
   BorrowedBookData,
   booksData,
   convertedBookData,
+  convertedCategoryData,
   convertedPopulatedBookData,
 } from '../mockData/booksData.js'
 
-import AuthorsModel from '../../models/authorsModel.js'
+import AuthorsRepo from '../../models/authorsModel.js'
 
 import { authorsData } from '../mockData/authorsData.js'
 
@@ -21,6 +22,8 @@ import booksService from '../../services/booksService.js'
 import { type BookFilterSchema, type PopulatedBook } from '../../types/Book.js'
 import { type PaginatedData } from '../../types/AdditionalType.js'
 import gerneralService from '../../services/gerneralService.js'
+import CategoryRepo from '../../models/categoriesModel.js'
+import mongoose from 'mongoose'
 
 describe('Book service', () => {
   let mongoHelper: MongoHelper
@@ -30,10 +33,11 @@ describe('Book service', () => {
   })
 
   beforeEach(async () => {
-    await AuthorsModel.create(authorsData[0])
+    await AuthorsRepo.create(authorsData[0])
     await BookModelRepo.create(convertedBookData[0])
     await CopiesBookRepo.create(BookCopiesData)
     await BorrowedBookRepo.create(BorrowedBookData)
+    await CategoryRepo.create(convertedCategoryData[0])
   })
 
   afterEach(async () => {
@@ -79,7 +83,7 @@ describe('Book service', () => {
           page: '1',
           perPage: '1',
           search: '69',
-          category: 'something',
+          categoryName: 'Historical',
           publisher: 'something',
           sortBy: 'id',
           sortOrder: 'desc',
@@ -94,7 +98,7 @@ describe('Book service', () => {
           page: '1',
           perPage: '1',
           search: '69',
-          category: 'something',
+          category: new mongoose.Types.ObjectId('656ea26860a0da45f1752145'),
           publisher: 'something',
           sortBy: 'id',
           sortOrder: 'desc',
@@ -111,7 +115,7 @@ describe('Book service', () => {
           page: '1',
           perPage: '1',
           search: '69',
-          category: 'something1',
+          categoryName: 'something1',
           publisher: 'something',
           sortBy: 'id',
           sortOrder: 'desc',
@@ -127,7 +131,7 @@ describe('Book service', () => {
         const query: BookFilterSchema = {
           perPage: '1',
           search: '69',
-          category: 'something',
+          categoryName: 'Historical',
           publisher: 'something',
           sortOrder: 'desc',
         }
@@ -140,7 +144,7 @@ describe('Book service', () => {
         const query: BookFilterSchema = {
           perPage: '1',
           search: '69',
-          category: 'something1',
+          categoryName: 'something1',
           publisher: 'something',
           sortBy: 'id',
         }
@@ -156,7 +160,7 @@ describe('Book service', () => {
         const query: BookFilterSchema = {
           perPage: '1',
           search: '69',
-          category: 'something',
+          categoryName: 'Historical',
           publisher: 'something',
           sortOrder: 'desc',
         }
@@ -170,7 +174,7 @@ describe('Book service', () => {
         const query: BookFilterSchema = {
           perPage: '2',
           search: 'something',
-          category: 'something',
+          categoryName: 'Historical',
           publisher: 'something',
           sortOrder: 'desc',
         }
@@ -191,7 +195,7 @@ describe('Book service', () => {
         const query: BookFilterSchema = {
           perPage: '1',
           search: '69',
-          category: 'something1',
+          categoryName: 'something1',
           publisher: 'something',
           sortBy: 'id',
         }
