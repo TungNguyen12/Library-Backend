@@ -36,8 +36,6 @@ router.get(
   UsersController.findOneUser
 )
 
-router.get('/profile/:email', checkAuth, UsersController.findByEmail)
-
 router.post('/', validateCreateUser, UsersController.createNewUser)
 router.delete('/:userId', UsersController.deleteUser)
 router.put(
