@@ -10,8 +10,10 @@ import {
   type Book,
   type BookFilterSchema,
   type PopulatedBook,
+  type bookBorrowHistory,
 } from '../types/Book.js'
 import { type PaginatedData, type AtleastOne } from '../types/AdditionalType.js'
+import UserRepo from '../models/usersModel.js'
 
 const getAll = async (): Promise<PopulatedBook[]> => {
   const books = await BooksRepo.aggregate([
@@ -387,8 +389,95 @@ const deleteOne = async (bookId: string): Promise<boolean | Error> => {
 
 const getHistory = async (
   userId: string
-): Promise<Record<string, any> | Error> => {
-  return {}
+): Promise<bookBorrowHistory | Error | undefined> => {
+  try {
+    const result = await UserRepo.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(userId),
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+        },
+      },
+      {
+        $lookup: {
+          from: 'borrowedbooks',
+          localField: '_id',
+          foreignField: 'user_id',
+          pipeline: [
+            {
+              $project: { _id: 0, user_id: 0 },
+            },
+            {
+              $lookup: {
+                from: 'copiesbooks',
+                localField: 'copy_id',
+                foreignField: '_id',
+                pipeline: [
+                  {
+                    $project: { book_id: 1, _id: 0 },
+                  },
+                  {
+                    $lookup: {
+                      from: 'books',
+                      localField: 'book_id',
+                      foreignField: '_id',
+                      pipeline: [{ $project: { title: 1, img: 1 } }],
+                      as: 'bookTitle',
+                    },
+                  },
+                  {
+                    $project: { book_id: 0 },
+                  },
+                ],
+                as: 'book',
+              },
+            },
+            {
+              $project: { copy_id: 0, user_id: 0 },
+            },
+          ],
+          as: 'history',
+        },
+      },
+    ])
+
+    if (result.length > 0) {
+      const nonEmptyResult = result[0]
+      const history = nonEmptyResult.history
+
+      const modifiedHistory: any[] = []
+
+      history.forEach((e: any) => {
+        if ('__v' in e) {
+          delete e.__v
+        }
+        modifiedHistory.push({
+          ...e,
+          book: e.book.length > 0 ? e.book[0] : {},
+          returned: 'returned_Date' in e,
+        })
+      })
+
+      modifiedHistory.forEach((e) => {
+        if ('bookTitle' in e.book) {
+          e.book = e.book.bookTitle.length > 0 ? e.book.bookTitle[0] : {}
+        }
+      })
+
+      const cleanedResult = { history: modifiedHistory }
+
+      return cleanedResult
+    }
+
+    return undefined
+  } catch (e) {
+    const err = e as Error
+    return err
+  }
 }
 
 export default {

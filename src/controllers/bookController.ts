@@ -218,6 +218,11 @@ const getUserBorrowHistory = async (
     return
   }
 
+  if (result === undefined) {
+    res.json({ history: [] })
+    return
+  }
+
   res.json(result)
 }
 
