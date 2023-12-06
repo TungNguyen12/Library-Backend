@@ -176,21 +176,87 @@ const getFilteredBook = async (
   }
 }
 
-const getOneById = async (bookId: string): Promise<Book | null | Error> => {
+const getOneById = async (
+  bookId: string
+): Promise<PopulatedBook | null | Error> => {
   try {
     const id = new Types.ObjectId(bookId)
-    const book = await BooksRepo.findById(id)
-    return book as Book | null
+    const book = await BooksRepo.aggregate([
+      {
+        $match: {
+          _id: id,
+        },
+      },
+      {
+        $lookup: {
+          from: 'authors',
+          localField: 'author',
+          foreignField: '_id',
+          pipeline: [
+            {
+              $addFields: {
+                fullName: { $concat: ['$firstName', ' ', '$lastName'] },
+              },
+            },
+            { $project: { fullName: 1 } },
+          ],
+          as: 'author',
+        },
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'category',
+          foreignField: '_id',
+          pipeline: [{ $project: { name: 1 } }],
+          as: 'category',
+        },
+      },
+    ])
+    return book.length > 0 ? (book[0] as PopulatedBook) : null
   } catch (e) {
     const err = e as Error
     return err
   }
 }
 
-const getOneByISBN = async (ISBN: string): Promise<Book | null | Error> => {
+const getOneByISBN = async (
+  ISBN: string
+): Promise<PopulatedBook | null | Error> => {
   try {
-    const book = await BooksRepo.findOne({ ISBN })
-    return book as Book | null
+    const book = await BooksRepo.aggregate([
+      {
+        $match: {
+          ISBN,
+        },
+      },
+      {
+        $lookup: {
+          from: 'authors',
+          localField: 'author',
+          foreignField: '_id',
+          pipeline: [
+            {
+              $addFields: {
+                fullName: { $concat: ['$firstName', ' ', '$lastName'] },
+              },
+            },
+            { $project: { fullName: 1 } },
+          ],
+          as: 'author',
+        },
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'category',
+          foreignField: '_id',
+          pipeline: [{ $project: { name: 1 } }],
+          as: 'category',
+        },
+      },
+    ])
+    return book.length > 0 ? (book[0] as PopulatedBook) : null
   } catch (e) {
     const err = e as Error
     return err
