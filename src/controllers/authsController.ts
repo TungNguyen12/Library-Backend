@@ -72,6 +72,11 @@ async function signup(
       address,
     }
     const accessToken = await authsService.signup(user)
+
+    if (accessToken instanceof ApiError) {
+      next(accessToken)
+    }
+
     res.status(201).json({ accessToken })
   } catch (error) {
     if (error instanceof ApiError) {
