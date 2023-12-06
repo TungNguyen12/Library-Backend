@@ -204,12 +204,35 @@ const deleteBookById = async (
   res.sendStatus(204)
 }
 
+const getUserBorrowHistory = async (
+  req: WithAuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const decoded = req.decoded
+  const userId = decoded?.userId as string
+  const result = await BooksServices.getHistory(userId)
+
+  if (result instanceof Error) {
+    next(ApiError.badRequest('Bad request.', result.message))
+    return
+  }
+
+  if (result === undefined) {
+    res.json({ history: [] })
+    return
+  }
+
+  res.json(result)
+}
+
 export default {
   getBooks,
   getAllBooks,
   getBookById,
   getBookByISBN,
   getAllBookCopies,
+  getUserBorrowHistory,
   filterByQuery,
   createNewBook,
   createNewCopy,

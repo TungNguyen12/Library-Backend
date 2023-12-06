@@ -36,3 +36,16 @@ export type PopulatedBook = Omit<Book, 'author' | 'category'> & {
     fullName: string
   }>
 }
+
+export type bookBorrowHistory = {
+  history: Array<{
+    borrowedDate?: string
+    returnedDate?: string
+    returned?: boolean
+    book?: {
+      _id?: mongoose.Types.ObjectId
+      title?: string
+      img?: string
+    }
+  }>
+}
