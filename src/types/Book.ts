@@ -39,12 +39,12 @@ export type PopulatedBook = Omit<Book, 'author' | 'category'> & {
 
 export type bookBorrowHistory = {
   history: Array<{
-    borrowedDate?: Date
-    returnedDate?: Date
+    borrowedDate?: string
+    returnedDate?: string
     returned?: boolean
     book?: {
       _id?: mongoose.Types.ObjectId
-      title?: mongoose.Types.ObjectId
+      title?: string
       img?: string
     }
   }>

@@ -24,6 +24,8 @@ import { type PaginatedData } from '../../types/AdditionalType.js'
 import gerneralService from '../../services/gerneralService.js'
 import CategoryRepo from '../../models/categoriesModel.js'
 import mongoose from 'mongoose'
+import UsersRepo from '../../models/usersModel.js'
+import { convertedUsersData } from '../mockData/usersData.js'
 
 describe('Book service', () => {
   let mongoHelper: MongoHelper
@@ -38,6 +40,7 @@ describe('Book service', () => {
     await CopiesBookRepo.create(BookCopiesData)
     await BorrowedBookRepo.create(BorrowedBookData)
     await CategoryRepo.create(convertedCategoryData[0])
+    await UsersRepo.create(convertedUsersData[1])
   })
 
   afterEach(async () => {
@@ -243,6 +246,14 @@ describe('Book service', () => {
         false
       )
       expect(result).toBe(false)
+    })
+  })
+
+  describe('get history', () => {
+    it('Should return history', async () => {
+      const userId = String(convertedUsersData[1]._id)
+      const result = await booksService.getHistory(userId)
+      expect(result).toHaveProperty('history')
     })
   })
 
