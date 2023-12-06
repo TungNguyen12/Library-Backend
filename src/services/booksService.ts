@@ -31,6 +31,15 @@ const getAll = async (): Promise<PopulatedBook[]> => {
         as: 'author',
       },
     },
+    {
+      $lookup: {
+        from: 'categories',
+        localField: 'category',
+        foreignField: '_id',
+        pipeline: [{ $project: { name: 1 } }],
+        as: 'category',
+      },
+    },
   ])
 
   return books as PopulatedBook[]
@@ -72,7 +81,8 @@ const getFilteredBook = async (
   const limit = perPage
   const skip = perPage * (page - 1)
 
-  const authorFilter = filter.authorName === '' ? null : filter.authorName
+  const authorFilter = filter.authorName
+  const categoryFilter = filter.categoryName
 
   delete filter.perPage
   delete filter.page
@@ -81,10 +91,12 @@ const getFilteredBook = async (
   delete filter.sortOrder
   delete filter.filter
   delete filter.authorName
+  delete filter.categoryName
 
   const modifiedFilter = {
     ...filter,
     'author.fullName': authorFilter,
+    'category.name': categoryFilter,
   }
 
   const cleanedFilter = Object.entries(modifiedFilter).reduce(
@@ -108,6 +120,15 @@ const getFilteredBook = async (
             { $project: { fullName: 1 } },
           ],
           as: 'author',
+        },
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'category',
+          foreignField: '_id',
+          pipeline: [{ $project: { name: 1 } }],
+          as: 'category',
         },
       },
       {

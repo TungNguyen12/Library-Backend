@@ -7,7 +7,10 @@ const BookSchema = new Schema({
   ISBN: String,
   title: String,
   edition: String,
-  category: String,
+  category: {
+    type: ObjectId,
+    ref: 'Category',
+  },
   description: String,
   publisher: String,
   img: String,

@@ -27,12 +27,7 @@ router.post(
   authController.loginWithGoogle
 )
 
-router.get(
-  '/profile',
-  checkAuth,
-  checkPermission('USERS_READ'),
-  UsersController.getUserProfile
-)
+router.get('/profile', checkAuth, UsersController.getUserProfile)
 
 router.get(
   '/:userId',
@@ -40,8 +35,6 @@ router.get(
   checkPermission('USERS_READ', 'USERS_READ_ONE'),
   UsersController.findOneUser
 )
-
-router.get('/profile/:email', checkAuth, UsersController.findByEmail)
 
 router.post('/', validateCreateUser, UsersController.createNewUser)
 router.delete('/:userId', UsersController.deleteUser)

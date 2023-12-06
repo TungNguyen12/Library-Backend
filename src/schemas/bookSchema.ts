@@ -77,11 +77,11 @@ export const booksSchema = z
         return z.NEVER
       }
     }),
-    title: z.string().min(1),
-    edition: z.string().min(1),
-    category: z.string().min(1),
-    description: z.string().min(1),
-    publisher: z.string().min(1),
+    title: z.string().default(''),
+    edition: z.string().default(''),
+    category: z.string().transform((val) => new mongoose.Types.ObjectId(val)),
+    description: z.string().default(''),
+    publisher: z.string().default(''),
     img: z.string().url().min(1).default('https://placehold.co/600x400'),
     author: z
       .array(
@@ -107,6 +107,7 @@ export const bookFilterSchema = booksSchema
       sortOrder: z.enum(['asc', 'desc']).optional(),
       filter: z.enum(['1', '0']).default('0'),
       authorName: z.string().optional(),
+      categoryName: z.string().optional(),
     })
   )
   .omit({
@@ -114,6 +115,7 @@ export const bookFilterSchema = booksSchema
     description: true,
     author: true,
     img: true,
+    category: true,
   })
   .partial()
   .strict()
