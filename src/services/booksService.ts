@@ -385,12 +385,19 @@ const deleteOne = async (bookId: string): Promise<boolean | Error> => {
   }
 }
 
+const getHistory = async (
+  userId: string
+): Promise<Record<string, any> | Error> => {
+  return {}
+}
+
 export default {
   getAll,
   getFilteredBook,
   getOneByISBN,
   getOneById,
   getAllCopies,
+  getHistory,
   createOne,
   createOneCopy,
   updateOne,

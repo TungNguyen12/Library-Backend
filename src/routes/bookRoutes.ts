@@ -73,6 +73,9 @@ router.get('/', validateFilteringQuery, BookController.getBooks)
 // Get all book copies
 router.get('/copy', BookController.getAllBookCopies)
 
+// Get user borrow history
+router.get('/history', checkAuth, BookController.getUserBorrowHistory)
+
 // Get Book with given id
 router.get('/:id', BookController.getBookById)
 
