@@ -36,9 +36,6 @@ async function getCartByUserId(
         },
       },
       {
-        $unwind: '$books', // Deconstruct the books array
-      },
-      {
         $lookup: {
           from: 'books',
           localField: 'books',
@@ -71,17 +68,7 @@ async function getCartByUserId(
               },
             },
           ],
-          as: 'book',
-        },
-      },
-      {
-        $unwind: '$book',
-      },
-      {
-        $group: {
-          _id: '$_id',
-          cart_id: { $first: '$cart_id' },
-          books: { $push: '$book' }, // Group the books back into an array
+          as: 'books',
         },
       },
     ])
@@ -116,7 +103,6 @@ async function addToCart({
         cart_id: cartId,
         books: [new mongoose.Types.ObjectId(bookId)],
       })
-      console.log(newCartItem, 'new cart item here 😶‍🌫️🤔')
       const res = await newCartItem.save()
       return res as CartItem | undefined
     } else {
@@ -126,7 +112,7 @@ async function addToCart({
         { $addToSet: { books: bookId } },
         { new: true, upsert: true }
       )
-      console.log(res, 'add new book to cart item here 😶‍🌫️🧠🤔')
+
       return res as CartItem | undefined
     }
   } catch (e) {
