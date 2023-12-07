@@ -75,6 +75,9 @@ async function getCartByUserId(
         },
       },
       {
+        $unwind: '$book',
+      },
+      {
         $group: {
           _id: '$_id',
           cart_id: { $first: '$cart_id' },
