@@ -140,10 +140,13 @@ const getFilteredBook = async (
             {
               $or: [
                 {
-                  title: { $regex: `${searchQuery}` },
+                  title: { $regex: `${searchQuery}`, $options: 'i' },
                 },
                 {
-                  'author.fullName': { $regex: `${searchQuery}` },
+                  'author.fullName': {
+                    $regex: `${searchQuery}`,
+                    $options: 'i',
+                  },
                 },
               ],
             },
