@@ -8,10 +8,12 @@ const CartItemSchema = new Schema({
     type: ObjectId,
     ref: 'Cart',
   },
-  book_id: {
-    type: ObjectId,
-    ref: 'Book',
-  },
+  books: [
+    {
+      type: ObjectId,
+      ref: 'Book',
+    },
+  ],
 })
 
 export default mongoose.model('CartItem', CartItemSchema)
