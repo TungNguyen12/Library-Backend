@@ -24,6 +24,7 @@ router.get(
   checkPermission('CART_READ_ONE'),
   CartsController.getCartByUserId
 )
+
 router.put(
   '/:userId',
   checkAuth,

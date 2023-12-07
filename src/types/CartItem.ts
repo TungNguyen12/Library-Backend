@@ -1,8 +1,9 @@
 import type mongoose from 'mongoose'
 
-export interface CartItem {
+export type CartItem = {
   cart_id: mongoose.Types.ObjectId
-  book_id: mongoose.Types.ObjectId
+  // book_id: mongoose.Types.ObjectId
+  books: mongoose.Types.ObjectId[]
 }
 
 export type PopulatedCartItem = Omit<CartItem, 'book_id'> & {

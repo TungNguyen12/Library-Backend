@@ -36,9 +36,12 @@ async function getCartByUserId(
         },
       },
       {
+        $unwind: '$books', // Deconstruct the books array
+      },
+      {
         $lookup: {
           from: 'books',
-          localField: 'book_id',
+          localField: 'books',
           foreignField: '_id',
           pipeline: [
             {
@@ -71,6 +74,13 @@ async function getCartByUserId(
           as: 'book',
         },
       },
+      {
+        $group: {
+          _id: '$_id',
+          cart_id: { $first: '$cart_id' },
+          books: { $push: '$book' }, // Group the books back into an array
+        },
+      },
     ])
 
     return cartItems as PopulatedCartItem[]
@@ -97,16 +107,25 @@ async function addToCart({
       })
       await newCart.save()
       cart = newCart
+
+      const cartId = cart._id
+      const newCartItem = new CartItemRepo({
+        cart_id: cartId,
+        books: [new mongoose.Types.ObjectId(bookId)],
+      })
+      console.log(newCartItem, 'new cart item here 😶‍🌫️🤔')
+      const res = await newCartItem.save()
+      return res as CartItem | undefined
+    } else {
+      const cartId = cart._id
+      const res = await CartItemRepo.findOneAndUpdate(
+        { cart_id: cartId },
+        { $addToSet: { books: bookId } },
+        { new: true, upsert: true }
+      )
+      console.log(res, 'add new book to cart item here 😶‍🌫️🧠🤔')
+      return res as CartItem | undefined
     }
-
-    const cartId = cart._id
-    const newCartItem = new CartItemRepo({
-      cart_id: cartId,
-      book_id: new mongoose.Types.ObjectId(bookId),
-    })
-    const res = await newCartItem.save()
-
-    return res as CartItem | undefined
   } catch (e) {
     const err = e as Error
     return err
@@ -177,8 +196,8 @@ async function checkout(userId: string): Promise<boolean | Error> {
       // get all book_id of books
       const bookIds: string[] = []
       cartItems.forEach((item) => {
-        if (item.book_id != null) {
-          bookIds.push(String(item.book_id))
+        if (item.books != null) {
+          bookIds.push(String(item.books))
         }
       })
 
