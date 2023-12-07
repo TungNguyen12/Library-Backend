@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-import { type CartItem } from '../types/CartItem.js'
+import { type PopulatedCartItem, type CartItem } from '../types/CartItem.js'
 import CartsRepo from '../models/cartsModel.js'
 import CartItemRepo from '../models/cartItemModel.js'
 import { type Cart } from '../types/Cart.js'
@@ -18,7 +18,7 @@ async function getAllCartItems(): Promise<CartItem[]> {
 
 async function getCartByUserId(
   userId: string
-): Promise<CartItem[] | null | Error> {
+): Promise<PopulatedCartItem[] | null | Error> {
   try {
     const id = new mongoose.Types.ObjectId(userId)
     const cart = await CartsRepo.findOne({ user_id: id })
@@ -28,8 +28,52 @@ async function getCartByUserId(
     }
 
     const cartId = cart._id
-    const cartItems = await CartItemRepo.find({ cart_id: cartId }).exec()
-    return cartItems as CartItem[]
+
+    const cartItems = await CartItemRepo.aggregate([
+      {
+        $match: {
+          cart_id: cartId,
+        },
+      },
+      {
+        $lookup: {
+          from: 'books',
+          localField: 'book_id',
+          foreignField: '_id',
+          pipeline: [
+            {
+              $project: {
+                title: 1,
+                description: 1,
+                author: 1,
+                img: 1,
+              },
+            },
+            {
+              $lookup: {
+                from: 'authors',
+                localField: 'author',
+                foreignField: '_id',
+                pipeline: [
+                  {
+                    $addFields: {
+                      fullName: {
+                        $concat: ['$firstName', ' ', '$lastName'],
+                      },
+                    },
+                  },
+                  { $project: { fullName: 1 } },
+                ],
+                as: 'author',
+              },
+            },
+          ],
+          as: 'book',
+        },
+      },
+    ])
+
+    return cartItems as PopulatedCartItem[]
   } catch (e) {
     const err = e as Error
     return err
