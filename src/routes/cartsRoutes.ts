@@ -27,7 +27,8 @@ router.get(
 router.put(
   '/:userId',
   checkAuth,
-  checkPermission('CART_UPDATE_ONE'),
+  // checkPermission('CART_UPDATE_ONE'),
+  checkPermission('CART_READ_ONE'),
   CartsController.addToCart
 )
 router.post(

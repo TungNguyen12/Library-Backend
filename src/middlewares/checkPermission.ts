@@ -47,6 +47,13 @@ export function checkPermission(...permissions: Permission[]) {
         permission.endsWith('_ONE') && userPermissions.includes(permission)
     )
 
+    console.log(
+      'SelfOnlyPermission:',
+      hasSelfOnlyPermission,
+      'PERMISSIONS 🤔🧠:',
+      userPermissions
+    )
+
     if (hasGeneralPermission) {
       next()
       return
