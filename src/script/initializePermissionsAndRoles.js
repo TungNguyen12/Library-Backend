@@ -30,9 +30,11 @@ async function createPermissionsAndRoles() {
       permissions: [
         'USERS_READ_ONE',
         'USERS_UPDATE_ONE',
-        'BORROW_POST',
+        'BORROW_CREATE',
         'CART_READ_ONE',
-        'CART_POST_ONE',
+        'CART_DELETE_ONE',
+        'CART_UPDATE_ONE',
+        'CART_CREATE_ONE',
       ].map((action) => permissionMap.get(action)),
     },
   ]
