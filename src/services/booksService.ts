@@ -102,7 +102,8 @@ const getFilteredBook = async (
   }
 
   const cleanedFilter = Object.entries(modifiedFilter).reduce(
-    (acc, [k, v]) => (v != null ? { ...acc, [k]: v } : acc),
+    (acc, [k, v]) =>
+      v != null && v !== '' && v !== undefined ? { ...acc, [k]: v } : acc,
     {}
   )
 
