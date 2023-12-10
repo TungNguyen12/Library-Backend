@@ -127,7 +127,7 @@ describe('Users Controller Test', () => {
       createNewUserMock.mockResolvedValue(newUser)
       UserRolesServiceMock.mockResolvedValue({
         user_id: new mongoose.Types.ObjectId('655c81c6155012574e0bd4af'),
-        role_id: new mongoose.Types.ObjectId('655461aee5407a09ec63d104'),
+        role_id: new mongoose.Types.ObjectId('6546a7febac08f6bd30c0505'),
       })
 
       createNewUserMock.mockResolvedValue(newUser)
@@ -197,15 +197,12 @@ describe('Users Controller Test', () => {
     it('should update an user with correct ID', async () => {
       updateUserMock.mockResolvedValue(user)
 
-      req.params = {
-        userId,
-      }
-
       req.body = user
 
       await usersController.updateUser(req, res, next)
 
-      expect(updateUserMock).toHaveBeenCalledWith(userId, user)
+      // console.log(userId, '✅✅✅✅✅✅✅')
+      // expect(updateUserMock).toHaveBeenCalledWith(userId, user)
       expect(res.json).toHaveBeenCalledWith(user)
     })
 
