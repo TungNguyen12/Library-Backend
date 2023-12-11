@@ -66,7 +66,7 @@ async function removeFromCart(
   if (result instanceof Error) {
     next(ApiError.badRequest('Bad request.', result.message))
     return
-  } else if (!result) {
+  } else if (result === null) {
     next(ApiError.notFound('Cart not found.'))
     return
   }
