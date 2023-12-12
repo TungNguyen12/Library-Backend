@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-import { type PopulatedCartItem, type CartItem } from '../types/CartItem.js'
+import { type CartItem } from '../types/CartItem.js'
 import CartsRepo from '../models/cartsModel.js'
 import CartItemRepo from '../models/cartItemModel.js'
 import { type Cart } from '../types/Cart.js'
@@ -18,7 +18,7 @@ async function getAllCartItems(): Promise<CartItem[]> {
 
 async function getCartByUserId(
   userId: string
-): Promise<PopulatedCartItem[] | null | Error> {
+): Promise<CartItem | null | Error> {
   try {
     const id = new mongoose.Types.ObjectId(userId)
     const cart = await CartsRepo.findOne({ user_id: id })
@@ -73,7 +73,7 @@ async function getCartByUserId(
       },
     ])
 
-    return cartItems as PopulatedCartItem[]
+    return cartItems[0] as CartItem
   } catch (e) {
     const err = e as Error
     return err
