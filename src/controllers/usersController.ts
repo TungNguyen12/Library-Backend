@@ -132,6 +132,24 @@ export async function updateUser(
 
   res.json(user)
 }
+export async function updateUserById(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  const userId = req.params.userId
+  const body = req.body
+  const user = await UsersService.updateUser(userId, body)
+  if (user === null) {
+    next(ApiError.notFound('User not found'))
+    return
+  } else if (user instanceof Error) {
+    next(ApiError.badRequest('Bad request.', user.message))
+    return
+  }
+
+  res.json(user)
+}
 
 export default {
   findOneUser,
@@ -141,4 +159,5 @@ export default {
   createNewUser,
   deleteUser,
   updateUser,
+  updateUserById,
 }
