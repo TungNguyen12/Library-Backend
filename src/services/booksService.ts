@@ -10,8 +10,10 @@ import {
   type Book,
   type BookFilterSchema,
   type PopulatedBook,
+  type bookBorrowHistory,
 } from '../types/Book.js'
 import { type PaginatedData, type AtleastOne } from '../types/AdditionalType.js'
+import UserRepo from '../models/usersModel.js'
 
 const getAll = async (): Promise<PopulatedBook[]> => {
   const books = await BooksRepo.aggregate([
@@ -100,7 +102,8 @@ const getFilteredBook = async (
   }
 
   const cleanedFilter = Object.entries(modifiedFilter).reduce(
-    (acc, [k, v]) => (v != null ? { ...acc, [k]: v } : acc),
+    (acc, [k, v]) =>
+      v != null && v !== '' && v !== undefined ? { ...acc, [k]: v } : acc,
     {}
   )
 
@@ -138,10 +141,13 @@ const getFilteredBook = async (
             {
               $or: [
                 {
-                  title: { $regex: `${searchQuery}` },
+                  title: { $regex: `${searchQuery}`, $options: 'i' },
                 },
                 {
-                  'author.fullName': { $regex: `${searchQuery}` },
+                  'author.fullName': {
+                    $regex: `${searchQuery}`,
+                    $options: 'i',
+                  },
                 },
               ],
             },
@@ -174,21 +180,87 @@ const getFilteredBook = async (
   }
 }
 
-const getOneById = async (bookId: string): Promise<Book | null | Error> => {
+const getOneById = async (
+  bookId: string
+): Promise<PopulatedBook | null | Error> => {
   try {
     const id = new Types.ObjectId(bookId)
-    const book = await BooksRepo.findById(id)
-    return book as Book | null
+    const book = await BooksRepo.aggregate([
+      {
+        $match: {
+          _id: id,
+        },
+      },
+      {
+        $lookup: {
+          from: 'authors',
+          localField: 'author',
+          foreignField: '_id',
+          pipeline: [
+            {
+              $addFields: {
+                fullName: { $concat: ['$firstName', ' ', '$lastName'] },
+              },
+            },
+            { $project: { fullName: 1 } },
+          ],
+          as: 'author',
+        },
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'category',
+          foreignField: '_id',
+          pipeline: [{ $project: { name: 1 } }],
+          as: 'category',
+        },
+      },
+    ])
+    return book.length > 0 ? (book[0] as PopulatedBook) : null
   } catch (e) {
     const err = e as Error
     return err
   }
 }
 
-const getOneByISBN = async (ISBN: string): Promise<Book | null | Error> => {
+const getOneByISBN = async (
+  ISBN: string
+): Promise<PopulatedBook | null | Error> => {
   try {
-    const book = await BooksRepo.findOne({ ISBN })
-    return book as Book | null
+    const book = await BooksRepo.aggregate([
+      {
+        $match: {
+          ISBN,
+        },
+      },
+      {
+        $lookup: {
+          from: 'authors',
+          localField: 'author',
+          foreignField: '_id',
+          pipeline: [
+            {
+              $addFields: {
+                fullName: { $concat: ['$firstName', ' ', '$lastName'] },
+              },
+            },
+            { $project: { fullName: 1 } },
+          ],
+          as: 'author',
+        },
+      },
+      {
+        $lookup: {
+          from: 'categories',
+          localField: 'category',
+          foreignField: '_id',
+          pipeline: [{ $project: { name: 1 } }],
+          as: 'category',
+        },
+      },
+    ])
+    return book.length > 0 ? (book[0] as PopulatedBook) : null
   } catch (e) {
     const err = e as Error
     return err
@@ -385,12 +457,106 @@ const deleteOne = async (bookId: string): Promise<boolean | Error> => {
   }
 }
 
+const getHistory = async (
+  userId: string
+): Promise<bookBorrowHistory | Error | undefined> => {
+  try {
+    const result = await UserRepo.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(userId),
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+        },
+      },
+      {
+        $lookup: {
+          from: 'borrowedbooks',
+          localField: '_id',
+          foreignField: 'user_id',
+          pipeline: [
+            {
+              $project: { _id: 0, user_id: 0 },
+            },
+            {
+              $lookup: {
+                from: 'copiesbooks',
+                localField: 'copy_id',
+                foreignField: '_id',
+                pipeline: [
+                  {
+                    $project: { book_id: 1, _id: 0 },
+                  },
+                  {
+                    $lookup: {
+                      from: 'books',
+                      localField: 'book_id',
+                      foreignField: '_id',
+                      pipeline: [{ $project: { title: 1, img: 1 } }],
+                      as: 'bookTitle',
+                    },
+                  },
+                  {
+                    $project: { book_id: 0 },
+                  },
+                ],
+                as: 'book',
+              },
+            },
+            {
+              $project: { copy_id: 0, user_id: 0 },
+            },
+          ],
+          as: 'history',
+        },
+      },
+    ])
+
+    if (result.length > 0) {
+      const nonEmptyResult = result[0]
+      const history = nonEmptyResult.history
+
+      const modifiedHistory: any[] = []
+
+      history.forEach((e: any) => {
+        if ('__v' in e) {
+          delete e.__v
+        }
+        modifiedHistory.push({
+          ...e,
+          book: e.book.length > 0 ? e.book[0] : {},
+          returned: 'returned_Date' in e,
+        })
+      })
+
+      modifiedHistory.forEach((e) => {
+        if ('bookTitle' in e.book) {
+          e.book = e.book.bookTitle.length > 0 ? e.book.bookTitle[0] : {}
+        }
+      })
+
+      const cleanedResult = { history: modifiedHistory }
+
+      return cleanedResult
+    }
+
+    return undefined
+  } catch (e) {
+    const err = e as Error
+    return err
+  }
+}
+
 export default {
   getAll,
   getFilteredBook,
   getOneByISBN,
   getOneById,
   getAllCopies,
+  getHistory,
   createOne,
   createOneCopy,
   updateOne,

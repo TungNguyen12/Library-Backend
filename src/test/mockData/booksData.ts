@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-import { type Book } from '../../types/Book.js'
+import { type bookBorrowHistory, type Book } from '../../types/Book.js'
 
 const ObjectId = mongoose.Types.ObjectId
 
@@ -122,3 +122,27 @@ export const convertedCategoryData = CategoryData.map((cate) => ({
   _id: cate.id,
   name: cate.name,
 }))
+
+export const historyData: bookBorrowHistory = {
+  history: [
+    {
+      borrowedDate: '2023-11-22T22:15:21.852Z',
+      returnedDate: '2023-11-22T22:16:21.852Z',
+      returned: true,
+      book: {
+        _id: new ObjectId('655d13daf50dd1ceca878b43'),
+        title: 'something69',
+        img: 'https://placehold.co/600x400',
+      },
+    },
+    {
+      borrowedDate: '2023-11-22T22:15:21.852Z',
+      returned: false,
+      book: {
+        _id: new ObjectId('655d13daf50dd1ceca878b43'),
+        title: 'something69',
+        img: 'https://placehold.co/600x400',
+      },
+    },
+  ],
+}

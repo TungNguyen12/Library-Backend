@@ -51,7 +51,7 @@ describe('Book Controller Test', () => {
 
   describe('getOneBooks', () => {
     const getOneBookMock = jest.spyOn(BooksService, 'getOneById')
-    const book = booksData[0]
+    const book = populatedBookData[0]
     const bookId = String(book.id)
     getOneBookMock.mockResolvedValue(book)
 
@@ -82,7 +82,7 @@ describe('Book Controller Test', () => {
 
   describe('getOneBooksWithISBN', () => {
     const getOneBookMock = jest.spyOn(BooksService, 'getOneByISBN')
-    const book = booksData[0]
+    const book = populatedBookData[0]
     const ISBN = book.ISBN
     getOneBookMock.mockResolvedValue(book)
 

@@ -38,11 +38,6 @@ router.get(
 
 router.post('/', validateCreateUser, UsersController.createNewUser)
 router.delete('/:userId', UsersController.deleteUser)
-router.put(
-  '/:userId',
-  checkAuth,
-  validateUpdateUser,
-  UsersController.updateUser
-)
+router.put('/update', checkAuth, validateUpdateUser, UsersController.updateUser)
 
 export default router
